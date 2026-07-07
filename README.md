@@ -93,12 +93,3 @@ To run this project locally without any dependencies:
 2. Open `index.html` in your web browser.
 
 ---
-
-## 🌐 Deploying to GitHub Pages
-
-1. Push the code to your GitHub repository (see instructions below).
-2. On GitHub, navigate to your repository settings.
-3. In the sidebar, select **Pages** (under the "Code and automation" section).
-4. Under **Build and deployment**, select **Deploy from a branch** as the source.
-5. Under **Branch**, select `main` (or `master`) and `/ (root)` folder, then click **Save**.
-6. GitHub will generate your live link in about a minute! Copy the link and paste it into the deployment section in this `README.md`.
