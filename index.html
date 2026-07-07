@@ -120,7 +120,61 @@
                 <!-- Right Side: Live Results & Circular Progress -->
                 <div class="calculator-right">
                     <section class="card results-card" id="results-section">
-                        <!-- Live Results display will be added here -->
+                        <div class="card-header">
+                            <i data-lucide="trending-up" class="header-icon"></i>
+                            <h2>Results & Analysis</h2>
+                        </div>
+                        
+                        <div class="results-content">
+                            <!-- Circular Gauge -->
+                            <div class="gauge-area">
+                                <div class="gauge-wrapper">
+                                    <svg class="gpa-gauge" viewBox="0 0 200 200">
+                                        <defs>
+                                            <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#6366f1" />
+                                                <stop offset="50%" stop-color="#a855f7" />
+                                                <stop offset="100%" stop-color="#ec4899" />
+                                            </linearGradient>
+                                        </defs>
+                                        <!-- Background Circle -->
+                                        <circle class="gauge-bg" cx="100" cy="100" r="85" />
+                                        <!-- Filled Circle -->
+                                        <circle class="gauge-progress" id="gpa-progress-circle" cx="100" cy="100" r="85" />
+                                    </svg>
+                                    <div class="gauge-text">
+                                        <span class="gauge-number" id="gpa-display">0.00</span>
+                                        <span class="gauge-label">SGPA</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rating & Status Text -->
+                            <div class="rating-box">
+                                <div class="rating-badge-container">
+                                    <span class="rating-badge" id="rating-badge">Ready to Calculate</span>
+                                </div>
+                                <p class="rating-message" id="rating-message">Enter your subjects and credits to get your score and rating.</p>
+                            </div>
+
+                            <!-- Calculations Metrics Grid -->
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-header">
+                                        <i data-lucide="hash"></i>
+                                        <span class="metric-title">Total Credits</span>
+                                    </div>
+                                    <div class="metric-value" id="metric-credits">0.0</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-header">
+                                        <i data-lucide="star"></i>
+                                        <span class="metric-title">Cumulative Points</span>
+                                    </div>
+                                    <div class="metric-value" id="metric-points">0.0</div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>
