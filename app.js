@@ -162,10 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.dataset.id = subject.id;
 
                 const gradePoint = GRADE_POINTS[subject.grade];
+                const gradeClass = getGradeClass(subject.grade);
 
                 tr.innerHTML = `
                     <td class="font-medium">${escapeHtml(subject.name)}</td>
-                    <td><span class="table-grade">${subject.grade}</span></td>
+                    <td><span class="table-grade ${gradeClass}">${subject.grade}</span></td>
                     <td>${subject.credits.toFixed(1)}</td>
                     <td>${gradePoint}</td>
                     <td class="text-center">
@@ -195,6 +196,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    };
+
+    // Helper to map grade to visual css classes
+    const getGradeClass = (grade) => {
+        if (grade === 'O') return 'grade-o';
+        if (grade === 'A+' || grade === 'A') return 'grade-a';
+        if (grade === 'B+' || grade === 'B') return 'grade-b';
+        if (grade === 'C') return 'grade-c';
+        return 'grade-f';
     };
 
     // Delete subject by ID
