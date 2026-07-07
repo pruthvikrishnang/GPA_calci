@@ -384,6 +384,38 @@ h1 span {
     border-color: rgba(99, 102, 241, 0.15);
 }
 
+/* Clear/Reset button in Card Header */
+.clear-btn {
+    width: 32px;
+    height: 32px;
+    margin-left: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.clear-btn:hover {
+    color: var(--color-poor);
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.clear-btn i {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--transition-normal);
+}
+
+.clear-btn:hover i {
+    transform: rotate(-180deg);
+}
+
 /* Table container styling */
 .table-container {
     width: 100%;

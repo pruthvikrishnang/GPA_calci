@@ -279,6 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
         nameInput.focus();
     });
 
+    // Clear all subjects handler
+    const clearAllBtn = document.getElementById('clear-all-btn');
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all subjects? This action cannot be undone.')) {
+                subjects = [];
+                saveSubjects();
+                renderSubjects();
+            }
+        });
+    }
+
     // Initial load & render
     loadSubjects();
     renderSubjects();
