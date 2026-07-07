@@ -20,7 +20,7 @@ Keeping track of academic performance can be tedious. Students often have to dea
 
 ## 🚀 Deployed Application
 The calculator is designed to be hosted on GitHub Pages for instant public access.
-* **Live Deployment Link**: *[[Insert your GitHub Pages link here once deployed]](https://pruthvikrishnang.github.io/GPA_calci/)* 🔗
+* **Live Deployment Link**: *(https://pruthvikrishnang.github.io/GPA_calci/)* 🔗
 > **Tip for Users**: You can open this link on your computer, tablet, or smartphone to calculate your grades on the go!
 
 ---
