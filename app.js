@@ -63,6 +63,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyStateRow = document.getElementById('empty-state-row');
     const countBadge = document.getElementById('subject-count');
 
+    // Result Card DOM Elements
+    const gpaDisplay = document.getElementById('gpa-display');
+    const ratingBadge = document.getElementById('rating-badge');
+    const ratingMessage = document.getElementById('rating-message');
+    const metricCredits = document.getElementById('metric-credits');
+    const metricPoints = document.getElementById('metric-points');
+    const progressCircle = document.getElementById('gpa-progress-circle');
+
+    // Update gauge visual progress
+    const updateGauge = (gpa) => {
+        if (!progressCircle) return;
+        const circumference = 534; // 2 * Math.PI * 85
+        const offset = circumference - (gpa / 10) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+    };
+
+    // Calculate GPA, cumulative points, total credits, and update results
+    const calculateGPA = () => {
+        let totalCredits = 0;
+        let cumulativePoints = 0;
+
+        subjects.forEach(subj => {
+            const gp = GRADE_POINTS[subj.grade];
+            totalCredits += subj.credits;
+            cumulativePoints += (subj.credits * gp);
+        });
+
+        // Update metrics display
+        metricCredits.textContent = totalCredits.toFixed(1);
+        metricPoints.textContent = cumulativePoints.toFixed(1);
+
+        if (totalCredits === 0) {
+            gpaDisplay.textContent = '0.00';
+            ratingBadge.textContent = 'Ready to Calculate';
+            ratingBadge.className = 'rating-badge rating-ready';
+            ratingMessage.textContent = 'Enter your subjects and credits to get your score and rating.';
+            updateGauge(0);
+            return;
+        }
+
+        const gpa = cumulativePoints / totalCredits;
+        gpaDisplay.textContent = gpa.toFixed(2);
+
+        // Update gauge visual progress
+        updateGauge(gpa);
+
+        // Classify performance rating
+        let rating = '';
+        let badgeClass = '';
+        let desc = '';
+
+        if (gpa >= 9.0) {
+            rating = 'Excellent';
+            badgeClass = 'rating-excellent';
+            desc = 'Exceptional academic standing! You have secured a top tier grade point average. Keep up the phenomenal work!';
+        } else if (gpa >= 7.0) {
+            rating = 'Very Good';
+            badgeClass = 'rating-verygood';
+            desc = 'Great performance! Scoring a GPA of 7 or above is very good. You are demonstrating high capabilities and solid work.';
+        } else if (gpa >= 6.0) {
+            rating = 'Good';
+            badgeClass = 'rating-good';
+            desc = 'Good job! A solid score. Push just a little harder in your upcoming terms to cross into the Very Good bracket.';
+        } else if (gpa >= 5.0) {
+            rating = 'Average';
+            badgeClass = 'rating-average';
+            desc = 'Fair performance. You have passed successfully, but there is clear room for improvement. Focus on higher weightage subjects.';
+        } else {
+            rating = 'Poor';
+            badgeClass = 'rating-poor';
+            desc = 'Academic warning. Your GPA is below average. We recommend consulting with your mentors and allocating more study hours.';
+        }
+
+        ratingBadge.textContent = rating;
+        ratingBadge.className = `rating-badge ${badgeClass}`;
+        ratingMessage.textContent = desc;
+    };
+
     // Render subjects in the table
     const renderSubjects = () => {
         // Remove existing dynamic subject rows
@@ -109,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.lucide.createIcons();
             }
         }
+        calculateGPA();
     };
 
     // Helper to escape HTML tags to avoid XSS
