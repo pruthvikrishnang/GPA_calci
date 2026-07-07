@@ -125,6 +125,34 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSubjects();
     };
 
+    // Add subject form handler
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = nameInput.value.trim();
+        const grade = gradeInput.value;
+        const credits = parseFloat(creditsInput.value);
+
+        if (!name || !grade || isNaN(credits) || credits <= 0) {
+            return;
+        }
+
+        const newSubject = {
+            id: Date.now().toString(),
+            name,
+            grade,
+            credits
+        };
+
+        subjects.push(newSubject);
+        saveSubjects();
+        renderSubjects();
+
+        // Reset form
+        form.reset();
+        nameInput.focus();
+    });
+
     // Initial load & render
     loadSubjects();
     renderSubjects();
