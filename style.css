@@ -806,3 +806,48 @@ h1 span {
     color: var(--text-muted);
     font-size: 0.85rem;
 }
+
+/* Print Stylesheet */
+@media print {
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+    }
+    .app-container {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+    }
+    #theme-toggle,
+    #input-section,
+    .delete-btn,
+    th:last-child,
+    td:last-child {
+        display: none !important;
+    }
+    .calculator-grid {
+        display: block !important;
+    }
+    .calculator-left, 
+    .calculator-right {
+        width: 100% !important;
+    }
+    .card {
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        margin-bottom: 2rem !important;
+        page-break-inside: avoid;
+    }
+    .rating-box {
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff !important;
+    }
+    .metric-card {
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff !important;
+    }
+}
