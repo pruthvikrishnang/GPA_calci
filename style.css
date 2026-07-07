@@ -752,6 +752,52 @@ h1 span {
     color: var(--text-primary);
 }
 
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Page Animation */
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.app-container {
+    animation: fadeInPage var(--transition-slow) forwards;
+}
+
+/* Theme Toggle Button Micro-interactions */
+#theme-toggle i {
+    transition: transform var(--transition-slow);
+}
+#theme-toggle:hover i {
+    transform: rotate(45deg) scale(1.1);
+}
+
+/* Interactive focus glows */
+.input-wrapper input:focus + i,
+.input-wrapper select:focus + i {
+    color: var(--input-focus-border);
+}
+
 /* Footer Styling */
 .app-footer {
     text-align: center;
