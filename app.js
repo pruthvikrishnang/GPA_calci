@@ -37,17 +37,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Subject State Manager
     let subjects = [];
 
-    // Load initial subjects from local storage
+    // Load initial subjects from local storage (or load sample data on first visit)
     const loadSubjects = () => {
         const saved = localStorage.getItem('gpa_subjects');
         if (saved) {
             try {
                 subjects = JSON.parse(saved);
             } catch (e) {
-                subjects = [];
+                subjects = getSampleData();
             }
+        } else {
+            subjects = getSampleData();
+            saveSubjects();
         }
     };
+
+    // Helper sample data for first-time layout demonstration
+    const getSampleData = () => [
+        { id: '1', name: 'Advanced Engineering Math', grade: 'O', credits: 4.0 },
+        { id: '2', name: 'Data Structures & Algorithms', grade: 'A+', credits: 4.0 },
+        { id: '3', name: 'Object Oriented Programming', grade: 'A', credits: 3.0 },
+        { id: '4', name: 'Technical Writing', grade: 'B+', credits: 2.0 }
+    ];
 
     // Save subjects to local storage
     const saveSubjects = () => {
