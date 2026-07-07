@@ -366,6 +366,149 @@ h1 span {
     height: 16px;
 }
 
+/* Badge Style in Card Header */
+.subject-count-badge {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 9999px;
+}
+
+[data-theme="light"] .subject-count-badge {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+/* Table container styling */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.subjects-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.subjects-table th {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.subjects-table td {
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.subjects-table tbody tr {
+    transition: background-color var(--transition-fast);
+}
+
+.subjects-table tbody tr:hover:not(#empty-state-row) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="light"] .subjects-table tbody tr:hover:not(#empty-state-row) {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+/* Align text helpers */
+.text-center {
+    text-align: center;
+}
+
+/* Row animations */
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.subject-row {
+    animation: fadeInRow var(--transition-normal) forwards;
+}
+
+/* Empty State Card Body styling */
+.empty-state {
+    padding: 3rem 1rem !important;
+}
+
+.empty-state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-content p {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.empty-state-content span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Action button style */
+.delete-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--border-radius-sm);
+    background: rgba(239, 68, 68, 0.05);
+    color: var(--color-poor);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    margin: 0 auto;
+}
+
+.delete-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+    transform: scale(1.08);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+}
+
+.delete-btn i {
+    width: 16px;
+    height: 16px;
+}
+
 /* Footer Styling */
 .app-footer {
     text-align: center;
