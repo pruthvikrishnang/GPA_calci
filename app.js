@@ -225,6 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSubjects();
     };
 
+    // Shake helper function for invalid input feedback
+    const triggerShake = (element) => {
+        element.classList.add('shake-input');
+        setTimeout(() => {
+            element.classList.remove('shake-input');
+        }, 300);
+        element.focus();
+    };
+
     // Add subject form handler
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -233,7 +242,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const grade = gradeInput.value;
         const credits = parseFloat(creditsInput.value);
 
-        if (!name || !grade || isNaN(credits) || credits <= 0) {
+        let hasError = false;
+
+        if (!name) {
+            triggerShake(nameInput);
+            hasError = true;
+        }
+
+        if (!grade) {
+            triggerShake(gradeInput);
+            hasError = true;
+        }
+
+        if (isNaN(credits) || credits < 0.5 || credits > 20) {
+            triggerShake(creditsInput);
+            hasError = true;
+        }
+
+        if (hasError) {
             return;
         }
 
