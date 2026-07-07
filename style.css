@@ -182,13 +182,37 @@ h1 span {
     display: block;
 }
 
-/* Placeholder for main content initially */
-.placeholder-content {
-    padding: 3rem;
-    text-align: center;
-    color: var(--text-secondary);
-    border: 2px dashed var(--border-color);
+/* Layout Grid & Card Styling */
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.9fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 968px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.calculator-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.card:hover {
+    border-color: var(--border-color-hover);
+    background: var(--bg-card-hover);
 }
 
 /* Footer Styling */
