@@ -21,14 +21,14 @@ const GRADE_POINTS = {
 // Built-in semester subjects and credits definitions
 const SEMESTER_SUBJECTS = {
     '1': [
-        { name: 'Engineering Mathematics I', credits: 4.0, grade: '' },
-        { name: 'Engineering Physics', credits: 4.0, grade: '' },
-        { name: 'Basic Electrical Engineering', credits: 3.0, grade: '' },
-        { name: 'Elements of Civil Engineering', credits: 3.0, grade: '' },
-        { name: 'Engineering Physics Lab', credits: 1.0, grade: '' },
-        { name: 'Basic Electrical Lab', credits: 1.0, grade: '' },
-        { name: 'Environmental Studies', credits: 1.0, grade: '' },
-        { name: 'Communicative English', credits: 1.0, grade: '' }
+        { name: 'CS1812 - Discrete Mathematics and Set Theory', credits: 3.0, grade: '' },
+        { name: 'CS1003 - Programming in C', credits: 4.0, grade: '' },
+        { name: 'WEB FUNDAMENTALS & UX DESIGN - CS1308', credits: 4.0, grade: '' },
+        { name: 'CS1101 - DIGITAL SYSTEM AND COMPUTER ARCHITECTURE', credits: 3.0, grade: '' },
+        { name: 'Exploring Science - CS1806', credits: 3.0, grade: '' },
+        { name: 'English Communication - CS1927', credits: 2.0, grade: '' },
+        { name: 'CS1929 - Structured Innovation with Design Thinking', credits: 2.0, grade: '' },
+        { name: 'Constituion of india and professional ethics - CS1928', credits: 2.0, grade: '' }
     ],
     '2': [
         { name: 'Engineering Mathematics II', credits: 4.0, grade: '' },
@@ -99,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (saved) {
             try {
                 subjects = JSON.parse(saved);
+                // Migration: Detect old placeholder subjects and overwrite with the new curriculum
+                if (currentSemester === '1' && subjects.some(s => s.name === 'Engineering Mathematics I')) {
+                    subjects = getDefaultSemesterData('1');
+                    saveSubjects();
+                }
             } catch (e) {
                 subjects = getDefaultSemesterData(currentSemester);
             }
