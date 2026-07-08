@@ -358,8 +358,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle semester changes
     const handleSemesterChange = (sem) => {
-        // Will implement default subject load in future commit
-        console.log('Semester changed to:', sem);
+        const key = `gpa_subjects_${sem}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+            try {
+                subjects = JSON.parse(saved);
+            } catch (e) {
+                subjects = getDefaultSemesterData(sem);
+            }
+        } else {
+            subjects = getDefaultSemesterData(sem);
+            saveSubjects();
+        }
+        renderSubjects();
     };
 
     // Semester selector tab listeners
