@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add name input listener
                 const nameInp = tr.querySelector('.table-input-name');
                 nameInp.addEventListener('input', () => {
-                    updateSubjectName(subject.id, nameInp.value.trim());
+                    updateSubjectProperty(subject.id, 'name', nameInp.value.trim(), false);
                 });
 
                 // Add credits input listener
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const val = parseFloat(creditsInp.value);
                     if (!isNaN(val) && val >= 0.5 && val <= 20) {
                         creditsInp.classList.remove('input-invalid');
-                        updateSubjectCredits(subject.id, val);
+                        updateSubjectProperty(subject.id, 'credits', val, true);
                     } else {
                         creditsInp.classList.add('input-invalid');
                     }
@@ -305,15 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gradePointCell = tr.querySelector('.grade-point-cell');
                 gradeSelect.addEventListener('change', () => {
                     const selectedGrade = gradeSelect.value;
-                    
-                    // Update class list for coloring
                     gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
-                    
-                    // Update grade point display text
                     const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
                     gradePointCell.textContent = gp;
-                    
-                    updateSubjectGrade(subject.id, selectedGrade);
+                    updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
                 });
 
                 listBody.appendChild(tr);
@@ -351,32 +346,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSubjects();
     };
 
-    // Update subject name by ID
-    const updateSubjectName = (id, name) => {
+    // Update subject property by ID and save
+    const updateSubjectProperty = (id, prop, value, recalculate = true) => {
         const index = subjects.findIndex(s => s.id === id);
         if (index !== -1) {
-            subjects[index].name = name;
+            subjects[index][prop] = value;
             saveSubjects();
-        }
-    };
-
-    // Update subject credits by ID
-    const updateSubjectCredits = (id, credits) => {
-        const index = subjects.findIndex(s => s.id === id);
-        if (index !== -1) {
-            subjects[index].credits = credits;
-            saveSubjects();
-            calculateGPA();
-        }
-    };
-
-    // Update subject grade by ID
-    const updateSubjectGrade = (id, grade) => {
-        const index = subjects.findIndex(s => s.id === id);
-        if (index !== -1) {
-            subjects[index].grade = grade;
-            saveSubjects();
-            calculateGPA();
+            if (recalculate) {
+                calculateGPA();
+            }
         }
     };
 
