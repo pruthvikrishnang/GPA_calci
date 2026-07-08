@@ -241,10 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
             countBadge.textContent = `${subjects.length} Subject${subjects.length > 1 ? 's' : ''}`;
             countBadge.style.display = 'inline-block';
 
-            subjects.forEach((subject) => {
+            subjects.forEach((subject, index) => {
                 const tr = document.createElement('tr');
                 tr.className = 'subject-row';
                 tr.dataset.id = subject.id;
+                tr.style.animationDelay = `${index * 0.04}s`;
 
                 const gradePoint = subject.grade ? GRADE_POINTS[subject.grade] : '-';
                 const gradeClass = getGradeClass(subject.grade);

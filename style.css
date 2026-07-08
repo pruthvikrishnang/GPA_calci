@@ -632,6 +632,7 @@ h1 span {
 }
 
 .subject-row {
+    opacity: 0;
     animation: fadeInRow var(--transition-normal) forwards;
 }
 
