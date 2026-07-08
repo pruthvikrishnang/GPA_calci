@@ -279,6 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateSubjectName(subject.id, nameInp.value.trim());
                 });
 
+                // Add credits input listener
+                const creditsInp = tr.querySelector('.table-input-credits');
+                creditsInp.addEventListener('input', () => {
+                    const val = parseFloat(creditsInp.value);
+                    if (!isNaN(val) && val >= 0.5 && val <= 20) {
+                        creditsInp.classList.remove('input-invalid');
+                        updateSubjectCredits(subject.id, val);
+                    } else {
+                        creditsInp.classList.add('input-invalid');
+                    }
+                });
+
                 listBody.appendChild(tr);
             });
 
@@ -320,6 +332,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (index !== -1) {
             subjects[index].name = name;
             saveSubjects();
+        }
+    };
+
+    // Update subject credits by ID
+    const updateSubjectCredits = (id, credits) => {
+        const index = subjects.findIndex(s => s.id === id);
+        if (index !== -1) {
+            subjects[index].credits = credits;
+            saveSubjects();
+            calculateGPA();
         }
     };
 
