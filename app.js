@@ -72,32 +72,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let subjects = [];
     let currentSemester = 'custom';
 
-    // Load initial subjects from local storage (or load sample data on first visit)
+    // Load initial subjects from local storage based on active semester
     const loadSubjects = () => {
-        const saved = localStorage.getItem('gpa_subjects');
+        currentSemester = localStorage.getItem('gpa_selected_semester') || 'custom';
+        
+        // Update UI active states for semester buttons
+        semButtons.forEach(btn => {
+            if (btn.dataset.sem === currentSemester) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        if (semBadge) {
+            semBadge.textContent = currentSemester === 'custom' ? 'Manual Mode' : `Semester ${currentSemester}`;
+        }
+
+        const key = `gpa_subjects_${currentSemester}`;
+        const saved = localStorage.getItem(key);
         if (saved) {
             try {
                 subjects = JSON.parse(saved);
             } catch (e) {
-                subjects = getSampleData();
+                subjects = getDefaultSemesterData(currentSemester);
             }
         } else {
-            subjects = getSampleData();
+            subjects = getDefaultSemesterData(currentSemester);
             saveSubjects();
         }
     };
 
-    // Helper sample data for first-time layout demonstration
-    const getSampleData = () => [
-        { id: '1', name: 'Advanced Engineering Math', grade: 'O', credits: 4.0 },
-        { id: '2', name: 'Data Structures & Algorithms', grade: 'A+', credits: 4.0 },
-        { id: '3', name: 'Object Oriented Programming', grade: 'A', credits: 3.0 },
-        { id: '4', name: 'Technical Writing', grade: 'B+', credits: 2.0 }
-    ];
+    // Helper to get default data for a semester template or sample custom data
+    const getDefaultSemesterData = (sem) => {
+        if (sem === 'custom') {
+            return [
+                { id: '1', name: 'Advanced Engineering Math', grade: 'O', credits: 4.0 },
+                { id: '2', name: 'Data Structures & Algorithms', grade: 'A+', credits: 4.0 },
+                { id: '3', name: 'Object Oriented Programming', grade: 'A', credits: 3.0 },
+                { id: '4', name: 'Technical Writing', grade: 'B+', credits: 2.0 }
+            ];
+        }
+        const defaults = SEMESTER_SUBJECTS[sem] || [];
+        return defaults.map((sub, index) => ({
+            id: `${sem}_${index}_${Date.now()}`,
+            name: sub.name,
+            credits: sub.credits,
+            grade: sub.grade
+        }));
+    };
 
     // Save subjects to local storage
     const saveSubjects = () => {
-        localStorage.setItem('gpa_subjects', JSON.stringify(subjects));
+        const key = `gpa_subjects_${currentSemester}`;
+        localStorage.setItem(key, JSON.stringify(subjects));
+        localStorage.setItem('gpa_selected_semester', currentSemester);
     };
 
     // DOM Element References
