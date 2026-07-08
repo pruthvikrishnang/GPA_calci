@@ -215,6 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ratingBadge.textContent = rating;
         ratingBadge.className = `rating-badge ${badgeClass}`;
+        
+        // Check for ungraded subjects to notify user
+        const ungradedCount = subjects.filter(s => !s.grade).length;
+        if (ungradedCount > 0) {
+            desc += ` (${ungradedCount} subject${ungradedCount > 1 ? 's are' : ' is'} currently ungraded and excluded from calculations.)`;
+        }
+        
         ratingMessage.textContent = desc;
     };
 
