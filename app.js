@@ -291,6 +291,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                // Add grade select listener
+                const gradeSelect = tr.querySelector('.table-select-grade');
+                const gradePointCell = tr.querySelector('.grade-point-cell');
+                gradeSelect.addEventListener('change', () => {
+                    const selectedGrade = gradeSelect.value;
+                    
+                    // Update class list for coloring
+                    gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
+                    
+                    // Update grade point display text
+                    const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
+                    gradePointCell.textContent = gp;
+                    
+                    updateSubjectGrade(subject.id, selectedGrade);
+                });
+
                 listBody.appendChild(tr);
             });
 
@@ -340,6 +356,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const index = subjects.findIndex(s => s.id === id);
         if (index !== -1) {
             subjects[index].credits = credits;
+            saveSubjects();
+            calculateGPA();
+        }
+    };
+
+    // Update subject grade by ID
+    const updateSubjectGrade = (id, grade) => {
+        const index = subjects.findIndex(s => s.id === id);
+        if (index !== -1) {
+            subjects[index].grade = grade;
             saveSubjects();
             calculateGPA();
         }
