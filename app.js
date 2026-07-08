@@ -12,6 +12,40 @@ const GRADE_POINTS = {
     'F': 0
 };
 
+// Built-in semester subjects and credits definitions
+const SEMESTER_SUBJECTS = {
+    '1': [
+        { name: 'Engineering Mathematics I', credits: 4.0, grade: '' },
+        { name: 'Engineering Physics', credits: 4.0, grade: '' },
+        { name: 'Basic Electrical Engineering', credits: 3.0, grade: '' },
+        { name: 'Elements of Civil Engineering', credits: 3.0, grade: '' },
+        { name: 'Engineering Physics Lab', credits: 1.0, grade: '' },
+        { name: 'Basic Electrical Lab', credits: 1.0, grade: '' },
+        { name: 'Environmental Studies', credits: 1.0, grade: '' },
+        { name: 'Communicative English', credits: 1.0, grade: '' }
+    ],
+    '2': [
+        { name: 'Engineering Mathematics II', credits: 4.0, grade: '' },
+        { name: 'Engineering Chemistry', credits: 4.0, grade: '' },
+        { name: 'Computer Programming in C', credits: 3.0, grade: '' },
+        { name: 'Elements of Mechanical Engineering', credits: 3.0, grade: '' },
+        { name: 'Computer Programming Lab', credits: 1.0, grade: '' },
+        { name: 'Engineering Chemistry Lab', credits: 1.0, grade: '' },
+        { name: 'Constitution of India', credits: 1.0, grade: '' },
+        { name: 'Professional Writing Skills', credits: 1.0, grade: '' }
+    ],
+    '3': [
+        { name: 'Transform Calculus & Fourier Series', credits: 3.0, grade: '' },
+        { name: 'Data Structures and Applications', credits: 4.0, grade: '' },
+        { name: 'Computer Organization and Architecture', credits: 3.0, grade: '' },
+        { name: 'Object Oriented Programming with C++', credits: 3.0, grade: '' },
+        { name: 'Data Structures Laboratory', credits: 1.0, grade: '' },
+        { name: 'Computer Organization Laboratory', credits: 1.0, grade: '' },
+        { name: 'Social Connect and Responsibilities', credits: 1.0, grade: '' },
+        { name: 'Quantitative Aptitude', credits: 1.0, grade: '' }
+    ]
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Theme Toggle Logic
     const themeToggleBtn = document.getElementById('theme-toggle');
