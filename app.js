@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subjects = getDefaultSemesterData(currentSemester);
             saveSubjects();
         }
+        updateClearButtonUI();
     };
 
     // Helper to get default data for a semester template or sample custom data
@@ -432,14 +433,39 @@ document.addEventListener('DOMContentLoaded', () => {
         nameInput.focus();
     });
 
-    // Clear all subjects handler
+        // Update clear button UI
+        updateClearButtonUI();
+    };
+
+    // Helper to update the clear button title & aria-label
+    const updateClearButtonUI = () => {
+        const clearBtn = document.getElementById('clear-all-btn');
+        if (!clearBtn) return;
+        if (currentSemester === 'custom') {
+            clearBtn.title = 'Clear All Subjects';
+            clearBtn.setAttribute('aria-label', 'Clear All Subjects');
+        } else {
+            clearBtn.title = 'Reset Semester Defaults';
+            clearBtn.setAttribute('aria-label', 'Reset Semester Defaults');
+        }
+    };
+
+    // Clear all subjects or Reset semester defaults handler
     const clearAllBtn = document.getElementById('clear-all-btn');
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all subjects? This action cannot be undone.')) {
-                subjects = [];
-                saveSubjects();
-                renderSubjects();
+            if (currentSemester === 'custom') {
+                if (confirm('Are you sure you want to clear all subjects? This action cannot be undone.')) {
+                    subjects = [];
+                    saveSubjects();
+                    renderSubjects();
+                }
+            } else {
+                if (confirm(`Are you sure you want to reset Semester ${currentSemester} to its default subjects and credits? This will clear entered grades.`)) {
+                    subjects = getDefaultSemesterData(currentSemester);
+                    saveSubjects();
+                    renderSubjects();
+                }
             }
         });
     }
@@ -459,6 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveSubjects();
         }
         renderSubjects();
+        updateClearButtonUI();
     };
 
     // Semester selector tab listeners
