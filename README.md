@@ -27,22 +27,25 @@ The calculator is designed to be hosted on GitHub Pages for instant public acces
 
 ## ✨ Features
 
+- **Semester-Wise Integration**: Auto-fills standard curricula (subjects and credits) for Semesters 1, 2, and 3 with one-click glassmorphic selector tabs.
+- **Interactive Inline Table Editing**: Edit subject names, credits, and select letter grades directly inside the table rows, triggering real-time GPA recalculations.
+- **Semester-Specific Persistence**: Separately persists subjects and user-entered grades for each semester, remembering the last active tab on page reload.
 - **Real-time calculations**: Computes total credits, cumulative grade points, and final SGPA instantly.
 - **Predefined Grades Dropdown**: Contains standard academic letter grades (O, A+, A, B+, B, C, P, F).
 - **Dynamic Circular Gauge**: An SVG-based circular progress chart that animates smoothly from 0.00 to 10.00 using gradients.
 - **Glassmorphic UI**: High-end styling featuring backdrop blurs, responsive grids, hover glows, and a responsive light/dark mode switch.
 - **Interactive Form Validation**: Shakes invalid input fields (e.g. credits less than 0.5 or empty names) to provide instant visual error feedback.
-- **Clear All Option**: A convenient reset button to wipe your data and start fresh with a simple confirmation prompt.
+- **Dynamic Clear & Reset**: Automatically adapts to clear all custom subjects in Manual mode, or reset defaults in semester modes with safety prompts.
 - **Print Optimization**: Automatically formats the page for clean printing by hiding form fields and control buttons when `Ctrl + P` is pressed.
 
 ---
 
 ## 📖 How to Use
 
-1. **Enter Subject Name**: Type the name of your course (e.g. *Computer Networks*).
-2. **Select Grade**: Choose the grade you scored (or expect to score) from the dropdown list.
-3. **Enter Credits**: Input the credits assigned to that course (typically between 0.5 and 10.0).
-4. **Click Add**: The subject will slide into the table and the circular gauge will dynamically animate to show your new SGPA.
+1. **Choose Mode / Semester**: Select **Manual** mode to input subjects from scratch, or click **Sem 1**, **Sem 2**, or **Sem 3** to load predefined subjects and credits.
+2. **Enter Grades**: For preloaded semesters, simply select your grade from the inline dropdown in the table for each subject. SGPA will update instantly.
+3. **Customize Curriculum**: Click directly into the subject name or credits input field in the table row to make custom adjustments. Use the trash icon to delete subjects, or the "Reset" icon in the table header to return to defaults.
+4. **Add Custom Subject**: Use the form at the top to add any extra subjects to your active semester.
 5. **Delete/Reset**: Click the trash icon next to any subject to delete it, or the refresh icon in the table header to clear the list.
 6. **Print or Save**: Press `Ctrl + P` (or `Cmd + P` on Mac) to print your grades or save them as a clean PDF report card.
 
