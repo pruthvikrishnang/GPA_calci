@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Subject State Manager
     let subjects = [];
+    let currentSemester = 'custom';
 
     // Load initial subjects from local storage (or load sample data on first visit)
     const loadSubjects = () => {
@@ -100,6 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // DOM Element References
+    const semButtons = document.querySelectorAll('.sem-btn');
+    const semBadge = document.getElementById('sem-badge');
     const form = document.getElementById('add-subject-form');
     const nameInput = document.getElementById('subject-name');
     const gradeInput = document.getElementById('subject-grade');
@@ -324,6 +327,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Handle semester changes
+    const handleSemesterChange = (sem) => {
+        // Will implement default subject load in future commit
+        console.log('Semester changed to:', sem);
+    };
+
+    // Semester selector tab listeners
+    semButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sem = btn.dataset.sem;
+            if (sem === currentSemester) return;
+
+            semButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            currentSemester = sem;
+            if (semBadge) {
+                semBadge.textContent = sem === 'custom' ? 'Manual Mode' : `Semester ${sem}`;
+            }
+
+            handleSemesterChange(sem);
+        });
+    });
 
     // Initial load & render
     loadSubjects();
