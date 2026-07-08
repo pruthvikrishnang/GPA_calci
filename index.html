@@ -36,6 +36,28 @@
             <div class="calculator-grid">
                 <!-- Left Side: Inputs & Subject List -->
                 <div class="calculator-left">
+                    <section class="card semester-card" id="semester-section">
+                        <div class="card-header">
+                            <i data-lucide="layers" class="header-icon"></i>
+                            <h2>Select Semester</h2>
+                            <span class="subtitle-badge" id="sem-badge">Manual Mode</span>
+                        </div>
+                        <div class="semester-selector-wrapper">
+                            <button type="button" class="sem-btn active" data-sem="custom">
+                                <i data-lucide="sliders"></i> Manual
+                            </button>
+                            <button type="button" class="sem-btn" data-sem="1">
+                                <i data-lucide="graduation-cap"></i> Sem 1
+                            </button>
+                            <button type="button" class="sem-btn" data-sem="2">
+                                <i data-lucide="graduation-cap"></i> Sem 2
+                            </button>
+                            <button type="button" class="sem-btn" data-sem="3">
+                                <i data-lucide="graduation-cap"></i> Sem 3
+                            </button>
+                        </div>
+                    </section>
+
                     <section class="card input-card" id="input-section">
                         <div class="card-header">
                             <i data-lucide="plus-circle" class="header-icon"></i>
