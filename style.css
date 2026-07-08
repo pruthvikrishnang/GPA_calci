@@ -238,6 +238,67 @@ h1 span {
     color: #a855f7;
 }
 
+/* Semester Selector Card */
+.semester-card {
+    margin-bottom: 1.5rem;
+}
+
+.semester-selector-wrapper {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.sem-btn {
+    flex: 1;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sem-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.sem-btn:hover {
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+.sem-btn.active {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: var(--text-on-gradient);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.25);
+}
+
+.subtitle-badge {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: var(--gradient-glow);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 /* Form Styling */
 .subject-form {
     display: flex;
