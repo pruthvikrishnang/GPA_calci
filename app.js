@@ -273,6 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deleteBtn = tr.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', () => deleteSubject(subject.id));
 
+                // Add name input listener
+                const nameInp = tr.querySelector('.table-input-name');
+                nameInp.addEventListener('input', () => {
+                    updateSubjectName(subject.id, nameInp.value.trim());
+                });
+
                 listBody.appendChild(tr);
             });
 
@@ -306,6 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
         subjects = subjects.filter(subject => subject.id !== id);
         saveSubjects();
         renderSubjects();
+    };
+
+    // Update subject name by ID
+    const updateSubjectName = (id, name) => {
+        const index = subjects.findIndex(s => s.id === id);
+        if (index !== -1) {
+            subjects[index].name = name;
+            saveSubjects();
+        }
     };
 
     // Shake helper function for invalid input feedback
