@@ -1,4 +1,10 @@
 // Apex GPA & SGPA Calculator logic
+// Supported Features:
+// - Semester-wise template selector (Semester 1, 2, & 3) with predefined credits
+// - Inline editable subject names, credits, and grade selectors in the table
+// - Instant calculation updates upon changing cell values
+// - Semester-specific local storage persistence (persists custom selections separately)
+// - Dynamic adaptive clear/reset button for templates and custom layouts
 
 // Grade to Grade Point Mapping
 const GRADE_POINTS = {
