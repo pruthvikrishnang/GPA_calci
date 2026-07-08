@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let cumulativePoints = 0;
 
         subjects.forEach(subj => {
+            if (!subj.grade) return; // Skip ungraded subjects
             const gp = GRADE_POINTS[subj.grade];
             totalCredits += subj.credits;
             cumulativePoints += (subj.credits * gp);
@@ -237,14 +238,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.className = 'subject-row';
                 tr.dataset.id = subject.id;
 
-                const gradePoint = GRADE_POINTS[subject.grade];
+                const gradePoint = subject.grade ? GRADE_POINTS[subject.grade] : '-';
                 const gradeClass = getGradeClass(subject.grade);
 
                 tr.innerHTML = `
-                    <td class="font-medium">${escapeHtml(subject.name)}</td>
-                    <td><span class="table-grade ${gradeClass}">${subject.grade}</span></td>
-                    <td>${subject.credits.toFixed(1)}</td>
-                    <td>${gradePoint}</td>
+                    <td>
+                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" placeholder="Subject Name">
+                    </td>
+                    <td>
+                        <select class="table-select-grade ${gradeClass}">
+                            <option value="" ${subject.grade === '' ? 'selected' : ''}>Grade</option>
+                            <option value="O" ${subject.grade === 'O' ? 'selected' : ''}>O (10)</option>
+                            <option value="A+" ${subject.grade === 'A+' ? 'selected' : ''}>A+ (9)</option>
+                            <option value="A" ${subject.grade === 'A' ? 'selected' : ''}>A (8)</option>
+                            <option value="B+" ${subject.grade === 'B+' ? 'selected' : ''}>B+ (7)</option>
+                            <option value="B" ${subject.grade === 'B' ? 'selected' : ''}>B (6)</option>
+                            <option value="C" ${subject.grade === 'C' ? 'selected' : ''}>C (5)</option>
+                            <option value="P" ${subject.grade === 'P' ? 'selected' : ''}>P (4)</option>
+                            <option value="F" ${subject.grade === 'F' ? 'selected' : ''}>F (0)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="table-input-credits" value="${subject.credits}" min="0.5" max="20" step="0.5" placeholder="Credits">
+                    </td>
+                    <td class="font-medium text-center grade-point-cell">${gradePoint}</td>
                     <td class="text-center">
                         <button class="delete-btn" aria-label="Delete Subject">
                             <i data-lucide="trash-2"></i>
@@ -276,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper to map grade to visual css classes
     const getGradeClass = (grade) => {
+        if (!grade) return 'grade-empty';
         if (grade === 'O') return 'grade-o';
         if (grade === 'A+' || grade === 'A') return 'grade-a';
         if (grade === 'B+' || grade === 'B') return 'grade-b';
