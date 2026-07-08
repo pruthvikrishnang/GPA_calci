@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const newSubject = {
-            id: Date.now().toString(),
+            id: currentSemester === 'custom' ? Date.now().toString() : `${currentSemester}_custom_${Date.now()}`,
             name,
             grade,
             credits
