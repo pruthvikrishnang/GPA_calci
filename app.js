@@ -436,9 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
         nameInput.focus();
     });
 
-        // Update clear button UI
-        updateClearButtonUI();
-    };
 
     // Helper to update the clear button title & aria-label
     const updateClearButtonUI = () => {
