@@ -252,23 +252,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 tr.innerHTML = `
                     <td>
-                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" placeholder="Subject Name">
+                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
                     </td>
                     <td>
-                        <select class="table-select-grade ${gradeClass}">
+                        <select class="table-select-grade ${gradeClass}" aria-label="Grade for ${escapeHtml(subject.name)}">
                             <option value="" ${subject.grade === '' ? 'selected' : ''}>Grade</option>
-                            <option value="O" ${subject.grade === 'O' ? 'selected' : ''}>O (10)</option>
-                            <option value="A+" ${subject.grade === 'A+' ? 'selected' : ''}>A+ (9)</option>
-                            <option value="A" ${subject.grade === 'A' ? 'selected' : ''}>A (8)</option>
-                            <option value="B+" ${subject.grade === 'B+' ? 'selected' : ''}>B+ (7)</option>
-                            <option value="B" ${subject.grade === 'B' ? 'selected' : ''}>B (6)</option>
-                            <option value="C" ${subject.grade === 'C' ? 'selected' : ''}>C (5)</option>
-                            <option value="P" ${subject.grade === 'P' ? 'selected' : ''}>P (4)</option>
-                            <option value="F" ${subject.grade === 'F' ? 'selected' : ''}>F (0)</option>
+                            <option value="O" ${subject.grade === 'O' ? 'selected' : ''}>O (Outstanding)</option>
+                            <option value="A+" ${subject.grade === 'A+' ? 'selected' : ''}>A+ (Excellent)</option>
+                            <option value="A" ${subject.grade === 'A' ? 'selected' : ''}>A (Very Good)</option>
+                            <option value="B+" ${subject.grade === 'B+' ? 'selected' : ''}>B+ (Good)</option>
+                            <option value="B" ${subject.grade === 'B' ? 'selected' : ''}>B (Above Average)</option>
+                            <option value="C" ${subject.grade === 'C' ? 'selected' : ''}>C (Average)</option>
+                            <option value="P" ${subject.grade === 'P' ? 'selected' : ''}>P (Pass)</option>
+                            <option value="F" ${subject.grade === 'F' ? 'selected' : ''}>F (Fail)</option>
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="table-input-credits" value="${subject.credits}" min="0.5" max="20" step="0.5" placeholder="Credits">
+                        <input type="number" class="table-input-credits" value="${subject.credits}" min="0.5" max="20" step="0.5" placeholder="Credits" aria-label="Credits for ${escapeHtml(subject.name)}">
                     </td>
                     <td class="font-medium text-center grade-point-cell">${gradePoint}</td>
                     <td class="text-center">
