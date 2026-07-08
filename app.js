@@ -78,6 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let subjects = [];
     let currentSemester = 'custom';
 
+    // Curriculum Versioning to invalidate cache when default subjects change
+    const CURRICULUM_VERSION = 'v2';
+    const checkCurriculumVersion = () => {
+        const savedVersion = localStorage.getItem('gpa_curriculum_version');
+        if (savedVersion !== CURRICULUM_VERSION) {
+            localStorage.removeItem('gpa_subjects_1');
+            localStorage.removeItem('gpa_subjects_2');
+            localStorage.removeItem('gpa_subjects_3');
+            localStorage.setItem('gpa_curriculum_version', CURRICULUM_VERSION);
+        }
+    };
+    checkCurriculumVersion();
+
     // Load initial subjects from local storage based on active semester
     const loadSubjects = () => {
         currentSemester = localStorage.getItem('gpa_selected_semester') || 'custom';
