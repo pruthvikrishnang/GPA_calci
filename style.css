@@ -519,6 +519,101 @@ h1 span {
     background-color: rgba(0, 0, 0, 0.01);
 }
 
+/* Table Inline Input & Select Styling */
+.table-input-name,
+.table-input-credits,
+.table-select-grade {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.table-input-name:hover,
+.table-input-credits:hover,
+.table-select-grade:hover {
+    border-color: var(--border-color-hover);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.table-input-name:focus,
+.table-input-credits:focus,
+.table-select-grade:focus {
+    border-color: var(--input-focus-border);
+    background: var(--input-bg);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
+}
+
+/* Specific select styling */
+.table-select-grade {
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    width: auto;
+    min-width: 105px;
+    padding-right: 1.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 14px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+[data-theme="light"] .table-select-grade {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+}
+
+/* Grade-based colors for the select dropdowns */
+.table-select-grade.grade-empty {
+    color: var(--text-muted);
+    border-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.01);
+}
+.table-select-grade.grade-o {
+    color: var(--color-excellent);
+    border-color: rgba(16, 185, 129, 0.2);
+    background-color: rgba(16, 185, 129, 0.08);
+}
+.table-select-grade.grade-a {
+    color: var(--color-verygood);
+    border-color: rgba(59, 130, 246, 0.2);
+    background-color: rgba(59, 130, 246, 0.08);
+}
+.table-select-grade.grade-b {
+    color: var(--color-good);
+    border-color: rgba(139, 92, 246, 0.2);
+    background-color: rgba(139, 92, 246, 0.08);
+}
+.table-select-grade.grade-c {
+    color: var(--color-average);
+    border-color: rgba(245, 158, 11, 0.2);
+    background-color: rgba(245, 158, 11, 0.08);
+}
+.table-select-grade.grade-f {
+    color: var(--color-poor);
+    border-color: rgba(239, 68, 68, 0.2);
+    background-color: rgba(239, 68, 68, 0.08);
+}
+
+.table-input-credits {
+    max-width: 75px;
+    text-align: center;
+}
+
+/* Adjust cell padding for inline fields */
+.subjects-table td:has(input),
+.subjects-table td:has(select) {
+    padding: 0.4rem 0.5rem;
+}
+
 /* Align text helpers */
 .text-center {
     text-align: center;
