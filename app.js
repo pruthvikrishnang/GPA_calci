@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 tr.innerHTML = `
                     <td>
-                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
+                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" title="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
                     </td>
                     <td>
                         <select class="table-select-grade ${gradeClass}" aria-label="Grade for ${escapeHtml(subject.name)}">
