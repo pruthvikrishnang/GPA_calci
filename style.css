@@ -549,40 +549,62 @@ h1 span {
 .table-input-credits,
 .table-select-grade {
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem;
     background: transparent;
     border: 1px solid transparent;
     border-radius: var(--border-radius-sm);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 0.9rem;
     outline: none;
     transition: all var(--transition-fast);
 }
 
 .table-input-name {
-    width: 100%;
     min-width: 0;
-    padding: 0.5rem 0.75rem;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 0.9rem;
-    outline: none;
-    transition: all var(--transition-fast);
     box-sizing: border-box;
+    font-size: 0.82rem;
+    letter-spacing: 0.01em;
+    padding: 0.45rem 0.65rem;
+    background: rgba(168, 85, 247, 0.03);
+    border-color: rgba(168, 85, 247, 0.06);
 }
 
-.table-input-name:hover,
+.table-input-credits,
+.table-select-grade {
+    font-size: 0.85rem;
+}
+
+.table-input-name:hover {
+    border-color: rgba(168, 85, 247, 0.2);
+    background: rgba(168, 85, 247, 0.06);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.08);
+}
+
+[data-theme="light"] .table-input-name {
+    background: rgba(99, 102, 241, 0.03);
+    border-color: rgba(99, 102, 241, 0.08);
+}
+
+[data-theme="light"] .table-input-name:hover {
+    background: rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.08);
+}
+
+.table-input-name:focus {
+    border-color: var(--input-focus-border);
+    background: var(--input-bg);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15), 0 0 16px rgba(168, 85, 247, 0.1);
+    font-size: 0.88rem;
+    padding: 0.5rem 0.75rem;
+}
+
 .table-input-credits:hover,
 .table-select-grade:hover {
     border-color: var(--border-color-hover);
     background: rgba(255, 255, 255, 0.03);
 }
 
-.table-input-name:focus,
 .table-input-credits:focus,
 .table-select-grade:focus {
     border-color: var(--input-focus-border);
