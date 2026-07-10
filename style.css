@@ -122,6 +122,15 @@ body {
     height: 24px;
 }
 
+.logo-area:hover .logo-icon {
+    transform: scale(1.05) rotate(-3deg);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+}
+
+.logo-icon {
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
 h1 {
     font-family: 'Outfit', sans-serif;
     font-size: 1.8rem;
