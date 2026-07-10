@@ -599,6 +599,27 @@ h1 span {
     padding: 0.5rem 0.75rem;
 }
 
+/* Pulse glow animation when row is being edited */
+@keyframes rowPulse {
+    0%, 100% { border-left-color: transparent; }
+    50% { border-left-color: rgba(168, 85, 247, 0.3); }
+}
+
+.subjects-table tbody tr:has(.table-input-name:focus) {
+    border-left: 2px solid transparent;
+    animation: rowPulse 2s ease-in-out infinite;
+}
+
+.subjects-table th:first-child,
+.subjects-table td:first-child {
+    padding-left: 0.75rem;
+}
+
+.subjects-table th:last-child,
+.subjects-table td:last-child {
+    padding-right: 0.75rem;
+}
+
 .table-input-credits:hover,
 .table-select-grade:hover {
     border-color: var(--border-color-hover);
