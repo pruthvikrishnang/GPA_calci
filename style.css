@@ -506,6 +506,17 @@ h1 span {
     overflow: visible;
 }
 
+/* Grade point cell with smooth transition */
+.grade-point-cell {
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+}
+
+.subjects-table tbody tr:hover .grade-point-cell {
+    transform: scale(1.05);
+}
+
 .subjects-table th {
     font-size: 0.7rem;
     font-weight: 700;
