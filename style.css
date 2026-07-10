@@ -236,6 +236,12 @@ h1 span {
     width: 22px;
     height: 22px;
     color: #a855f7;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.card-header:hover .header-icon {
+    transform: scale(1.12) rotate(-3deg);
+    color: #c084fc;
 }
 
 /* Semester Selector Card */
