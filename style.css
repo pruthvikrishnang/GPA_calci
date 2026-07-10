@@ -895,11 +895,11 @@ h1 span {
 
 /* Action button style */
 .delete-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(239, 68, 68, 0.15);
     border-radius: var(--border-radius-sm);
-    background: rgba(239, 68, 68, 0.05);
+    background: rgba(239, 68, 68, 0.04);
     color: var(--color-poor);
     cursor: pointer;
     display: inline-flex;
@@ -907,19 +907,30 @@ h1 span {
     justify-content: center;
     transition: all var(--transition-fast);
     margin: 0 auto;
+    opacity: 0.7;
 }
 
 .delete-btn:hover {
     background: #ef4444;
     border-color: #ef4444;
     color: #ffffff;
-    transform: scale(1.08);
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+    transform: scale(1.12);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    opacity: 1;
+}
+
+.delete-btn:active {
+    transform: scale(0.95);
 }
 
 .delete-btn i {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+    transition: transform var(--transition-fast);
+}
+
+.delete-btn:hover i {
+    transform: rotate(8deg);
 }
 
 /* Results Card & Gauge Styling */
