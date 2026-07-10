@@ -528,11 +528,11 @@ h1 span {
 }
 
 /* Non-name columns get fixed widths so the name column takes all remaining space */
-.subjects-table .th-name { width: auto; min-width: 200px; }
-.subjects-table .th-grade { width: 95px; }
-.subjects-table .th-credits { width: 78px; }
-.subjects-table .th-points { width: 90px; }
-.subjects-table .th-action { width: 60px; }
+.subjects-table .th-name { width: auto; min-width: 280px; }
+.subjects-table .th-grade { width: 85px; }
+.subjects-table .th-credits { width: 70px; }
+.subjects-table .th-points { width: 82px; }
+.subjects-table .th-action { width: 55px; }
 
 .subjects-table th,
 .subjects-table td:not(:first-child) {
