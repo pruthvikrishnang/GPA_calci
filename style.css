@@ -185,7 +185,7 @@ h1 span {
 /* Layout Grid & Card Styling */
 .calculator-grid {
     display: grid;
-    grid-template-columns: 1.25fr 0.9fr;
+    grid-template-columns: 1.5fr 0.8fr;
     gap: 1.5rem;
 }
 
@@ -487,6 +487,23 @@ h1 span {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    table-layout: fixed;
+}
+
+.subjects-table .th-name { width: 46%; }
+.subjects-table .th-grade { width: 14%; }
+.subjects-table .th-credits { width: 11%; }
+.subjects-table .th-points { width: 15%; }
+.subjects-table .th-action { width: 14%; }
+
+.subjects-table th,
+.subjects-table td:not(:first-child) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subjects-table td:first-child {
+    overflow: visible;
 }
 
 .subjects-table th {
@@ -533,6 +550,21 @@ h1 span {
     font-size: 0.9rem;
     outline: none;
     transition: all var(--transition-fast);
+}
+
+.table-input-name {
+    width: 100%;
+    min-width: 0;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all var(--transition-fast);
+    box-sizing: border-box;
 }
 
 .table-input-name:hover,
