@@ -487,14 +487,14 @@ h1 span {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-    table-layout: fixed;
 }
 
-.subjects-table .th-name { width: 46%; }
-.subjects-table .th-grade { width: 14%; }
-.subjects-table .th-credits { width: 11%; }
-.subjects-table .th-points { width: 15%; }
-.subjects-table .th-action { width: 14%; }
+/* Non-name columns get fixed widths so the name column takes all remaining space */
+.subjects-table .th-name { width: auto; min-width: 200px; }
+.subjects-table .th-grade { width: 95px; }
+.subjects-table .th-credits { width: 78px; }
+.subjects-table .th-points { width: 90px; }
+.subjects-table .th-action { width: 60px; }
 
 .subjects-table th,
 .subjects-table td:not(:first-child) {
@@ -507,17 +507,17 @@ h1 span {
 }
 
 .subjects-table th {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-muted);
-    padding: 0.75rem 1rem;
+    padding: 0.7rem 0.6rem;
     border-bottom: 1px solid var(--border-color);
 }
 
 .subjects-table td {
-    padding: 1rem;
+    padding: 0.65rem 0.5rem;
     font-size: 0.9rem;
     color: var(--text-primary);
     border-bottom: 1px solid var(--border-color);
@@ -525,15 +525,23 @@ h1 span {
 }
 
 .subjects-table tbody tr {
-    transition: background-color var(--transition-fast);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .subjects-table tbody tr:hover:not(#empty-state-row) {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(168, 85, 247, 0.04);
 }
 
 [data-theme="light"] .subjects-table tbody tr:hover:not(#empty-state-row) {
-    background-color: rgba(0, 0, 0, 0.01);
+    background-color: rgba(99, 102, 241, 0.03);
+}
+
+.subjects-table tbody tr:has(.table-input-name:focus) {
+    background-color: rgba(168, 85, 247, 0.06);
+}
+
+[data-theme="light"] .subjects-table tbody tr:has(.table-input-name:focus) {
+    background-color: rgba(99, 102, 241, 0.04);
 }
 
 /* Table Inline Input & Select Styling */
