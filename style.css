@@ -611,12 +611,8 @@ h1 span {
 }
 
 .subjects-table tbody tr {
-    transition: background-color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.subjects-table tbody tr {
     border-left: 2px solid transparent;
-    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    transition: background-color var(--transition-fast), border-left-color var(--transition-fast);
 }
 
 .subjects-table tbody tr:hover:not(#empty-state-row) {
@@ -692,17 +688,6 @@ h1 span {
     box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15), 0 0 16px rgba(168, 85, 247, 0.1);
     font-size: 0.88rem;
     padding: 0.5rem 0.75rem;
-}
-
-/* Pulse glow animation when row is being edited */
-@keyframes rowPulse {
-    0%, 100% { border-left-color: transparent; }
-    50% { border-left-color: rgba(168, 85, 247, 0.3); }
-}
-
-.subjects-table tbody tr:has(.table-input-name:focus) {
-    border-left: 2px solid transparent;
-    animation: rowPulse 2s ease-in-out infinite;
 }
 
 .subjects-table th:first-child,
