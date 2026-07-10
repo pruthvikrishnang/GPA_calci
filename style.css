@@ -445,6 +445,15 @@ h1 span {
 .primary-btn i {
     width: 16px;
     height: 16px;
+    transition: transform var(--transition-fast);
+}
+
+.primary-btn:hover i {
+    transform: scale(1.15);
+}
+
+.primary-btn:active i {
+    transform: scale(0.9);
 }
 
 /* Badge Style in Card Header */
