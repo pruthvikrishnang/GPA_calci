@@ -576,20 +576,29 @@ h1 span {
     transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
+.subjects-table tbody tr {
+    border-left: 2px solid transparent;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
 .subjects-table tbody tr:hover:not(#empty-state-row) {
     background-color: rgba(168, 85, 247, 0.04);
+    border-left-color: rgba(168, 85, 247, 0.15);
 }
 
 [data-theme="light"] .subjects-table tbody tr:hover:not(#empty-state-row) {
     background-color: rgba(99, 102, 241, 0.03);
+    border-left-color: rgba(99, 102, 241, 0.12);
 }
 
 .subjects-table tbody tr:has(.table-input-name:focus) {
     background-color: rgba(168, 85, 247, 0.06);
+    border-left-color: rgba(168, 85, 247, 0.3);
 }
 
 [data-theme="light"] .subjects-table tbody tr:has(.table-input-name:focus) {
     background-color: rgba(99, 102, 241, 0.04);
+    border-left-color: rgba(99, 102, 241, 0.25);
 }
 
 /* Table Inline Input & Select Styling */
