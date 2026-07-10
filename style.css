@@ -702,10 +702,49 @@ h1 span {
     text-align: center;
 }
 
+/* Mobile responsive refinements */
+@media (max-width: 768px) {
+    .subjects-table .th-name { min-width: 160px; }
+    .subjects-table .th-grade { width: 80px; }
+    .subjects-table .th-credits { width: 70px; }
+    .subjects-table .th-points { width: 80px; }
+    .subjects-table .th-action { width: 55px; }
+    
+    .subjects-table td {
+        padding: 0.5rem 0.35rem;
+    }
+    
+    .table-input-name {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.5rem;
+    }
+    
+    .table-input-credits {
+        max-width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .subjects-table .th-name { min-width: 140px; }
+    .subjects-table .th-grade { width: 70px; }
+    .subjects-table .th-credits { width: 60px; }
+    .subjects-table .th-points { width: 70px; }
+    .subjects-table .th-action { width: 48px; }
+    
+    .subjects-table td {
+        padding: 0.4rem 0.25rem;
+    }
+    
+    .table-input-name {
+        font-size: 0.78rem;
+        padding: 0.3rem 0.4rem;
+    }
+}
+
 /* Adjust cell padding for inline fields */
 .subjects-table td:has(input),
 .subjects-table td:has(select) {
-    padding: 0.4rem 0.5rem;
+    padding: 0.3rem 0.4rem;
 }
 
 /* Align text helpers */
