@@ -676,19 +676,27 @@ h1 span {
     text-align: center;
     cursor: pointer;
     width: auto;
-    min-width: 105px;
-    padding-right: 1.5rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    min-width: 95px;
+    padding: 0.4rem 1.8rem 0.4rem 0.6rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
-    background-size: 14px;
+    background-size: 12px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
 }
 
 [data-theme="light"] .table-select-grade {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.table-select-grade option {
+    background: var(--bg-surface-solid);
+    color: var(--text-primary);
+    padding: 0.5rem;
 }
 
 /* Grade-based colors for the select dropdowns */
