@@ -492,6 +492,8 @@ h1 span {
 .table-container {
     width: 100%;
     overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
 }
 
 .subjects-table {
