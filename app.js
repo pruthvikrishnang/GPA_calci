@@ -332,6 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
                     const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
                     gradePointCell.textContent = gp;
+                    // Animate grade point change
+                    gradePointCell.classList.remove('gp-flash');
+                    void gradePointCell.offsetWidth; // trigger reflow
+                    gradePointCell.classList.add('gp-flash');
                     updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
                 });
 

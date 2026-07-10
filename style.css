@@ -517,6 +517,17 @@ h1 span {
     transform: scale(1.05);
 }
 
+/* Flash animation when grade changes */
+@keyframes gpFlash {
+    0% { color: var(--input-focus-border); transform: scale(1.15); }
+    50% { color: var(--input-focus-border); transform: scale(1.05); }
+    100% { color: var(--text-primary); transform: scale(1); }
+}
+
+.gp-flash {
+    animation: gpFlash 0.5s ease forwards;
+}
+
 .subjects-table th {
     font-size: 0.68rem;
     font-weight: 700;
