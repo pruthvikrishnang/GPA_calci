@@ -76,17 +76,17 @@ body {
 
 .app-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     background: var(--bg-surface);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
-    padding: 2rem;
+    padding: 1.75rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     transition: background var(--transition-slow), border-color var(--transition-slow);
 }
 
