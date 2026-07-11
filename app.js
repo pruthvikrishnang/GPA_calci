@@ -31,14 +31,14 @@ const SEMESTER_SUBJECTS = {
         { name: 'Constituion of india and professional ethics - CS1928', credits: 2.0, grade: '' }
     ],
     '2': [
-        { name: 'Engineering Mathematics II', credits: 4.0, grade: '' },
-        { name: 'Engineering Chemistry', credits: 4.0, grade: '' },
-        { name: 'Computer Programming in C', credits: 3.0, grade: '' },
-        { name: 'Elements of Mechanical Engineering', credits: 3.0, grade: '' },
-        { name: 'Computer Programming Lab', credits: 1.0, grade: '' },
-        { name: 'Engineering Chemistry Lab', credits: 1.0, grade: '' },
-        { name: 'Constitution of India', credits: 1.0, grade: '' },
-        { name: 'Professional Writing Skills', credits: 1.0, grade: '' }
+        { name: 'CS1807 - Linear Algebra', credits: 3.0, grade: '' },
+        { name: 'CS1006 - Data Structures', credits: 4.0, grade: '' },
+        { name: 'CS1211 - Database Management Systems', credits: 4.0, grade: '' },
+        { name: 'CS1103 - Operating System', credits: 3.0, grade: '' },
+        { name: 'CS1102 - Embedded Systems and ARM Microcontroller', credits: 4.0, grade: '' },
+        { name: 'CS1841 - Engineering Explorations', credits: 3.0, grade: '' },
+        { name: 'CS1940 - Entrepreneurial Mindset', credits: 2.0, grade: '' },
+        { name: 'CS1925 - Yoga and Wellbeing', credits: 2.0, grade: '' }
     ],
     '3': [
         { name: 'Transform Calculus & Fourier Series', credits: 3.0, grade: '' },
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSemester = 'custom';
 
     // Curriculum Versioning to invalidate cache when default subjects change
-    const CURRICULUM_VERSION = 'v2';
+    const CURRICULUM_VERSION = 'v3';
     const checkCurriculumVersion = () => {
         const savedVersion = localStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
