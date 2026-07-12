@@ -198,15 +198,6 @@ h1 span {
     gap: 1.5rem;
 }
 
-@media (max-width: 968px) {
-    .calculator-grid {
-        grid-template-columns: 1fr;
-    }
-    .calculator-right {
-        position: static;
-    }
-}
-
 .calculator-left {
     display: flex;
     flex-direction: column;
@@ -220,8 +211,13 @@ h1 span {
     align-self: start;
 }
 
-.calculator-right .results-card {
-    transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
+@media (max-width: 968px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+    .calculator-right {
+        position: static;
+    }
 }
 
 .card {
