@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyStateRow = document.getElementById('empty-state-row');
     const countBadge = document.getElementById('subject-count');
     const searchInput = document.getElementById('subject-search');
+    const searchClearBtn = document.getElementById('search-clear-btn');
     const filterResultsBar = document.getElementById('filter-results-bar');
     const filterResultsText = document.getElementById('filter-results-text');
 
@@ -473,6 +474,15 @@ document.addEventListener('DOMContentLoaded', () => {
         element.focus();
     };
 
+    const toggleClearButton = () => {
+        if (!searchClearBtn) return;
+        if (searchInput.value.trim()) {
+            searchClearBtn.classList.add('visible');
+        } else {
+            searchClearBtn.classList.remove('visible');
+        }
+    };
+
     // Search/filter event listener
     if (searchInput) {
         searchInput.addEventListener('input', () => {
@@ -480,11 +490,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (subjects.length > 0) {
                 filterSubjects();
             }
+            toggleClearButton();
         });
 
         // Focus search with Ctrl+F / Cmd+F
         document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f' && searchInput) {
                 e.preventDefault();
                 searchInput.focus();
                 searchInput.select();
@@ -500,8 +511,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     filterSubjects();
                 }
                 searchInput.blur();
+                toggleClearButton();
             }
         });
+
+        // Clear button click handler
+        if (searchClearBtn) {
+            searchClearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchTerm = '';
+                if (subjects.length > 0) {
+                    filterSubjects();
+                }
+                searchInput.focus();
+                toggleClearButton();
+            });
+        }
     }
 
     // Add subject form handler

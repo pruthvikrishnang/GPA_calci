@@ -603,9 +603,68 @@ h1 span {
     }
 }
 
-/* Filter active state: subtle highlight on table */
+/* Search clear button */
+.search-clear-btn {
+    position: absolute;
+    right: 0.5rem;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    padding: 0;
+}
+
+.search-clear-btn.visible {
+    display: inline-flex;
+    animation: fadeInClearBtn 0.2s ease forwards;
+}
+
+.search-clear-btn:hover {
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.search-clear-btn:active {
+    transform: scale(0.9);
+}
+
+.search-clear-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+@keyframes fadeInClearBtn {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Active filter state: subtle highlight on table */
 .table-container.filter-active {
     border-color: rgba(168, 85, 247, 0.08);
+}
+
+/* Row highlight animation when filtering */
+.subject-row:not(.filtered-hidden) {
+    transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+/* Search input padding adjusted for clear button */
+.search-input {
+    padding-right: 2.4rem;
 }
 
 /* Table container styling */
