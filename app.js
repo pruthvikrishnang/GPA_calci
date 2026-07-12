@@ -49,7 +49,12 @@ const SEMESTER_SUBJECTS = {
         { name: 'Computer Organization Laboratory', credits: 1.0, grade: '' },
         { name: 'Social Connect and Responsibilities', credits: 1.0, grade: '' },
         { name: 'Quantitative Aptitude', credits: 1.0, grade: '' }
-    ]
+    ],
+    '4': [],
+    '5': [],
+    '6': [],
+    '7': [],
+    '8': []
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -80,13 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchTerm = '';
 
     // Curriculum Versioning to invalidate cache when default subjects change
-    const CURRICULUM_VERSION = 'v3';
+    const CURRICULUM_VERSION = 'v4';
     const checkCurriculumVersion = () => {
         const savedVersion = localStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
-            localStorage.removeItem('gpa_subjects_1');
-            localStorage.removeItem('gpa_subjects_2');
-            localStorage.removeItem('gpa_subjects_3');
+            // Clear all semester caches when curriculum updates
+            for (let i = 1; i <= 8; i++) {
+                localStorage.removeItem(`gpa_subjects_${i}`);
+            }
             localStorage.setItem('gpa_curriculum_version', CURRICULUM_VERSION);
         }
     };
