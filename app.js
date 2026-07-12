@@ -565,12 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render a category header row
     const renderCategoryHeader = (category) => {
         const colors = getCategoryColor(category);
+        // Display 'Majors' instead of 'Major' as the user requested
+        const displayName = category === 'Major' ? 'Majors' : category;
         const tr = document.createElement('tr');
         tr.className = 'category-header-row';
         tr.innerHTML = `
             <td colspan="5">
                 <div class="category-header-content">
-                    <span class="cat-label" style="background: ${colors.bg}; color: ${colors.text}; border: 1px solid ${colors.border};">${category}</span>
+                    <span class="cat-label" style="background: ${colors.bg}; color: ${colors.text}; border: 1px solid ${colors.border};">${displayName}</span>
                     <span class="cat-line"></span>
                 </div>
             </td>
@@ -838,8 +840,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Save major selection
             saveSelectedMajor(currentSemester, major);
             
-            // Reload subjects with new major
+            // Preserve existing grades before regenerating
+            const gradeMap = {};
+            subjects.forEach(s => {
+                if (s.grade) {
+                    gradeMap[s.name] = s.grade;
+                }
+            });
+            
+            // Reload subjects with new major, preserving grades
             subjects = getDefaultSemesterData(currentSemester);
+            subjects.forEach(s => {
+                if (gradeMap[s.name]) {
+                    s.grade = gradeMap[s.name];
+                }
+            });
             saveSubjects();
             renderSubjects();
         });
