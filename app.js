@@ -1122,8 +1122,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const items = grouped[cat];
                 if (!items) return;
 
-                // Category header row
-                const catColors = getCategoryColor(cat);
+                // Category header row (always use dark theme colors for export)
+                const catColors = CATEGORY_COLORS[cat] || { bg: 'transparent', text: '#9ca3af', border: 'rgba(255,255,255,0.08)' };
                 const displayName = cat === 'Major' ? 'Majors' : cat;
                 const catRow = document.createElement('tr');
                 const catCell = document.createElement('td');
@@ -1145,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const gp = sub.grade ? GRADE_POINTS[sub.grade] : '-';
                     const row = document.createElement('tr');
                     const cells = [
-                        { text: sub.name, styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
+                        { text: escapeHtml(sub.name), styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
                         { text: sub.grade || '-', styles: `text-align:center; font-weight:600; color:${sub.grade ? '#9ca3af' : '#6b7280'};` },
                         { text: sub.credits.toFixed(1), styles: 'text-align:center; color:#9ca3af;' },
                         { text: gp, styles: 'text-align:center; font-weight:600; color:#9ca3af;' }
@@ -1168,7 +1168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gp = sub.grade ? GRADE_POINTS[sub.grade] : '-';
                 const row = document.createElement('tr');
                 const cells = [
-                    { text: sub.name, styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
+                    { text: escapeHtml(sub.name), styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
                     { text: sub.grade || '-', styles: `text-align:center; font-weight:600; color:${sub.grade ? '#9ca3af' : '#6b7280'};` },
                     { text: sub.credits.toFixed(1), styles: 'text-align:center; color:#9ca3af;' },
                     { text: gp, styles: 'text-align:center; font-weight:600; color:#9ca3af;' }
