@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchTerm = '';
 
     // Curriculum Versioning to invalidate cache when default subjects change
-    const CURRICULUM_VERSION = 'v5';
+    const CURRICULUM_VERSION = 'v6';
     const checkCurriculumVersion = () => {
         const savedVersion = localStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
