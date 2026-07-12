@@ -197,6 +197,17 @@
                         <div class="card-header">
                             <i data-lucide="trending-up" class="header-icon"></i>
                             <h2>Results & Analysis</h2>
+                            <div class="export-buttons">
+                                <button type="button" class="export-btn" id="export-png-btn" title="Download as PNG" aria-label="Download as PNG">
+                                    <i data-lucide="image"></i>
+                                </button>
+                                <button type="button" class="export-btn" id="export-pdf-btn" title="Download as PDF" aria-label="Download as PDF">
+                                    <i data-lucide="file-text"></i>
+                                </button>
+                                <button type="button" class="export-btn" id="export-print-btn" title="Print / Save as PDF" aria-label="Print or Save as PDF">
+                                    <i data-lucide="printer"></i>
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="results-content">
@@ -257,6 +268,11 @@
         <footer class="app-footer">
             <p>&copy; 2026 Apex Calculator. Designed for academic excellence.</p>
         </footer>
+    </div>
+
+    <div class="export-toast" id="export-toast">
+        <i data-lucide="check-circle"></i>
+        <span id="export-toast-message">Report downloaded successfully!</span>
     </div>
 
     <script src="app.js"></script>

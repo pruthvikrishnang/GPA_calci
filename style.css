@@ -1413,6 +1413,122 @@ h1 span {
     margin-top: 0.25rem;
 }
 
+/* Export Buttons */
+.export-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.export-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.export-btn i {
+    width: 15px;
+    height: 15px;
+    transition: transform var(--transition-fast);
+}
+
+.export-btn:hover {
+    border-color: var(--border-color-hover);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.export-btn:hover i {
+    transform: scale(1.1);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
+#export-png-btn:hover {
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.06);
+}
+
+#export-pdf-btn:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.06);
+}
+
+#export-print-btn:hover {
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.3);
+    background: rgba(59, 130, 246, 0.06);
+}
+
+/* Export loading state */
+.export-btn.exporting {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.export-btn.exporting i {
+    animation: exportSpin 0.8s linear infinite;
+}
+
+@keyframes exportSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Toast notification for export */
+.export-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-surface-solid);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 0.75rem 1.25rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.export-toast.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.export-toast i {
+    width: 18px;
+    height: 18px;
+    color: #22c55e;
+    flex-shrink: 0;
+}
+
+.export-toast.error i {
+    color: #ef4444;
+}
+
 /* Rating Area Styling */
 .rating-box {
     text-align: center;
@@ -1615,45 +1731,227 @@ h1 span {
 
 /* Print Stylesheet */
 @media print {
+    @page {
+        margin: 0.75in;
+        size: A4 portrait;
+    }
+
+    * {
+        background: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
     body {
         background: #ffffff !important;
         color: #000000 !important;
         padding: 0 !important;
+        font-size: 11pt;
+        line-height: 1.5;
     }
+
     .app-container {
         border: none !important;
         box-shadow: none !important;
         background: transparent !important;
         backdrop-filter: none !important;
         padding: 0 !important;
+        animation: none !important;
+        max-width: 100% !important;
     }
+
+    /* Hide unnecessary elements */
     #theme-toggle,
     #input-section,
     .delete-btn,
     th:last-child,
-    td:last-child {
+    td:last-child,
+    .subject-row td:last-child,
+    .search-bar-wrapper,
+    .filter-results-bar,
+    .export-buttons,
+    .clear-btn,
+    #export-toast,
+    .app-footer,
+    .semester-card,
+    .card-header .header-icon,
+    .major-selector,
+    .semester-selector-wrapper {
         display: none !important;
     }
+
     .calculator-grid {
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
     }
-    .calculator-left, 
-    .calculator-right {
+
+    .calculator-left {
         width: 100% !important;
     }
+
+    .calculator-right {
+        position: static !important;
+        width: 100% !important;
+        page-break-before: always;
+    }
+
+    /* Hide the list card subject table on print, show only results */
+    .list-card {
+        display: none !important;
+    }
+
     .card {
         border: 1px solid #e2e8f0 !important;
         background: #ffffff !important;
         box-shadow: none !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 0 !important;
         page-break-inside: avoid;
+        padding: 1.5rem !important;
     }
+
+    .card-header {
+        border-bottom: 2px solid #e2e8f0 !important;
+        margin-bottom: 1.25rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+
+    .card-header h2 {
+        color: #0f172a !important;
+        font-size: 1.2rem !important;
+    }
+
+    .subtitle-badge {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+
+    /* Results card full width */
+    .results-card {
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    .results-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
+    }
+
+    .gauge-wrapper {
+        width: 200px !important;
+        height: 200px !important;
+    }
+
+    .gauge-number {
+        font-size: 2.75rem !important;
+        background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+    }
+
+    .gauge-label {
+        color: #64748b !important;
+    }
+
+    .gauge-bg {
+        stroke: #e2e8f0 !important;
+    }
+
+    .gauge-progress {
+        stroke: url(#gauge-gradient) !important;
+    }
+
     .rating-box {
         border: 1px solid #e2e8f0 !important;
-        background: #ffffff !important;
+        background: #f8fafc !important;
+        border-radius: 12px !important;
+        padding: 1.25rem !important;
     }
+
+    .rating-message {
+        color: #475569 !important;
+    }
+
+    .rating-excellent {
+        background: rgba(16, 185, 129, 0.1) !important;
+        color: #10b981 !important;
+        border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    }
+
+    .rating-verygood {
+        background: rgba(59, 130, 246, 0.1) !important;
+        color: #3b82f6 !important;
+        border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    }
+
+    .rating-good {
+        background: rgba(139, 92, 246, 0.1) !important;
+        color: #8b5cf6 !important;
+        border: 1px solid rgba(139, 92, 246, 0.2) !important;
+    }
+
+    .rating-average {
+        background: rgba(245, 158, 11, 0.1) !important;
+        color: #f59e0b !important;
+        border: 1px solid rgba(245, 158, 11, 0.2) !important;
+    }
+
+    .rating-poor {
+        background: rgba(239, 68, 68, 0.1) !important;
+        color: #ef4444 !important;
+        border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    }
+
+    .metrics-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+        width: 100% !important;
+    }
+
     .metric-card {
         border: 1px solid #e2e8f0 !important;
-        background: #ffffff !important;
+        background: #f8fafc !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+    }
+
+    .metric-value {
+        color: #0f172a !important;
+        font-size: 1.5rem !important;
+    }
+
+    .metric-header {
+        color: #64748b !important;
+    }
+
+    .metric-title {
+        color: #64748b !important;
+    }
+
+    /* Add a print-only report header */
+    .results-card::before {
+        content: "Apex GPA Calculator - GPA Report";
+        display: block;
+        text-align: center;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0f172a;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    /* Hide lucide icons on print to prevent missing icon artifacts */
+    .results-card i {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        color: #64748b !important;
     }
 }

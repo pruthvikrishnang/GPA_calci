@@ -1033,6 +1033,205 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ========================
+    // Export Functionality
+    // ========================
+
+    const exportToast = document.getElementById('export-toast');
+    const exportToastMessage = document.getElementById('export-toast-message');
+    let toastTimeout = null;
+
+    const showToast = (message, isError = false) => {
+        if (toastTimeout) clearTimeout(toastTimeout);
+        exportToastMessage.textContent = message;
+        exportToast.className = `export-toast visible${isError ? ' error' : ''}`;
+        if (window.lucide) window.lucide.createIcons();
+        toastTimeout = setTimeout(() => {
+            exportToast.classList.remove('visible');
+        }, 3000);
+    };
+
+    // Dynamically load a script from CDN
+    const loadScript = (src) => {
+        return new Promise((resolve, reject) => {
+            // Check if already loaded
+            if (document.querySelector(`script[src="${src}"]`)) {
+                resolve();
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    };
+
+    const exportPNGBtn = document.getElementById('export-png-btn');
+    const exportPDFBtn = document.getElementById('export-pdf-btn');
+    const exportPrintBtn = document.getElementById('export-print-btn');
+
+    // Capture and clean the results card for export
+    const prepareExportElement = () => {
+        const resultsCard = document.querySelector('.results-card');
+        // Clone to avoid modifying live DOM
+        const clone = resultsCard.cloneNode(true);
+        
+        // Set a fixed light background and explicit styling for export
+        clone.style.background = '#ffffff';
+        clone.style.border = '1px solid #e2e8f0';
+        clone.style.borderRadius = '16px';
+        clone.style.padding = '1.5rem';
+        clone.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+        clone.style.color = '#0f172a';
+        clone.style.fontFamily = 'Inter, sans-serif';
+        clone.style.width = '400px';
+        clone.style.margin = '0 auto';
+        
+        // Remove export buttons from clone
+        const exportBtns = clone.querySelector('.export-buttons');
+        if (exportBtns) exportBtns.remove();
+        
+        // Fix gauge text colors for light background
+        const gaugeNum = clone.querySelector('.gauge-number');
+        if (gaugeNum) {
+            gaugeNum.style.background = 'linear-gradient(135deg, #6366f1, #a855f7, #ec4899)';
+            gaugeNum.style.webkitBackgroundClip = 'text';
+            gaugeNum.style.webkitTextFillColor = 'transparent';
+        }
+        
+        // Fix metric cards for light bg
+        const metricCards = clone.querySelectorAll('.metric-card');
+        metricCards.forEach(c => {
+            c.style.background = '#f8fafc';
+            c.style.border = '1px solid #e2e8f0';
+            c.style.color = '#0f172a';
+        });
+        
+        // Fix rating box
+        const ratingBox = clone.querySelector('.rating-box');
+        if (ratingBox) {
+            ratingBox.style.background = '#f8fafc';
+            ratingBox.style.border = '1px solid #e2e8f0';
+        }
+        
+        // Fix metric values
+        const metricValues = clone.querySelectorAll('.metric-value');
+        metricValues.forEach(v => {
+            v.style.color = '#0f172a';
+        });
+        
+        // Fix rating message
+        const ratingMsg = clone.querySelector('.rating-message');
+        if (ratingMsg) ratingMsg.style.color = '#475569';
+        
+        return clone;
+    };
+
+    // Export as PNG
+    const exportPNG = async () => {
+        const btn = exportPNGBtn;
+        btn.classList.add('exporting');
+        btn.innerHTML = '<i data-lucide="loader-2"></i>';
+        if (window.lucide) window.lucide.createIcons();
+
+        try {
+            await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+            
+            const exportEl = prepareExportElement();
+            exportEl.style.position = 'absolute';
+            exportEl.style.left = '-9999px';
+            exportEl.style.top = '0';
+            document.body.appendChild(exportEl);
+
+            const canvas = await window.html2canvas(exportEl, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false
+            });
+
+            document.body.removeChild(exportEl);
+
+            // Download PNG
+            const link = document.createElement('a');
+            link.download = `GPA_Report_${currentSemester === 'custom' ? 'Manual' : `Sem${currentSemester}`}.png`;
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('PNG report downloaded!');
+        } catch (err) {
+            console.error('PNG export failed:', err);
+            showToast('Failed to export PNG. Please try Print instead.', true);
+        } finally {
+            btn.classList.remove('exporting');
+            btn.innerHTML = '<i data-lucide="image"></i>';
+            if (window.lucide) window.lucide.createIcons();
+        }
+    };
+
+    // Export as PDF
+    const exportPDF = async () => {
+        const btn = exportPDFBtn;
+        btn.classList.add('exporting');
+        btn.innerHTML = '<i data-lucide="loader-2"></i>';
+        if (window.lucide) window.lucide.createIcons();
+
+        try {
+            await Promise.all([
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+            ]);
+
+            const exportEl = prepareExportElement();
+            exportEl.style.position = 'absolute';
+            exportEl.style.left = '-9999px';
+            exportEl.style.top = '0';
+            document.body.appendChild(exportEl);
+
+            const canvas = await window.html2canvas(exportEl, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false
+            });
+
+            document.body.removeChild(exportEl);
+
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width / 2, canvas.height / 2]
+            });
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+            pdf.save(`GPA_Report_${currentSemester === 'custom' ? 'Manual' : `Sem${currentSemester}`}.pdf`);
+
+            showToast('PDF report downloaded!');
+        } catch (err) {
+            console.error('PDF export failed:', err);
+            showToast('Failed to export PDF. Please try Print instead.', true);
+        } finally {
+            btn.classList.remove('exporting');
+            btn.innerHTML = '<i data-lucide="file-text"></i>';
+            if (window.lucide) window.lucide.createIcons();
+        }
+    };
+
+    // Print report
+    const printReport = () => {
+        window.print();
+    };
+
+    // Event listeners
+    if (exportPNGBtn) exportPNGBtn.addEventListener('click', exportPNG);
+    if (exportPDFBtn) exportPDFBtn.addEventListener('click', exportPDF);
+    if (exportPrintBtn) exportPrintBtn.addEventListener('click', printReport);
+
     // Initial load & render
     loadSubjects();
     renderSubjects();
