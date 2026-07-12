@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Subject State Manager
     let subjects = [];
     let currentSemester = 'custom';
+    let searchTerm = '';
 
     // Curriculum Versioning to invalidate cache when default subjects change
     const CURRICULUM_VERSION = 'v3';
@@ -163,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const listBody = document.getElementById('subject-list-body');
     const emptyStateRow = document.getElementById('empty-state-row');
     const countBadge = document.getElementById('subject-count');
+    const searchInput = document.getElementById('subject-search');
 
     // Result Card DOM Elements
     const gpaDisplay = document.getElementById('gpa-display');
@@ -250,6 +252,67 @@ document.addEventListener('DOMContentLoaded', () => {
         ratingMessage.textContent = desc;
     };
 
+    // Save and restore default empty state content
+    const defaultEmptyContent = {
+        icon: 'inbox',
+        title: 'No subjects added yet.',
+        desc: 'Fill in the form above to start calculating your GPA.'
+    };
+
+    // Update empty state content for filter/no results
+    const setEmptyStateContent = (icon, title, desc) => {
+        const content = emptyStateRow.querySelector('.empty-state-content');
+        if (!content) return;
+        const iconEl = content.querySelector('i');
+        const titleEl = content.querySelector('p');
+        const descEl = content.querySelector('span');
+        if (iconEl) iconEl.setAttribute('data-lucide', icon);
+        if (titleEl) titleEl.textContent = title;
+        if (descEl) descEl.textContent = desc;
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    // Restore default empty state
+    const resetEmptyState = () => {
+        setEmptyStateContent(defaultEmptyContent.icon, defaultEmptyContent.title, defaultEmptyContent.desc);
+    };
+
+    // Filter subjects by search term (toggles row visibility)
+    const filterSubjects = () => {
+        const term = searchTerm.toLowerCase().trim();
+        const rows = listBody.querySelectorAll('.subject-row');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const nameInput = row.querySelector('.table-input-name');
+            const name = nameInput ? nameInput.value.toLowerCase() : '';
+            if (!term || name.includes(term)) {
+                row.classList.remove('filtered-hidden');
+                visibleCount++;
+            } else {
+                row.classList.add('filtered-hidden');
+            }
+        });
+
+        // Handle filter empty state when no rows match but subjects exist
+        if (term && visibleCount === 0 && subjects.length > 0) {
+            emptyStateRow.style.display = 'table-row';
+            setEmptyStateContent('search', 'No subjects match your search', `Try adjusting your search term or clear the filter to see all ${subjects.length} subjects.`);
+        } else if (!term && subjects.length > 0) {
+            emptyStateRow.style.display = 'none';
+            resetEmptyState();
+        } else if (subjects.length === 0) {
+            resetEmptyState();
+        }
+
+        // Update count badge contextually
+        if (term && subjects.length > 0) {
+            countBadge.textContent = `${visibleCount}/${subjects.length} Subject${subjects.length !== 1 ? 's' : ''}`;
+        } else if (subjects.length > 0) {
+            countBadge.textContent = `${subjects.length} Subject${subjects.length > 1 ? 's' : ''}`;
+        }
+    };
+
     // Render subjects in the table
     const renderSubjects = () => {
         // Remove existing dynamic subject rows
@@ -258,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (subjects.length === 0) {
             emptyStateRow.style.display = 'table-row';
+            resetEmptyState();
             countBadge.textContent = '0 Subjects';
             countBadge.style.display = 'none';
         } else {
@@ -347,6 +411,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.lucide.createIcons();
             }
         }
+        // Apply search filter after rendering
+        if (searchTerm) {
+            filterSubjects();
+        }
         calculateGPA();
     };
 
@@ -394,6 +462,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
         element.focus();
     };
+
+    // Search/filter event listener
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            searchTerm = searchInput.value;
+            if (subjects.length > 0) {
+                filterSubjects();
+            }
+        });
+
+        // Focus search with Ctrl+F / Cmd+F
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+        });
+
+        // Escape to clear search and blur
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchTerm = '';
+                if (subjects.length > 0) {
+                    filterSubjects();
+                }
+                searchInput.blur();
+            }
+        });
+    }
 
     // Add subject form handler
     form.addEventListener('submit', (e) => {
