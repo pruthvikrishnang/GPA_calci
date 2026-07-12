@@ -828,6 +828,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Helper to safely regenerate structured semester data with preservation
+    const regenerateStructuredData = () => {
+        // Preserve user-added Minor/Elective subjects
+        const customSubjects = subjects.filter(s => s.category === 'Minor' || s.category === 'Elective');
+        
+        // Preserve grades from all existing subjects by name
+        const gradeMap = {};
+        subjects.forEach(s => {
+            if (s.grade) gradeMap[s.name] = s.grade;
+        });
+        
+        // Regenerate fresh template subjects (Core + Major)
+        const fresh = getDefaultSemesterData(currentSemester);
+        
+        // Re-apply preserved grades to matching template subjects
+        fresh.forEach(s => {
+            if (gradeMap[s.name]) s.grade = gradeMap[s.name];
+        });
+        
+        // Merge back user-added custom subjects (with preserved grades)
+        customSubjects.forEach(cs => {
+            if (!fresh.some(fs => fs.id === cs.id)) {
+                fresh.push(cs);
+            }
+        });
+        
+        subjects = fresh;
+        saveSubjects();
+        renderSubjects();
+    };
+
     // Major selector click handlers
     majorPills.forEach(pill => {
         pill.addEventListener('click', () => {
@@ -840,23 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Save major selection
             saveSelectedMajor(currentSemester, major);
             
-            // Preserve existing grades before regenerating
-            const gradeMap = {};
-            subjects.forEach(s => {
-                if (s.grade) {
-                    gradeMap[s.name] = s.grade;
-                }
-            });
-            
-            // Reload subjects with new major, preserving grades
-            subjects = getDefaultSemesterData(currentSemester);
-            subjects.forEach(s => {
-                if (gradeMap[s.name]) {
-                    s.grade = gradeMap[s.name];
-                }
-            });
-            saveSubjects();
-            renderSubjects();
+            regenerateStructuredData();
         });
     });
 
