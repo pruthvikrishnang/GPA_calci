@@ -1081,127 +1081,239 @@ document.addEventListener('DOMContentLoaded', () => {
         return semLabel;
     };
 
-    // Capture and clean the results card for export (dark theme)
+    // Build a subject summary table for the export
+    const buildExportSubjectTable = () => {
+        if (subjects.length === 0) return null;
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'margin-top: 1.5rem; width: 100%;';
+
+        const title = document.createElement('div');
+        title.textContent = 'Subjects Summary';
+        title.style.cssText = `
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f3f4f6;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        `;
+        wrapper.appendChild(title);
+
+        const table = document.createElement('table');
+        table.style.cssText = `
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        `;
+
+        const isStructured = isStructuredSemester(currentSemester);
+
+        if (isStructured) {
+            // Group by category
+            const grouped = {};
+            CATEGORY_ORDER.forEach(cat => {
+                const items = subjects.filter(s => s.category === cat);
+                if (items.length > 0) grouped[cat] = items;
+            });
+
+            CATEGORY_ORDER.forEach(cat => {
+                const items = grouped[cat];
+                if (!items) return;
+
+                // Category header row
+                const catColors = getCategoryColor(cat);
+                const displayName = cat === 'Major' ? 'Majors' : cat;
+                const catRow = document.createElement('tr');
+                const catCell = document.createElement('td');
+                catCell.colSpan = 4;
+                catCell.style.cssText = `
+                    padding: 0.6rem 0.5rem 0.3rem 0.5rem;
+                    border-bottom: none;
+                    font-size: 0.65rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.08em;
+                `;
+                catCell.innerHTML = `<span style="background:${catColors.bg}; color:${catColors.text}; border:1px solid ${catColors.border}; padding:0.15rem 0.6rem; border-radius:999px;">${displayName}</span>`;
+                catRow.appendChild(catCell);
+                table.appendChild(catRow);
+
+                // Subject rows for this category
+                items.forEach((sub, idx) => {
+                    const gp = sub.grade ? GRADE_POINTS[sub.grade] : '-';
+                    const row = document.createElement('tr');
+                    const cells = [
+                        { text: sub.name, styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
+                        { text: sub.grade || '-', styles: `text-align:center; font-weight:600; color:${sub.grade ? '#9ca3af' : '#6b7280'};` },
+                        { text: sub.credits.toFixed(1), styles: 'text-align:center; color:#9ca3af;' },
+                        { text: gp, styles: 'text-align:center; font-weight:600; color:#9ca3af;' }
+                    ];
+                    row.innerHTML = cells.map(c => `<td style="padding:0.3rem 0.5rem; border-bottom:1px solid rgba(255,255,255,0.04); ${c.styles}">${c.text}</td>`).join('');
+                    table.appendChild(row);
+                });
+            });
+        } else {
+            // Flat table for non-structured semesters
+            // Header row
+            const headRow = document.createElement('tr');
+            const headers = ['Subject', 'Grade', 'Credits', 'Grade Pt.'];
+            headRow.innerHTML = headers.map(h => 
+                `<th style="padding:0.4rem 0.5rem; border-bottom:1px solid rgba(255,255,255,0.1); color:#6b7280; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; text-align:${h === 'Subject' ? 'left' : 'center'};">${h}</th>`
+            ).join('');
+            table.appendChild(headRow);
+
+            subjects.forEach(sub => {
+                const gp = sub.grade ? GRADE_POINTS[sub.grade] : '-';
+                const row = document.createElement('tr');
+                const cells = [
+                    { text: sub.name, styles: 'text-align:left; font-weight:500; color:#f3f4f6;' },
+                    { text: sub.grade || '-', styles: `text-align:center; font-weight:600; color:${sub.grade ? '#9ca3af' : '#6b7280'};` },
+                    { text: sub.credits.toFixed(1), styles: 'text-align:center; color:#9ca3af;' },
+                    { text: gp, styles: 'text-align:center; font-weight:600; color:#9ca3af;' }
+                ];
+                row.innerHTML = cells.map(c => `<td style="padding:0.35rem 0.5rem; border-bottom:1px solid rgba(255,255,255,0.04); ${c.styles}">${c.text}</td>`).join('');
+                table.appendChild(row);
+            });
+        }
+
+        wrapper.appendChild(table);
+        return wrapper;
+    };
+
+    // Build the full export element: report header + results card + subject table
     const prepareExportElement = () => {
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = `
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            width: 500px;
+            margin: 0 auto;
+        `;
+
+        // --- Report Header ---
+        const header = document.createElement('div');
+        header.style.cssText = `
+            text-align: center;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        `;
+
+        const reportTitle = document.createElement('div');
+        reportTitle.textContent = 'Apex GPA - GPA Report';
+        reportTitle.style.cssText = `
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        `;
+
+        const reportInfo = document.createElement('div');
+        reportInfo.textContent = getExportHeaderText();
+        reportInfo.style.cssText = `
+            font-size: 0.78rem;
+            color: #9ca3af;
+            font-weight: 500;
+        `;
+
+        header.appendChild(reportTitle);
+        header.appendChild(reportInfo);
+        wrapper.appendChild(header);
+
+        // --- Results Card Content ---
         const resultsCard = document.querySelector('.results-card');
-        // Clone to avoid modifying live DOM
         const clone = resultsCard.cloneNode(true);
-        
-        // Dark theme styling for export
-        clone.style.background = '#0b0f19';
-        clone.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-        clone.style.borderRadius = '16px';
-        clone.style.padding = '1.5rem';
-        clone.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
-        clone.style.color = '#f3f4f6';
-        clone.style.fontFamily = 'Inter, sans-serif';
-        clone.style.width = '420px';
-        clone.style.margin = '0 auto';
-        
+
         // Remove export buttons from clone
         const exportBtns = clone.querySelector('.export-buttons');
         if (exportBtns) exportBtns.remove();
-        
-        // --- Add report header with semester & major info ---
-        const headerEl = clone.querySelector('.card-header');
-        if (headerEl) {
-            const reportInfo = document.createElement('div');
-            reportInfo.style.cssText = `
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding-bottom: 1rem;
-                margin-bottom: 1rem;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-                width: 100%;
-            `;
-            
-            const titleEl = document.createElement('div');
-            titleEl.textContent = 'Apex GPA - GPA Report';
-            titleEl.style.cssText = `
-                font-family: 'Outfit', sans-serif;
-                font-size: 1.2rem;
-                font-weight: 700;
-                background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 0.25rem;
-            `;
-            
-            const infoEl = document.createElement('div');
-            infoEl.textContent = getExportHeaderText();
-            infoEl.style.cssText = `
-                font-size: 0.78rem;
-                color: #9ca3af;
-                font-weight: 500;
-            `;
-            
-            reportInfo.appendChild(titleEl);
-            reportInfo.appendChild(infoEl);
-            headerEl.insertBefore(reportInfo, headerEl.firstChild);
-        }
-        
-        // Fix gauge text colors for dark background
+
+        // Remove the card-header from clone (we have our own report header)
+        const cardHeader = clone.querySelector('.card-header');
+        if (cardHeader) cardHeader.remove();
+
+        // Style the cloned results content
+        clone.style.background = 'transparent';
+        clone.style.border = 'none';
+        clone.style.padding = '0';
+        clone.style.boxShadow = 'none';
+        clone.style.margin = '0';
+        clone.style.width = '100%';
+
+        // Fix gauge text colors
         const gaugeNum = clone.querySelector('.gauge-number');
         if (gaugeNum) {
             gaugeNum.style.background = 'linear-gradient(135deg, #6366f1, #a855f7, #ec4899)';
             gaugeNum.style.webkitBackgroundClip = 'text';
             gaugeNum.style.webkitTextFillColor = 'transparent';
         }
-        
+
         const gaugeLabel = clone.querySelector('.gauge-label');
         if (gaugeLabel) gaugeLabel.style.color = '#9ca3af';
-        
-        // Fix metric cards for dark bg
+
+        // Fix metric cards
         const metricCards = clone.querySelectorAll('.metric-card');
         metricCards.forEach(c => {
             c.style.background = 'rgba(17, 24, 39, 0.5)';
             c.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-            c.style.color = '#f3f4f6';
         });
-        
-        // Fix rating box for dark bg
+
+        // Fix rating box
         const ratingBox = clone.querySelector('.rating-box');
         if (ratingBox) {
             ratingBox.style.background = 'rgba(255, 255, 255, 0.02)';
             ratingBox.style.border = '1px solid rgba(255, 255, 255, 0.08)';
         }
-        
-        // Fix metric values & headers
+
+        // Fix metric values
         const metricValues = clone.querySelectorAll('.metric-value');
-        metricValues.forEach(v => {
-            v.style.color = '#f3f4f6';
-        });
-        
+        metricValues.forEach(v => v.style.color = '#f3f4f6');
+
         const metricHeaders = clone.querySelectorAll('.metric-header');
-        metricHeaders.forEach(h => {
-            h.style.color = '#6b7280';
-        });
-        
+        metricHeaders.forEach(h => h.style.color = '#6b7280');
+
         // Fix rating message
         const ratingMsg = clone.querySelector('.rating-message');
         if (ratingMsg) ratingMsg.style.color = '#9ca3af';
-        
-        // Fix rating badge text color
-        const ratingBadge = clone.querySelector('.rating-badge');
-        if (ratingBadge) {
-            // Keep original class styles but ensure text is visible
-            if (ratingBadge.classList.contains('rating-excellent')) {
-                ratingBadge.style.color = '#10b981';
-            } else if (ratingBadge.classList.contains('rating-verygood')) {
-                ratingBadge.style.color = '#3b82f6';
-            } else if (ratingBadge.classList.contains('rating-good')) {
-                ratingBadge.style.color = '#8b5cf6';
-            } else if (ratingBadge.classList.contains('rating-average')) {
-                ratingBadge.style.color = '#f59e0b';
-            } else if (ratingBadge.classList.contains('rating-poor')) {
-                ratingBadge.style.color = '#ef4444';
+
+        // Fix rating badge
+        const ratingBadgeEl = clone.querySelector('.rating-badge');
+        if (ratingBadgeEl) {
+            const colorMap = {
+                'rating-excellent': '#10b981',
+                'rating-verygood': '#3b82f6',
+                'rating-good': '#8b5cf6',
+                'rating-average': '#f59e0b',
+                'rating-poor': '#ef4444'
+            };
+            for (const [cls, color] of Object.entries(colorMap)) {
+                if (ratingBadgeEl.classList.contains(cls)) {
+                    ratingBadgeEl.style.color = color;
+                    break;
+                }
             }
         }
-        
-        return clone;
+
+        wrapper.appendChild(clone);
+
+        // --- Subject Summary Table ---
+        const subjectTable = buildExportSubjectTable();
+        if (subjectTable) {
+            wrapper.appendChild(subjectTable);
+        }
+
+        return wrapper;
     };
 
     // Export as PNG
