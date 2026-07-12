@@ -710,17 +710,13 @@ h1 span {
     white-space: nowrap;
 }
 
-/* Category badge on subject rows */
-.cat-badge {
-    display: inline-block;
-    font-size: 0.62rem;
-    font-weight: 700;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-left: 0.4rem;
-    vertical-align: middle;
+/* Category header row spacing */
+.category-header-row:not(:first-child) td {
+    padding-top: 0.75rem !important;
+}
+
+.category-header-row .category-header-content {
+    padding: 0.15rem 0;
 }
 
 /* Search bar styling */

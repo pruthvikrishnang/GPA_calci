@@ -589,14 +589,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gradePoint = subject.grade ? GRADE_POINTS[subject.grade] : '-';
         const gradeClass = getGradeClass(subject.grade);
-        const cat = subject.category || '';
-        const catColors = cat ? getCategoryColor(cat) : null;
-        const catBadge = cat ? `<span class="cat-badge" style="background: ${catColors.bg}; color: ${catColors.text}; border: 1px solid ${catColors.border};">${cat}</span>` : '';
-
         tr.innerHTML = `
             <td>
                 <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" title="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
-                ${catBadge}
             </td>
             <td>
                 <select class="table-select-grade ${gradeClass}" aria-label="Grade for ${escapeHtml(subject.name)}">
