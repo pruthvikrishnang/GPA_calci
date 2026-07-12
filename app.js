@@ -1071,28 +1071,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportPDFBtn = document.getElementById('export-pdf-btn');
     const exportPrintBtn = document.getElementById('export-print-btn');
 
-    // Capture and clean the results card for export
+    // Build a report info line: semester + major details
+    const getExportHeaderText = () => {
+        const semLabel = currentSemester === 'custom' ? 'Manual Mode' : `Semester ${currentSemester}`;
+        const savedMajor = getSelectedMajor(currentSemester);
+        if (savedMajor) {
+            return `${semLabel}  •  Major: ${savedMajor}`;
+        }
+        return semLabel;
+    };
+
+    // Capture and clean the results card for export (dark theme)
     const prepareExportElement = () => {
         const resultsCard = document.querySelector('.results-card');
         // Clone to avoid modifying live DOM
         const clone = resultsCard.cloneNode(true);
         
-        // Set a fixed light background and explicit styling for export
-        clone.style.background = '#ffffff';
-        clone.style.border = '1px solid #e2e8f0';
+        // Dark theme styling for export
+        clone.style.background = '#0b0f19';
+        clone.style.border = '1px solid rgba(255, 255, 255, 0.08)';
         clone.style.borderRadius = '16px';
         clone.style.padding = '1.5rem';
-        clone.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
-        clone.style.color = '#0f172a';
+        clone.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+        clone.style.color = '#f3f4f6';
         clone.style.fontFamily = 'Inter, sans-serif';
-        clone.style.width = '400px';
+        clone.style.width = '420px';
         clone.style.margin = '0 auto';
         
         // Remove export buttons from clone
         const exportBtns = clone.querySelector('.export-buttons');
         if (exportBtns) exportBtns.remove();
         
-        // Fix gauge text colors for light background
+        // --- Add report header with semester & major info ---
+        const headerEl = clone.querySelector('.card-header');
+        if (headerEl) {
+            const reportInfo = document.createElement('div');
+            reportInfo.style.cssText = `
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                width: 100%;
+            `;
+            
+            const titleEl = document.createElement('div');
+            titleEl.textContent = 'Apex GPA - GPA Report';
+            titleEl.style.cssText = `
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.2rem;
+                font-weight: 700;
+                background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 0.25rem;
+            `;
+            
+            const infoEl = document.createElement('div');
+            infoEl.textContent = getExportHeaderText();
+            infoEl.style.cssText = `
+                font-size: 0.78rem;
+                color: #9ca3af;
+                font-weight: 500;
+            `;
+            
+            reportInfo.appendChild(titleEl);
+            reportInfo.appendChild(infoEl);
+            headerEl.insertBefore(reportInfo, headerEl.firstChild);
+        }
+        
+        // Fix gauge text colors for dark background
         const gaugeNum = clone.querySelector('.gauge-number');
         if (gaugeNum) {
             gaugeNum.style.background = 'linear-gradient(135deg, #6366f1, #a855f7, #ec4899)';
@@ -1100,30 +1151,55 @@ document.addEventListener('DOMContentLoaded', () => {
             gaugeNum.style.webkitTextFillColor = 'transparent';
         }
         
-        // Fix metric cards for light bg
+        const gaugeLabel = clone.querySelector('.gauge-label');
+        if (gaugeLabel) gaugeLabel.style.color = '#9ca3af';
+        
+        // Fix metric cards for dark bg
         const metricCards = clone.querySelectorAll('.metric-card');
         metricCards.forEach(c => {
-            c.style.background = '#f8fafc';
-            c.style.border = '1px solid #e2e8f0';
-            c.style.color = '#0f172a';
+            c.style.background = 'rgba(17, 24, 39, 0.5)';
+            c.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+            c.style.color = '#f3f4f6';
         });
         
-        // Fix rating box
+        // Fix rating box for dark bg
         const ratingBox = clone.querySelector('.rating-box');
         if (ratingBox) {
-            ratingBox.style.background = '#f8fafc';
-            ratingBox.style.border = '1px solid #e2e8f0';
+            ratingBox.style.background = 'rgba(255, 255, 255, 0.02)';
+            ratingBox.style.border = '1px solid rgba(255, 255, 255, 0.08)';
         }
         
-        // Fix metric values
+        // Fix metric values & headers
         const metricValues = clone.querySelectorAll('.metric-value');
         metricValues.forEach(v => {
-            v.style.color = '#0f172a';
+            v.style.color = '#f3f4f6';
+        });
+        
+        const metricHeaders = clone.querySelectorAll('.metric-header');
+        metricHeaders.forEach(h => {
+            h.style.color = '#6b7280';
         });
         
         // Fix rating message
         const ratingMsg = clone.querySelector('.rating-message');
-        if (ratingMsg) ratingMsg.style.color = '#475569';
+        if (ratingMsg) ratingMsg.style.color = '#9ca3af';
+        
+        // Fix rating badge text color
+        const ratingBadge = clone.querySelector('.rating-badge');
+        if (ratingBadge) {
+            // Keep original class styles but ensure text is visible
+            if (ratingBadge.classList.contains('rating-excellent')) {
+                ratingBadge.style.color = '#10b981';
+            } else if (ratingBadge.classList.contains('rating-verygood')) {
+                ratingBadge.style.color = '#3b82f6';
+            } else if (ratingBadge.classList.contains('rating-good')) {
+                ratingBadge.style.color = '#8b5cf6';
+            } else if (ratingBadge.classList.contains('rating-average')) {
+                ratingBadge.style.color = '#f59e0b';
+            } else if (ratingBadge.classList.contains('rating-poor')) {
+                ratingBadge.style.color = '#ef4444';
+            }
+        }
         
         return clone;
     };
@@ -1146,7 +1222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const canvas = await window.html2canvas(exportEl, {
                 scale: 2,
-                backgroundColor: '#ffffff',
+                backgroundColor: '#0b0f19',
                 useCORS: true,
                 logging: false
             });
@@ -1193,7 +1269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const canvas = await window.html2canvas(exportEl, {
                 scale: 2,
-                backgroundColor: '#ffffff',
+                backgroundColor: '#0b0f19',
                 useCORS: true,
                 logging: false
             });
