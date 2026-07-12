@@ -72,9 +72,10 @@ const SEMESTER_SUBJECTS = {
     ],
     '3': {
         core: [
-            { name: 'Theory of Computation', credits: 4.0, grade: '', category: 'Core' },
-            { name: 'Computer Networks', credits: 3.0, grade: '', category: 'Core' },
-            { name: 'Design and Analysis of Algorithms', credits: 4.0, grade: '', category: 'Core' }
+            { name: 'CS2806-Calculus', credits: 2.0, grade: '', category: 'Core' },
+            { name: 'CS2000-Design and Analysis of Algorithms', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'CS2403-Computer Networks', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'CS2403-Internet of Things', credits: 3.0, grade: '', category: 'Core' }
         ],
         majors: {
             'AIML': [
