@@ -46,7 +46,7 @@ const CATEGORY_COLORS_LIGHT = {
 };
 
 // Helper to check if semester has structured categories (Sem 3-6)
-const isStructuredSemester = (sem) => ['3', '4', '5', '6'].includes(sem);
+const isStructuredSemester = (sem) => ['3', '4', '5', '6', '7', '8'].includes(sem);
 
 // Built-in semester subjects and credits definitions
 const SEMESTER_SUBJECTS = {
@@ -180,8 +180,58 @@ const SEMESTER_SUBJECTS = {
         minors: [],
         electives: []
     },
-    '7': [],
-    '8': []
+    '7': {
+        core: [
+            { name: 'Capstone Project - I', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'Professional Ethics & Values', credits: 2.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'Advanced Deep Learning', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'AI in Production', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Big Data Engineering', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'ML Pipeline Architecture', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'Kubernetes & Orchestration', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Cloud Architecture Design', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Cyber Threat Intelligence', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Incident Response & Forensics', credits: 3.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    },
+    '8': {
+        core: [
+            { name: 'Capstone Project - II', credits: 6.0, grade: '', category: 'Core' },
+            { name: 'Seminar & Technical Presentation', credits: 2.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'AI Ethics & Governance', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Research in AI/ML', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Data Science Capstone', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Advanced Analytics', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'Cloud Migration Strategy', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Enterprise Cloud Solutions', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Security Architecture', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Cyber Warfare & Defense', credits: 3.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -212,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchTerm = '';
 
     // Curriculum Versioning to invalidate cache when default subjects change
-    const CURRICULUM_VERSION = 'v7';
+    const CURRICULUM_VERSION = 'v8';
     const checkCurriculumVersion = () => {
         const savedVersion = localStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
