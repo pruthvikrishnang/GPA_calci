@@ -87,6 +87,17 @@
                                 </div>
                             </div>
                             
+                            <div class="form-group flex-1" id="category-form-group" style="display:none;">
+                                <label for="subject-category">Category</label>
+                                <div class="input-wrapper">
+                                    <i data-lucide="layers" class="input-icon"></i>
+                                    <select id="subject-category">
+                                        <option value="Minor">Minor</option>
+                                        <option value="Elective">Elective</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="form-group flex-1">
                                 <label for="subject-grade">Grade</label>
                                 <div class="input-wrapper">
@@ -129,6 +140,19 @@
                             <button id="clear-all-btn" class="clear-btn" title="Clear All Subjects" aria-label="Clear All Subjects">
                                 <i data-lucide="rotate-ccw"></i>
                             </button>
+                        </div>
+                        <!-- Major Selector for Sem 3-6 -->
+                        <div class="major-selector" id="major-selector" style="display:none;">
+                            <div class="major-selector-header">
+                                <i data-lucide="bookmark"></i>
+                                <span>Select Your Major</span>
+                            </div>
+                            <div class="major-pills" id="major-pills">
+                                <button type="button" class="major-pill" data-major="AIML">AIML</button>
+                                <button type="button" class="major-pill" data-major="Data Science and Engineering">Data Science &amp; Engineering</button>
+                                <button type="button" class="major-pill" data-major="Cloud computing">Cloud Computing</button>
+                                <button type="button" class="major-pill" data-major="Cyber Security">Cyber Security</button>
+                            </div>
                         </div>
                         <div class="search-bar-wrapper">
                             <i data-lucide="search" class="search-input-icon"></i>

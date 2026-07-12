@@ -18,6 +18,36 @@ const GRADE_POINTS = {
     'F': 0
 };
 
+// Major options for Sem 3-6
+const MAJOR_OPTIONS = [
+    'AIML',
+    'Data Science and Engineering',
+    'Cloud computing',
+    'Cyber Security'
+];
+
+// Category order for display
+const CATEGORY_ORDER = ['Core', 'Major', 'Minor', 'Elective'];
+
+// Category display colors
+const CATEGORY_COLORS = {
+    'Core': { bg: 'rgba(99, 102, 241, 0.08)', text: '#818cf8', border: 'rgba(99, 102, 241, 0.15)' },
+    'Major': { bg: 'rgba(16, 185, 129, 0.08)', text: '#34d399', border: 'rgba(16, 185, 129, 0.15)' },
+    'Minor': { bg: 'rgba(245, 158, 11, 0.08)', text: '#fbbf24', border: 'rgba(245, 158, 11, 0.15)' },
+    'Elective': { bg: 'rgba(236, 72, 153, 0.08)', text: '#f472b6', border: 'rgba(236, 72, 153, 0.15)' }
+};
+
+// Light mode category colors
+const CATEGORY_COLORS_LIGHT = {
+    'Core': { bg: 'rgba(99, 102, 241, 0.06)', text: '#6366f1', border: 'rgba(99, 102, 241, 0.12)' },
+    'Major': { bg: 'rgba(16, 185, 129, 0.06)', text: '#059669', border: 'rgba(16, 185, 129, 0.12)' },
+    'Minor': { bg: 'rgba(245, 158, 11, 0.06)', text: '#d97706', border: 'rgba(245, 158, 11, 0.12)' },
+    'Elective': { bg: 'rgba(236, 72, 153, 0.06)', text: '#db2777', border: 'rgba(236, 72, 153, 0.12)' }
+};
+
+// Helper to check if semester has structured categories (Sem 3-6)
+const isStructuredSemester = (sem) => ['3', '4', '5', '6'].includes(sem);
+
 // Built-in semester subjects and credits definitions
 const SEMESTER_SUBJECTS = {
     '1': [
@@ -40,19 +70,114 @@ const SEMESTER_SUBJECTS = {
         { name: 'CS1940 - Entrepreneurial Mindset', credits: 2.0, grade: '' },
         { name: 'CS1925 - Yoga and Wellbeing', credits: 2.0, grade: '' }
     ],
-    '3': [
-        { name: 'Transform Calculus & Fourier Series', credits: 3.0, grade: '' },
-        { name: 'Data Structures and Applications', credits: 4.0, grade: '' },
-        { name: 'Computer Organization and Architecture', credits: 3.0, grade: '' },
-        { name: 'Object Oriented Programming with C++', credits: 3.0, grade: '' },
-        { name: 'Data Structures Laboratory', credits: 1.0, grade: '' },
-        { name: 'Computer Organization Laboratory', credits: 1.0, grade: '' },
-        { name: 'Social Connect and Responsibilities', credits: 1.0, grade: '' },
-        { name: 'Quantitative Aptitude', credits: 1.0, grade: '' }
-    ],
-    '4': [],
-    '5': [],
-    '6': [],
+    '3': {
+        core: [
+            { name: 'Theory of Computation', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'Computer Networks', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'Design and Analysis of Algorithms', credits: 4.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'Introduction to Machine Learning', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'AI Lab', credits: 1.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Data Science Fundamentals', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Data Science Lab', credits: 1.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'Cloud Architecture', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Cloud Lab', credits: 1.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Network Security', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Security Lab', credits: 1.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    },
+    '4': {
+        core: [
+            { name: 'Operating Systems', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'Database Management Systems', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'Software Engineering', credits: 3.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'Deep Learning', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'NLP Fundamentals', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Big Data Analytics', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Statistical Methods', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'Distributed Systems', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Cloud Security', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Cryptography', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Digital Forensics', credits: 3.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    },
+    '5': {
+        core: [
+            { name: 'Compiler Design', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'Distributed Computing', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'Professional Ethics', credits: 2.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'Reinforcement Learning', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Computer Vision', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Data Visualization', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Time Series Analysis', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'DevOps Practices', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Microservices Architecture', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Ethical Hacking', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Cyber Law & Compliance', credits: 3.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    },
+    '6': {
+        core: [
+            { name: 'Cloud Computing', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'Internet of Things', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'Project Work', credits: 3.0, grade: '', category: 'Core' }
+        ],
+        majors: {
+            'AIML': [
+                { name: 'Generative AI', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'MLOps', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Data Science and Engineering': [
+                { name: 'Deep Learning for DS', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Data Engineering', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cloud computing': [
+                { name: 'Cloud Native Apps', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Serverless Computing', credits: 3.0, grade: '', category: 'Major' }
+            ],
+            'Cyber Security': [
+                { name: 'Malware Analysis', credits: 3.0, grade: '', category: 'Major' },
+                { name: 'Security Operations', credits: 3.0, grade: '', category: 'Major' }
+            ]
+        },
+        minors: [],
+        electives: []
+    },
     '7': [],
     '8': []
 };
@@ -85,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchTerm = '';
 
     // Curriculum Versioning to invalidate cache when default subjects change
-    const CURRICULUM_VERSION = 'v4';
+    const CURRICULUM_VERSION = 'v5';
     const checkCurriculumVersion = () => {
         const savedVersion = localStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
@@ -97,6 +222,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     checkCurriculumVersion();
+
+    // Show/hide major selector and category form based on semester
+    const updateStructuredUI = (sem) => {
+        const isStructured = isStructuredSemester(sem);
+        if (majorSelector) {
+            majorSelector.style.display = isStructured ? 'block' : 'none';
+        }
+        if (categoryFormGroup) {
+            categoryFormGroup.style.display = isStructured ? 'flex' : 'none';
+        }
+        
+        // Update major pill active states
+        if (isStructured) {
+            const savedMajor = getSelectedMajor(sem);
+            majorPills.forEach(pill => {
+                if (pill.dataset.major === savedMajor) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+        }
+    };
 
     // Load initial subjects from local storage based on active semester
     const loadSubjects = () => {
@@ -113,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (semBadge) {
             semBadge.textContent = currentSemester === 'custom' ? 'Manual Mode' : `Semester ${currentSemester}`;
         }
+
+        // Show/hide structured semester UI
+        updateStructuredUI(currentSemester);
 
         const key = `gpa_subjects_${currentSemester}`;
         const saved = localStorage.getItem(key);
@@ -134,6 +285,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateClearButtonUI();
     };
 
+    // Get selected major for a semester from localStorage
+    const getSelectedMajor = (sem) => {
+        return localStorage.getItem(`gpa_major_${sem}`) || '';
+    };
+
+    // Save selected major for a semester
+    const saveSelectedMajor = (sem, major) => {
+        localStorage.setItem(`gpa_major_${sem}`, major);
+    };
+
     // Helper to get default data for a semester template or sample custom data
     const getDefaultSemesterData = (sem) => {
         if (sem === 'custom') {
@@ -144,12 +305,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: '4', name: 'Technical Writing', grade: 'B+', credits: 2.0 }
             ];
         }
+        
+        if (isStructuredSemester(sem)) {
+            const data = SEMESTER_SUBJECTS[sem];
+            if (!data) return [];
+            const result = [];
+            
+            // Add core subjects
+            data.core.forEach((sub, idx) => {
+                result.push({
+                    id: `${sem}_core_${idx}_${Date.now()}`,
+                    name: sub.name,
+                    credits: sub.credits,
+                    grade: sub.grade || '',
+                    category: 'Core'
+                });
+            });
+            
+            // Add major subjects if a major is selected
+            const savedMajor = getSelectedMajor(sem);
+            if (savedMajor && data.majors[savedMajor]) {
+                data.majors[savedMajor].forEach((sub, idx) => {
+                    result.push({
+                        id: `${sem}_major_${idx}_${Date.now()}`,
+                        name: sub.name,
+                        credits: sub.credits,
+                        grade: sub.grade || '',
+                        category: 'Major'
+                    });
+                });
+            }
+            
+            // Saved minors and electives (from user additions)
+            if (data.minors) {
+                data.minors.forEach((sub, idx) => {
+                    result.push({
+                        id: `${sem}_minor_${idx}_${Date.now()}`,
+                        name: sub.name,
+                        credits: sub.credits,
+                        grade: sub.grade || '',
+                        category: 'Minor'
+                    });
+                });
+            }
+            if (data.electives) {
+                data.electives.forEach((sub, idx) => {
+                    result.push({
+                        id: `${sem}_elective_${idx}_${Date.now()}`,
+                        name: sub.name,
+                        credits: sub.credits,
+                        grade: sub.grade || '',
+                        category: 'Elective'
+                    });
+                });
+            }
+            
+            return result;
+        }
+        
         const defaults = SEMESTER_SUBJECTS[sem] || [];
         return defaults.map((sub, index) => ({
             id: `${sem}_${index}_${Date.now()}`,
             name: sub.name,
             credits: sub.credits,
-            grade: sub.grade
+            grade: sub.grade || ''
         }));
     };
 
@@ -174,6 +393,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchClearBtn = document.getElementById('search-clear-btn');
     const filterResultsBar = document.getElementById('filter-results-bar');
     const filterResultsText = document.getElementById('filter-results-text');
+    const majorSelector = document.getElementById('major-selector');
+    const majorPills = document.querySelectorAll('.major-pill');
+    const categoryFormGroup = document.getElementById('category-form-group');
+    const categorySelect = document.getElementById('subject-category');
 
     // Result Card DOM Elements
     const gpaDisplay = document.getElementById('gpa-display');
@@ -332,11 +555,118 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Render subjects in the table
+    // Get category colors based on theme
+    const getCategoryColor = (category) => {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const palette = isLight ? CATEGORY_COLORS_LIGHT : CATEGORY_COLORS;
+        return palette[category] || { bg: 'transparent', text: 'var(--text-muted)', border: 'var(--border-color)' };
+    };
+
+    // Render a category header row
+    const renderCategoryHeader = (category) => {
+        const colors = getCategoryColor(category);
+        const tr = document.createElement('tr');
+        tr.className = 'category-header-row';
+        tr.innerHTML = `
+            <td colspan="5">
+                <div class="category-header-content">
+                    <span class="cat-label" style="background: ${colors.bg}; color: ${colors.text}; border: 1px solid ${colors.border};">${category}</span>
+                    <span class="cat-line"></span>
+                </div>
+            </td>
+        `;
+        return tr;
+    };
+
+    // Render a single subject row
+    const renderSubjectRow = (subject, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'subject-row';
+        tr.dataset.id = subject.id;
+        tr.style.animationDelay = `${index * 0.04}s`;
+
+        const gradePoint = subject.grade ? GRADE_POINTS[subject.grade] : '-';
+        const gradeClass = getGradeClass(subject.grade);
+        const cat = subject.category || '';
+        const catColors = cat ? getCategoryColor(cat) : null;
+        const catBadge = cat ? `<span class="cat-badge" style="background: ${catColors.bg}; color: ${catColors.text}; border: 1px solid ${catColors.border};">${cat}</span>` : '';
+
+        tr.innerHTML = `
+            <td>
+                <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" title="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
+                ${catBadge}
+            </td>
+            <td>
+                <select class="table-select-grade ${gradeClass}" aria-label="Grade for ${escapeHtml(subject.name)}">
+                    <option value="" ${subject.grade === '' ? 'selected' : ''}>Grade</option>
+                    <option value="O" ${subject.grade === 'O' ? 'selected' : ''}>O (Outstanding)</option>
+                    <option value="A+" ${subject.grade === 'A+' ? 'selected' : ''}>A+ (Excellent)</option>
+                    <option value="A" ${subject.grade === 'A' ? 'selected' : ''}>A (Very Good)</option>
+                    <option value="B+" ${subject.grade === 'B+' ? 'selected' : ''}>B+ (Good)</option>
+                    <option value="B" ${subject.grade === 'B' ? 'selected' : ''}>B (Above Average)</option>
+                    <option value="C" ${subject.grade === 'C' ? 'selected' : ''}>C (Average)</option>
+                    <option value="P" ${subject.grade === 'P' ? 'selected' : ''}>P (Pass)</option>
+                    <option value="F" ${subject.grade === 'F' ? 'selected' : ''}>F (Fail)</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" class="table-input-credits" value="${subject.credits}" min="0.5" max="20" step="0.5" placeholder="Credits" aria-label="Credits for ${escapeHtml(subject.name)}">
+            </td>
+            <td class="font-medium text-center grade-point-cell">${gradePoint}</td>
+            <td class="text-center">
+                <button class="delete-btn" aria-label="Delete Subject">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </td>
+        `;
+
+        // Add delete button event listener
+        const deleteBtn = tr.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', () => deleteSubject(subject.id));
+
+        // Add name input listener
+        const nameInp = tr.querySelector('.table-input-name');
+        nameInp.addEventListener('input', () => {
+            updateSubjectProperty(subject.id, 'name', nameInp.value.trim(), false);
+            if (searchTerm) {
+                filterSubjects();
+            }
+        });
+
+        // Add credits input listener
+        const creditsInp = tr.querySelector('.table-input-credits');
+        creditsInp.addEventListener('input', () => {
+            const val = parseFloat(creditsInp.value);
+            if (!isNaN(val) && val >= 0.5 && val <= 20) {
+                creditsInp.classList.remove('input-invalid');
+                updateSubjectProperty(subject.id, 'credits', val, true);
+            } else {
+                creditsInp.classList.add('input-invalid');
+            }
+        });
+
+        // Add grade select listener
+        const gradeSelect = tr.querySelector('.table-select-grade');
+        const gradePointCell = tr.querySelector('.grade-point-cell');
+        gradeSelect.addEventListener('change', () => {
+            const selectedGrade = gradeSelect.value;
+            gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
+            const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
+            gradePointCell.textContent = gp;
+            gradePointCell.classList.remove('gp-flash');
+            void gradePointCell.offsetWidth;
+            gradePointCell.classList.add('gp-flash');
+            updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
+        });
+
+        return tr;
+    };
+
+    // Render subjects in the table (with category grouping for structured semesters)
     const renderSubjects = () => {
-        // Remove existing dynamic subject rows
-        const rows = listBody.querySelectorAll('.subject-row');
-        rows.forEach(row => row.remove());
+        // Remove existing dynamic rows + category headers
+        const existing = listBody.querySelectorAll('.subject-row, .category-header-row');
+        existing.forEach(row => row.remove());
 
         if (subjects.length === 0) {
             emptyStateRow.style.display = 'table-row';
@@ -348,93 +678,48 @@ document.addEventListener('DOMContentLoaded', () => {
             countBadge.textContent = `${subjects.length} Subject${subjects.length > 1 ? 's' : ''}`;
             countBadge.style.display = 'inline-block';
 
-            subjects.forEach((subject, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'subject-row';
-                tr.dataset.id = subject.id;
-                tr.style.animationDelay = `${index * 0.04}s`;
-
-                const gradePoint = subject.grade ? GRADE_POINTS[subject.grade] : '-';
-                const gradeClass = getGradeClass(subject.grade);
-
-                tr.innerHTML = `
-                    <td>
-                        <input type="text" class="table-input-name" value="${escapeHtml(subject.name)}" title="${escapeHtml(subject.name)}" placeholder="Subject Name" aria-label="Subject Name">
-                    </td>
-                    <td>
-                        <select class="table-select-grade ${gradeClass}" aria-label="Grade for ${escapeHtml(subject.name)}">
-                            <option value="" ${subject.grade === '' ? 'selected' : ''}>Grade</option>
-                            <option value="O" ${subject.grade === 'O' ? 'selected' : ''}>O (Outstanding)</option>
-                            <option value="A+" ${subject.grade === 'A+' ? 'selected' : ''}>A+ (Excellent)</option>
-                            <option value="A" ${subject.grade === 'A' ? 'selected' : ''}>A (Very Good)</option>
-                            <option value="B+" ${subject.grade === 'B+' ? 'selected' : ''}>B+ (Good)</option>
-                            <option value="B" ${subject.grade === 'B' ? 'selected' : ''}>B (Above Average)</option>
-                            <option value="C" ${subject.grade === 'C' ? 'selected' : ''}>C (Average)</option>
-                            <option value="P" ${subject.grade === 'P' ? 'selected' : ''}>P (Pass)</option>
-                            <option value="F" ${subject.grade === 'F' ? 'selected' : ''}>F (Fail)</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" class="table-input-credits" value="${subject.credits}" min="0.5" max="20" step="0.5" placeholder="Credits" aria-label="Credits for ${escapeHtml(subject.name)}">
-                    </td>
-                    <td class="font-medium text-center grade-point-cell">${gradePoint}</td>
-                    <td class="text-center">
-                        <button class="delete-btn" aria-label="Delete Subject">
-                            <i data-lucide="trash-2"></i>
-                        </button>
-                    </td>
-                `;
-
-                // Add delete button event listener
-                const deleteBtn = tr.querySelector('.delete-btn');
-                deleteBtn.addEventListener('click', () => deleteSubject(subject.id));
-
-                // Add name input listener
-                const nameInp = tr.querySelector('.table-input-name');
-                nameInp.addEventListener('input', () => {
-                    updateSubjectProperty(subject.id, 'name', nameInp.value.trim(), false);
-                    // Re-apply search filter if active
-                    if (searchTerm) {
-                        filterSubjects();
+            const isStructured = isStructuredSemester(currentSemester);
+            
+            if (isStructured) {
+                // Group subjects by category
+                const grouped = {};
+                CATEGORY_ORDER.forEach(cat => {
+                    const items = subjects.filter(s => s.category === cat);
+                    if (items.length > 0) {
+                        grouped[cat] = items;
                     }
                 });
-
-                // Add credits input listener
-                const creditsInp = tr.querySelector('.table-input-credits');
-                creditsInp.addEventListener('input', () => {
-                    const val = parseFloat(creditsInp.value);
-                    if (!isNaN(val) && val >= 0.5 && val <= 20) {
-                        creditsInp.classList.remove('input-invalid');
-                        updateSubjectProperty(subject.id, 'credits', val, true);
-                    } else {
-                        creditsInp.classList.add('input-invalid');
-                    }
+                
+                // Render each category group
+                let globalIdx = 0;
+                CATEGORY_ORDER.forEach(cat => {
+                    const items = grouped[cat];
+                    if (!items) return;
+                    
+                    // Add category header
+                    listBody.appendChild(renderCategoryHeader(cat));
+                    
+                    // Add subject rows
+                    items.forEach((subject) => {
+                        const tr = renderSubjectRow(subject, globalIdx);
+                        listBody.appendChild(tr);
+                        globalIdx++;
+                    });
                 });
-
-                // Add grade select listener
-                const gradeSelect = tr.querySelector('.table-select-grade');
-                const gradePointCell = tr.querySelector('.grade-point-cell');
-                gradeSelect.addEventListener('change', () => {
-                    const selectedGrade = gradeSelect.value;
-                    gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
-                    const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
-                    gradePointCell.textContent = gp;
-                    // Animate grade point change
-                    gradePointCell.classList.remove('gp-flash');
-                    void gradePointCell.offsetWidth; // trigger reflow
-                    gradePointCell.classList.add('gp-flash');
-                    updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
+            } else {
+                // Flat rendering for non-structured semesters
+                subjects.forEach((subject, index) => {
+                    const tr = renderSubjectRow(subject, index);
+                    listBody.appendChild(tr);
                 });
+            }
 
-                listBody.appendChild(tr);
-            });
-
-            // Re-initialize icons for newly added elements
+            // Re-initialize icons
             if (window.lucide) {
                 window.lucide.createIcons();
             }
         }
-        // Apply search filter after rendering
+        
         if (searchTerm) {
             filterSubjects();
         }
@@ -541,6 +826,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Major selector click handlers
+    majorPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            const major = pill.dataset.major;
+            
+            // Update active state
+            majorPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            
+            // Save major selection
+            saveSelectedMajor(currentSemester, major);
+            
+            // Reload subjects with new major
+            subjects = getDefaultSemesterData(currentSemester);
+            saveSubjects();
+            renderSubjects();
+        });
+    });
+
     // Add subject form handler
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -548,6 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = nameInput.value.trim();
         const grade = gradeInput.value;
         const credits = parseFloat(creditsInput.value);
+        const category = isStructuredSemester(currentSemester) ? categorySelect.value : '';
 
         let hasError = false;
 
@@ -571,10 +876,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const newSubject = {
-            id: currentSemester === 'custom' ? Date.now().toString() : `${currentSemester}_custom_${Date.now()}`,
+            id: `${currentSemester}_custom_${Date.now()}`,
             name,
             grade,
-            credits
+            credits,
+            category: category || ''
         };
 
         subjects.push(newSubject);
@@ -583,6 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset form
         form.reset();
+        if (categorySelect) categorySelect.value = 'Minor';
         nameInput.focus();
     });
 
@@ -634,6 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subjects = getDefaultSemesterData(sem);
             saveSubjects();
         }
+        updateStructuredUI(sem);
         renderSubjects();
         updateClearButtonUI();
     };
