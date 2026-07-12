@@ -513,6 +513,67 @@ h1 span {
     transform: rotate(-180deg);
 }
 
+/* Search bar styling */
+.search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.85rem;
+}
+
+.search-input-icon {
+    position: absolute;
+    left: 0.85rem;
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color var(--transition-fast);
+}
+
+.search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 1rem 0 2.4rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.search-input:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.search-input:focus ~ .search-input-icon,
+.search-input:focus + .search-input-icon {
+    color: var(--input-focus-border);
+}
+
+.search-input:hover {
+    border-color: var(--border-color-hover);
+}
+
+/* Filtered row hidden state */
+.subject-row.filtered-hidden {
+    display: none;
+}
+
+/* Filter active state for search icon */
+.search-bar-wrapper.filter-active .search-input-icon {
+    color: var(--input-focus-border);
+}
+
 /* Table container styling */
 .table-container {
     width: 100%;
