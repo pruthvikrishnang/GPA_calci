@@ -165,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyStateRow = document.getElementById('empty-state-row');
     const countBadge = document.getElementById('subject-count');
     const searchInput = document.getElementById('subject-search');
+    const filterResultsBar = document.getElementById('filter-results-bar');
+    const filterResultsText = document.getElementById('filter-results-text');
 
     // Result Card DOM Elements
     const gpaDisplay = document.getElementById('gpa-display');
@@ -303,6 +305,14 @@ document.addEventListener('DOMContentLoaded', () => {
             resetEmptyState();
         } else if (subjects.length === 0) {
             resetEmptyState();
+        }
+
+        // Update filter results info bar
+        if (term && subjects.length > 0) {
+            filterResultsText.textContent = `Showing ${visibleCount} of ${subjects.length} subject${subjects.length !== 1 ? 's' : ''}`;
+            filterResultsBar.classList.toggle('visible', true);
+        } else {
+            filterResultsBar.classList.toggle('visible', false);
         }
 
         // Update count badge contextually

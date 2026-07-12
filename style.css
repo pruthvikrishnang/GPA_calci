@@ -574,6 +574,40 @@ h1 span {
     color: var(--input-focus-border);
 }
 
+/* Filter results info bar */
+.filter-results-bar {
+    display: none;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: -0.4rem;
+    margin-bottom: 0.65rem;
+    padding-left: 0.2rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: all var(--transition-fast);
+}
+
+.filter-results-bar.visible {
+    display: block;
+    animation: fadeInFilterInfo 0.25s ease forwards;
+}
+
+@keyframes fadeInFilterInfo {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Filter active state: subtle highlight on table */
+.table-container.filter-active {
+    border-color: rgba(168, 85, 247, 0.08);
+}
+
 /* Table container styling */
 .table-container {
     width: 100%;
