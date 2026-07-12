@@ -100,9 +100,10 @@ const SEMESTER_SUBJECTS = {
     },
     '4': {
         core: [
-            { name: 'Operating Systems', credits: 4.0, grade: '', category: 'Core' },
-            { name: 'Database Management Systems', credits: 3.0, grade: '', category: 'Core' },
-            { name: 'Software Engineering', credits: 3.0, grade: '', category: 'Core' }
+            { name: 'CS2800-Probability and Statistics', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'CS2024-Object Oriented Programming with Java', credits: 4.0, grade: '', category: 'Core' },
+            { name: 'CS2005-Agile Software Engineering and DevOps', credits: 3.0, grade: '', category: 'Core' },
+            { name: 'CS2306-Mobile App Development Essentials', credits: 2.0, grade: '', category: 'Core' }
         ],
         majors: {
             'AIML': [
