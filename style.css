@@ -536,6 +536,17 @@ h1 span {
     border-radius: 9999px;
 }
 
+/* Light mode overrides for semester number badges */
+[data-theme="light"] .sem-num {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-muted);
+}
+
+[data-theme="light"] .sem-btn:not(.active):hover .sem-num {
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
 [data-theme="light"] .subject-count-badge {
     background: rgba(99, 102, 241, 0.08);
     color: #6366f1;
