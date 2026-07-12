@@ -103,20 +103,16 @@ const SEMESTER_SUBJECTS = {
         ],
         majors: {
             'AIML': [
-                { name: 'Deep Learning', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'NLP Fundamentals', credits: 3.0, grade: '', category: 'Major' }
+                { name: 'CS2228-Deep Learning', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Data Science and Engineering': [
-                { name: 'Big Data Analytics', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Statistical Methods', credits: 3.0, grade: '', category: 'Major' }
+                { name: 'CS2226-Machine Learning for Data Science', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Cloud computing': [
-                { name: 'Distributed Systems', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Cloud Security', credits: 3.0, grade: '', category: 'Major' }
+                { name: 'CS2307-Full Stack Application Development', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Cyber Security': [
-                { name: 'Cryptography', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Digital Forensics', credits: 3.0, grade: '', category: 'Major' }
+                { name: 'CS2406-Incident Response and Digital Forensics', credits: 3.0, grade: '', category: 'Major' }
             ]
         },
         minors: [],
