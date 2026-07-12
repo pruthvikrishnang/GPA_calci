@@ -652,11 +652,6 @@ h1 span {
     }
 }
 
-/* Active filter state: subtle highlight on table */
-.table-container.filter-active {
-    border-color: rgba(168, 85, 247, 0.08);
-}
-
 /* Row highlight animation when filtering */
 .subject-row:not(.filtered-hidden) {
     transition: background-color 0.2s ease, border-left-color 0.2s ease;

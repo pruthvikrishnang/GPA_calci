@@ -309,11 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Update filter results info bar
-        if (term && subjects.length > 0) {
-            filterResultsText.textContent = `Showing ${visibleCount} of ${subjects.length} subject${subjects.length !== 1 ? 's' : ''}`;
-            filterResultsBar.classList.toggle('visible', true);
-        } else {
-            filterResultsBar.classList.toggle('visible', false);
+        if (filterResultsText && filterResultsBar) {
+            if (term && subjects.length > 0) {
+                filterResultsText.textContent = `Showing ${visibleCount} of ${subjects.length} subject${subjects.length !== 1 ? 's' : ''}`;
+                filterResultsBar.classList.toggle('visible', true);
+            } else {
+                filterResultsBar.classList.toggle('visible', false);
+            }
         }
 
         // Update count badge contextually
@@ -385,6 +387,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nameInp = tr.querySelector('.table-input-name');
                 nameInp.addEventListener('input', () => {
                     updateSubjectProperty(subject.id, 'name', nameInp.value.trim(), false);
+                    // Re-apply search filter if active
+                    if (searchTerm) {
+                        filterSubjects();
+                    }
                 });
 
                 // Add credits input listener
