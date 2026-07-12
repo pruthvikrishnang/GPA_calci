@@ -79,20 +79,16 @@ const SEMESTER_SUBJECTS = {
         ],
         majors: {
             'AIML': [
-                { name: 'Introduction to Machine Learning', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'AI Lab', credits: 1.0, grade: '', category: 'Major' }
+                { name: 'CS2227-AI/ML', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Data Science and Engineering': [
-                { name: 'Data Science Fundamentals', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Data Science Lab', credits: 1.0, grade: '', category: 'Major' }
+                { name: 'CS2231-Data Science', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Cloud computing': [
-                { name: 'Cloud Architecture', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Cloud Lab', credits: 1.0, grade: '', category: 'Major' }
+                { name: 'CS2500-Cloud Computing and Big Data', credits: 3.0, grade: '', category: 'Major' }
             ],
             'Cyber Security': [
-                { name: 'Network Security', credits: 3.0, grade: '', category: 'Major' },
-                { name: 'Security Lab', credits: 1.0, grade: '', category: 'Major' }
+                { name: 'CS2405-Cyber Security', credits: 3.0, grade: '', category: 'Major' }
             ]
         },
         minors: [],
