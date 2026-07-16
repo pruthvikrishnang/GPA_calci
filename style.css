@@ -1069,13 +1069,11 @@ h1 span {
 .table-input-credits:hover,
 .table-select-grade:hover {
     border-color: var(--border-color-hover);
-    background: rgba(255, 255, 255, 0.03);
 }
 
-.table-input-credits:focus,
-.table-select-grade:focus {
+.table-input-credits:focus-visible,
+.table-select-grade:focus-visible {
     border-color: var(--input-focus-border);
-    background: var(--input-bg);
     box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
 }
 
