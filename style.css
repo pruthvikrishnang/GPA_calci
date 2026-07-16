@@ -1093,7 +1093,7 @@ h1 span {
     -moz-appearance: none;
     appearance: none;
     font-size: 0.8rem;
-    transition: all var(--transition-fast);
+    transition: none;
 }
 
 [data-theme="light"] .table-select-grade {
