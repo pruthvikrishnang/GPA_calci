@@ -903,7 +903,6 @@ h1 span {
 .grade-point-cell {
     font-weight: 700;
     font-size: 0.95rem;
-    transition: all var(--transition-fast);
 }
 
 .subjects-table tbody tr:hover .grade-point-cell {
@@ -1084,11 +1083,7 @@ h1 span {
     cursor: pointer;
     width: auto;
     min-width: 95px;
-    padding: 0.4rem 1.8rem 0.4rem 0.6rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 12px;
+    padding: 0.4rem 0.5rem;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -1096,7 +1091,28 @@ h1 span {
     transition: none;
 }
 
-[data-theme="light"] .table-select-grade {
+/* Dropdown arrow via pseudo-element (decoupled from grade select background-color) */
+.subjects-table td:nth-child(2) {
+    position: relative;
+}
+
+.subjects-table td:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+    transition: none;
+}
+
+[data-theme="light"] .subjects-table td:nth-child(2)::after {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 
@@ -1141,6 +1157,78 @@ h1 span {
 .table-input-credits {
     max-width: 75px;
     text-align: center;
+}
+
+/* Light mode: refined card-like styling for grade, credits, and grade-point cells */
+[data-theme="light"] .table-select-grade {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    border-radius: 6px;
+    padding: 0.35rem 0.5rem;
+}
+
+[data-theme="light"] .table-select-grade.grade-empty {
+    background-color: #ffffff;
+    border-color: #d1d5db;
+}
+
+[data-theme="light"] .table-select-grade.grade-o {
+    background-color: #f0fdf4;
+    border-color: #86efac;
+}
+
+[data-theme="light"] .table-select-grade.grade-a {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+}
+
+[data-theme="light"] .table-select-grade.grade-b {
+    background-color: #f5f3ff;
+    border-color: #c4b5fd;
+}
+
+[data-theme="light"] .table-select-grade.grade-c {
+    background-color: #fffbeb;
+    border-color: #fcd34d;
+}
+
+[data-theme="light"] .table-select-grade.grade-f {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+}
+
+[data-theme="light"] .table-select-grade:hover {
+    border-color: #9ca3af;
+    background-color: #f9fafb;
+}
+
+[data-theme="light"] .table-input-credits {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .table-input-credits:hover {
+    border-color: #9ca3af;
+    background-color: #f9fafb;
+}
+
+[data-theme="light"] .table-input-credits:focus-visible,
+[data-theme="light"] .table-select-grade:focus-visible {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] .grade-point-cell {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    min-width: 40px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 /* Mobile responsive refinements */

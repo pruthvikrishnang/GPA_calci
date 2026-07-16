@@ -691,12 +691,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradePointCell = tr.querySelector('.grade-point-cell');
         gradeSelect.addEventListener('change', () => {
             const selectedGrade = gradeSelect.value;
-            gradeSelect.className = `table-select-grade ${getGradeClass(selectedGrade)}`;
+            // Use classList to swap grade classes without removing the base class
+            gradeSelect.classList.remove('grade-empty', 'grade-o', 'grade-a', 'grade-b', 'grade-c', 'grade-f');
+            gradeSelect.classList.add(getGradeClass(selectedGrade));
             const gp = selectedGrade ? GRADE_POINTS[selectedGrade] : '-';
             gradePointCell.textContent = gp;
+            // Restart gp-flash animation without forcing a synchronous reflow
             gradePointCell.classList.remove('gp-flash');
-            void gradePointCell.offsetWidth;
-            gradePointCell.classList.add('gp-flash');
+            requestAnimationFrame(() => {
+                gradePointCell.classList.add('gp-flash');
+            });
             updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
         });
 
