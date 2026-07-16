@@ -991,7 +991,18 @@ h1 span {
 }
 
 /* Table Inline Input & Select Styling */
-.table-input-name,
+.table-input-name {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+}
+
 .table-input-credits,
 .table-select-grade {
     width: 100%;
