@@ -1013,7 +1013,7 @@ h1 span {
     color: var(--text-primary);
     font-family: inherit;
     outline: none;
-    transition: all var(--transition-fast);
+    transition: none;
 }
 
 .table-input-name {
