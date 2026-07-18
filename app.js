@@ -459,6 +459,37 @@ document.addEventListener('DOMContentLoaded', () => {
         progressCircle.style.strokeDashoffset = offset;
     };
 
+    // Update grade distribution visual bar in results
+    const updateGradeDistribution = () => {
+        const metricsGrid = document.querySelector('.metrics-grid');
+        if (!metricsGrid) return;
+        // Remove old distribution bar
+        const oldDist = document.querySelector('.grade-distribution-bar');
+        if (oldDist) oldDist.remove();
+        
+        const gradeOrder = ['O', 'A+', 'A', 'B+', 'B', 'C', 'P', 'F'];
+        const graded = subjects.filter(s => s.grade);
+        if (graded.length === 0) return;
+        
+        const dist = document.createElement('div');
+        dist.className = 'grade-distribution-bar';
+        dist.style.cssText = 'grid-column: 1 / -1; display: flex; gap: 3px; height: 8px; border-radius: 4px; overflow: hidden;';
+        
+        const colorMap = { 'O': '#10b981', 'A+': '#3b82f6', 'A': '#6366f1', 'B+': '#8b5cf6', 'B': '#a855f7', 'C': '#f59e0b', 'P': '#f97316', 'F': '#ef4444' };
+        
+        gradeOrder.forEach(grade => {
+            const count = subjects.filter(s => s.grade === grade).length;
+            if (count === 0) return;
+            const pct = (count / graded.length) * 100;
+            const seg = document.createElement('div');
+            seg.style.cssText = `width: ${pct}%; background: ${colorMap[grade]}; min-width: ${pct > 0 ? '3px' : '0'};`;
+            seg.title = `${grade}: ${count} subject${count > 1 ? 's' : ''}`;
+            dist.appendChild(seg);
+        });
+        
+        metricsGrid.appendChild(dist);
+    };
+
     // Calculate summary statistics for display
     const calculateSubjectStats = () => {
         const total = subjects.length;
@@ -544,6 +575,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Store last calculated timestamp
         const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         localStorage.setItem('gpa_last_calculated_' + currentSemester, timestamp);
+        
+        // Update grade distribution visual
+        updateGradeDistribution();
         
         hasUncalculatedChanges = false;
         setCalculateButtonState('calculated');
