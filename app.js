@@ -583,6 +583,14 @@ document.addEventListener('DOMContentLoaded', () => {
         setCalculateButtonState('calculated');
         updateSaveButtonState();
         
+        // Show last calculated time in hint
+        const timestamp2 = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const hintEl = document.getElementById('calculate-hint');
+        if (hintEl) {
+            hintEl.textContent = `✓ Calculated at ${timestamp2}`;
+            hintEl.style.color = 'var(--success-color, #10b981)';
+        }
+
         // Trigger confetti for Excellent performance
         if (gpa >= 9.0) {
             triggerConfetti();
