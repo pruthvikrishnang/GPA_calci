@@ -974,6 +974,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (searchTerm) {
             filterSubjects();
         }
+        
+        // Update bulk grade bar after rendering subjects
+        updateBulkGradeBar();
     };
 
     // Helper to escape HTML tags to avoid XSS
