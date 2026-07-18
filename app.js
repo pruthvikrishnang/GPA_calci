@@ -490,19 +490,6 @@ document.addEventListener('DOMContentLoaded', () => {
         metricsGrid.appendChild(dist);
     };
 
-    // Calculate summary statistics for display
-    const calculateSubjectStats = () => {
-        const total = subjects.length;
-        const withGrade = subjects.filter(s => s.grade).length;
-        const avgCredits = total > 0 ? subjects.reduce((s, sub) => s + sub.credits, 0) / total : 0;
-        // Grade distribution
-        const grades = {};
-        Object.keys(GRADE_POINTS).forEach(g => {
-            grades[g] = subjects.filter(s => s.grade === g).length;
-        });
-        return { total, withGrade, avgCredits, grades };
-    };
-
     // Calculate GPA, cumulative points, total credits, and update results
     const calculateGPA = () => {
         let totalCredits = 0;
@@ -583,12 +570,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setCalculateButtonState('calculated');
         updateSaveButtonState();
         
-        // Show last calculated time in hint
-        const timestamp2 = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const hintEl = document.getElementById('calculate-hint');
-        if (hintEl) {
-            hintEl.textContent = `✓ Calculated at ${timestamp2}`;
-            hintEl.style.color = 'var(--success-color, #10b981)';
+        // Show calculated timestamp in hint (after setCalculateButtonState to avoid overwrite)
+        const calcTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const hintElAfter = document.getElementById('calculate-hint');
+        if (hintElAfter) {
+            hintElAfter.textContent = `✓ Calculated at ${calcTime}`;
+            hintElAfter.style.color = 'var(--success-color, #10b981)';
         }
 
         // Trigger confetti for Excellent performance
@@ -675,14 +662,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (subjects.length > 0) {
             initBulkGradeFill();
         }
-    };
-
-    // Patch renderSubjects to update bulk bar
-    const originalRender = renderSubjects;
-    renderSubjects = function(...args) {
-        originalRender.apply(this, args);
-        // Re-init bulk grade bar after render
-        setTimeout(() => updateBulkGradeBar(), 0);
     };
 
     // Copy GPA to clipboard on click
