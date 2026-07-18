@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const gpa = cumulativePoints / totalCredits;
-        gpaDisplay.textContent = gpa.toFixed(2);
+        animateCounter(gpa);
 
         // Update gauge visual progress
         updateGauge(gpa);
@@ -536,6 +536,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gpa >= 9.0) {
             triggerConfetti();
         }
+    };
+
+    // Animated counter for GPA display
+    const animateCounter = (target) => {
+        const start = parseFloat(gpaDisplay.textContent) || 0;
+        const duration = 800;
+        const startTime = performance.now();
+        
+        const tick = (now) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = start + (target - start) * eased;
+            gpaDisplay.textContent = current.toFixed(2);
+            if (progress < 1) {
+                requestAnimationFrame(tick);
+            }
+        };
+        requestAnimationFrame(tick);
     };
 
     // Confetti celebration effect
