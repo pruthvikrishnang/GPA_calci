@@ -531,6 +531,39 @@ document.addEventListener('DOMContentLoaded', () => {
         hasUncalculatedChanges = false;
         setCalculateButtonState('calculated');
         updateSaveButtonState();
+        
+        // Trigger confetti for Excellent performance
+        if (gpa >= 9.0) {
+            triggerConfetti();
+        }
+    };
+
+    // Confetti celebration effect
+    const triggerConfetti = () => {
+        const colors = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899', '#6366f1', '#22d3ee'];
+        const gaugeWrapper = document.querySelector('.gauge-wrapper');
+        if (gaugeWrapper) gaugeWrapper.classList.add('celebrate');
+        
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random() * 100 + 'vw';
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.width = (Math.random() * 6 + 4) + 'px';
+            piece.style.height = (Math.random() * 6 + 4) + 'px';
+            piece.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+            piece.style.animationDelay = (Math.random() * 0.8) + 's';
+            piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            document.body.appendChild(piece);
+            
+            setTimeout(() => {
+                piece.remove();
+            }, 3500);
+        }
+        
+        setTimeout(() => {
+            if (gaugeWrapper) gaugeWrapper.classList.remove('celebrate');
+        }, 3000);
     };
 
     // Save and restore default empty state content

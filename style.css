@@ -1795,6 +1795,34 @@ h1 span {
     transform: rotate(45deg) scale(1.1);
 }
 
+/* ======================== */
+/* Confetti Celebration */
+/* ======================== */
+@keyframes confetti-fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: confetti-fall 2.5s ease-in forwards;
+    border-radius: 2px;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
+}
+
+.gauge-wrapper.celebrate .gauge-progress {
+    animation: pulse-glow 1s ease-in-out infinite;
+}
+
 /* Interactive focus glows */
 .input-wrapper input:focus + i,
 .input-wrapper select:focus + i {
