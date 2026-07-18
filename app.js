@@ -1762,11 +1762,14 @@ document.addEventListener('DOMContentLoaded', () => {
             item.className = 'saved-list-item';
             item.style.animationDelay = `${idx * 0.05}s`;
             
+            const semColors = ['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#f43f5e', '#f97316', '#10b981', '#3b82f6'];
+            const semIdx = sem.semKey === 'custom' ? 0 : (parseInt(sem.semKey) || 1);
+            const iconColor = semColors[(semIdx - 1) % semColors.length];
             let displayName = sem.name;
             
             item.innerHTML = `
-                <div class="saved-list-icon">
-                    <i data-lucide="layers"></i>
+                <div class="saved-list-icon" style="background: ${iconColor}22;">
+                    <i data-lucide="layers" style="color: ${iconColor};"></i>
                 </div>
                 <div class="saved-list-info">
                     <div class="saved-list-name">${escapeHtml(displayName)}</div>
