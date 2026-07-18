@@ -528,6 +528,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         ratingMessage.textContent = desc;
+        // Store last calculated timestamp
+        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        localStorage.setItem('gpa_last_calculated_' + currentSemester, timestamp);
+        
         hasUncalculatedChanges = false;
         setCalculateButtonState('calculated');
         updateSaveButtonState();
