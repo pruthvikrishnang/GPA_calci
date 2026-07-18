@@ -1074,6 +1074,13 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`Warning: "${name}" already exists in the list`, true);
         }
 
+        // Enforce maximum subject count
+        const MAX_SUBJECTS = 50;
+        if (subjects.length >= MAX_SUBJECTS) {
+            showToast(`Maximum ${MAX_SUBJECTS} subjects allowed!`, true);
+            return;
+        }
+
         const newSubject = {
             id: `${currentSemester}_custom_${Date.now()}`,
             name,
