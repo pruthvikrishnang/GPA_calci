@@ -1040,6 +1040,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Check for duplicate subject name
+        const duplicate = subjects.some(s => s.name.toLowerCase() === name.toLowerCase());
+        if (duplicate) {
+            showToast(`Warning: "${name}" already exists in the list`, true);
+        }
+
         const newSubject = {
             id: `${currentSemester}_custom_${Date.now()}`,
             name,
