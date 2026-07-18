@@ -544,6 +544,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Copy GPA to clipboard on click
+    if (gpaDisplay) {
+        gpaDisplay.style.cursor = 'pointer';
+        gpaDisplay.title = 'Click to copy GPA value';
+        gpaDisplay.addEventListener('click', async () => {
+            const text = gpaDisplay.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast(`GPA ${text} copied to clipboard!`);
+            } catch {
+                // Fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(`GPA ${text} copied!`);
+            }
+        });
+    }
+
     // Animated counter for GPA display
     const animateCounter = (target) => {
         const start = parseFloat(gpaDisplay.textContent) || 0;
