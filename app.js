@@ -1162,6 +1162,32 @@ document.addEventListener('DOMContentLoaded', () => {
         initResultsDisplay();
     };
 
+    // Keyboard shortcuts for semester switching
+    document.addEventListener('keydown', (e) => {
+        // Left arrow: previous semester
+        if (e.key === 'ArrowLeft' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const sems = ['custom', '1', '2', '3', '4', '5', '6', '7', '8'];
+            const idx = sems.indexOf(currentSemester);
+            if (idx > 0) {
+                const prev = sems[idx - 1];
+                const btn = document.querySelector(`.sem-btn[data-sem="${prev}"]`);
+                if (btn) btn.click();
+            }
+            e.preventDefault();
+        }
+        // Right arrow: next semester
+        if (e.key === 'ArrowRight' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const sems = ['custom', '1', '2', '3', '4', '5', '6', '7', '8'];
+            const idx = sems.indexOf(currentSemester);
+            if (idx < sems.length - 1) {
+                const next = sems[idx + 1];
+                const btn = document.querySelector(`.sem-btn[data-sem="${next}"]`);
+                if (btn) btn.click();
+            }
+            e.preventDefault();
+        }
+    });
+
     // Semester selector tab listeners
     semButtons.forEach(btn => {
         btn.addEventListener('click', () => {
