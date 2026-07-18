@@ -595,6 +595,88 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // ========================
+    // Bulk Grade Fill
+    // ========================
+    const initBulkGradeFill = () => {
+        const header = document.querySelector('.card-header h2');
+        const listCard = document.getElementById('list-section');
+        if (!header || !listCard || listCard.querySelector('.bulk-grade-bar')) return;
+        
+        const bar = document.createElement('div');
+        bar.className = 'bulk-grade-bar';
+        bar.style.cssText = 'display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.85rem; padding: 0.6rem 0.8rem; background: rgba(168, 85, 247, 0.04); border: 1px solid rgba(168, 85, 247, 0.08); border-radius: 8px; flex-wrap: wrap;';
+        
+        const label = document.createElement('span');
+        label.textContent = 'Bulk Grade:';
+        label.style.cssText = 'font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);';
+        
+        const select = document.createElement('select');
+        select.style.cssText = 'padding: 0.3rem 0.5rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary); font-size: 0.78rem; cursor: pointer;';
+        select.innerHTML = '<option value="">Select grade...</option>' +
+            '<option value="O">O (Outstanding)</option>' +
+            '<option value="A+">A+ (Excellent)</option>' +
+            '<option value="A">A (Very Good)</option>' +
+            '<option value="B+">B+ (Good)</option>' +
+            '<option value="B">B (Above Average)</option>' +
+            '<option value="C">C (Average)</option>' +
+            '<option value="P">P (Pass)</option>' +
+            '<option value="F">F (Fail)</option>';
+        
+        const applyBtn = document.createElement('button');
+        applyBtn.textContent = 'Apply to All Ungraded';
+        applyBtn.style.cssText = 'padding: 0.3rem 0.75rem; border: none; border-radius: 6px; background: var(--primary-gradient); color: #fff; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;';
+        applyBtn.addEventListener('click', () => {
+            const grade = select.value;
+            if (!grade) {
+                showToast('Select a grade first!', true);
+                return;
+            }
+            const ungraded = subjects.filter(s => !s.grade);
+            if (ungraded.length === 0) {
+                showToast('All subjects already have grades!');
+                return;
+            }
+            ungraded.forEach(s => {
+                const idx = subjects.findIndex(sub => sub.id === s.id);
+                if (idx !== -1) {
+                    subjects[idx].grade = grade;
+                }
+            });
+            saveSubjects();
+            renderSubjects();
+            markUncalculated();
+            showToast(`Applied grade ${grade} to ${ungraded.length} subject${ungraded.length > 1 ? 's' : ''}`);
+        });
+        
+        bar.appendChild(label);
+        bar.appendChild(select);
+        bar.appendChild(applyBtn);
+        
+        // Insert after card header
+        const cardHeader = listCard.querySelector('.card-header');
+        if (cardHeader) {
+            cardHeader.after(bar);
+        }
+    };
+
+    // Bulk grade bar in render
+    const updateBulkGradeBar = () => {
+        const existing = document.querySelector('.bulk-grade-bar');
+        if (existing) existing.remove();
+        if (subjects.length > 0) {
+            initBulkGradeFill();
+        }
+    };
+
+    // Patch renderSubjects to update bulk bar
+    const originalRender = renderSubjects;
+    renderSubjects = function(...args) {
+        originalRender.apply(this, args);
+        // Re-init bulk grade bar after render
+        setTimeout(() => updateBulkGradeBar(), 0);
+    };
+
     // Copy GPA to clipboard on click
     if (gpaDisplay) {
         gpaDisplay.style.cursor = 'pointer';
