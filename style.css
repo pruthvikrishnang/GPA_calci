@@ -1823,6 +1823,58 @@ h1 span {
     animation: pulse-glow 1s ease-in-out infinite;
 }
 
+/* ======================== */
+/* Grade Distribution Bar */
+/* ======================== */
+.grade-distribution-bar {
+    grid-column: 1 / -1;
+}
+
+.grade-distribution-bar div {
+    transition: width 0.5s ease;
+}
+
+.grade-distribution-bar div:hover {
+    opacity: 0.8;
+    transform: scaleY(1.3);
+    transform-origin: bottom;
+}
+
+/* ======================== */
+/* Bulk Grade Fill Bar */
+/* ======================== */
+.bulk-grade-bar {
+    animation: fadeInFilterInfo 0.3s ease forwards;
+}
+
+.bulk-grade-bar select:hover {
+    border-color: var(--border-color-hover);
+}
+
+.bulk-grade-bar button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.bulk-grade-bar button:active {
+    transform: translateY(0);
+}
+
+/* Tooltip icon in table header */
+.tooltip-icon {
+    display: inline-block;
+    font-size: 0.7rem;
+    margin-left: 0.15rem;
+    opacity: 0.6;
+    cursor: help;
+    transition: opacity 0.2s;
+    vertical-align: super;
+}
+
+th:hover .tooltip-icon {
+    opacity: 1;
+}
+
 /* Interactive focus glows */
 .input-wrapper input:focus + i,
 .input-wrapper select:focus + i {
