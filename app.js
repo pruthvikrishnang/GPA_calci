@@ -1978,9 +1978,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listeners
+    const exportCSVBtn = document.getElementById('export-csv-btn');
     if (exportPNGBtn) exportPNGBtn.addEventListener('click', exportPNG);
     if (exportPDFBtn) exportPDFBtn.addEventListener('click', exportPDF);
     if (exportPrintBtn) exportPrintBtn.addEventListener('click', printReport);
+    if (exportCSVBtn) exportCSVBtn.addEventListener('click', exportCSV);
 
     // Initialize display to "ready" state
     const initResultsDisplay = () => {
