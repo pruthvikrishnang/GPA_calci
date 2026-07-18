@@ -1,59 +1,73 @@
 # Apex GPA & SGPA Calculator 📊
 
-Welcome to the **Apex GPA Calculator**! A sleek, premium, and fully responsive single-page web application designed for students to calculate and track their Semester Grade Point Average (SGPA) and cumulative grade points. 
+Welcome to the **Apex GPA Calculator**! A sleek, premium, and fully responsive single-page web application designed for students to calculate and track their Semester Grade Point Average (SGPA) and cumulative CGPA across all semesters.
 
-Built with modern glassmorphism aesthetics, dynamic SVG visualizations, and real-time calculations, it makes academic tracking simple, engaging, and accurate.
-
----
-
-## 🌟 The Use Case
-
-Keeping track of academic performance can be tedious. Students often have to deal with manual formulas, look up grade weightages, or use cluttered, outdated calculators. 
-
-**Apex GPA Calculator** solves this by providing:
-1. **Frictionless Inputting**: Direct dropdowns for letter grades, eliminating the need to memorize grade points (e.g., *O = 10, A+ = 9, etc.*).
-2. **Instant Feedback**: Values recalculate on every single keypress, form submission, or row deletion.
-3. **Performance Assessment**: Generates clear, contextual badges (e.g., *Excellent, Very Good*) and rating messages to help students understand their standing at a glance.
-4. **PDF/Print Readiness**: Built-in print stylesheets clean up the page so users can save their calculated report cards directly to PDF or print them with a single click (`Ctrl + P`).
+Built with modern glassmorphism aesthetics, dynamic SVG visualizations, and a polished interactive experience, it makes academic tracking simple, engaging, and accurate.
 
 ---
 
-## 🚀 Deployed Application
-The calculator is designed to be hosted on GitHub Pages for instant public access.
-* **Live Deployment Link**: *https://pruthvikrishnang.github.io/GPA_calci/* 🔗
-> **Tip for Users**: You can open this link on your computer, tablet, or smartphone to calculate your grades on the go!
+## 🚀 Live Demo
+The calculator is deployed on GitHub Pages for instant access.
+* **Live URL**: *https://pruthvikrishnang.github.io/GPA_calci/* 🔗
 
 ---
 
 ## ✨ Features
 
-- **Semester-Wise Integration**: Auto-fills standard curricula (subjects and credits) for Semesters 1, 2, and 3 with one-click glassmorphic selector tabs.
-- **Interactive Inline Table Editing**: Edit subject names, credits, and select letter grades directly inside the table rows, triggering real-time GPA recalculations.
-- **Semester-Specific Persistence**: Separately persists subjects and user-entered grades for each semester, remembering the last active tab on page reload.
-- **Real-time calculations**: Computes total credits, cumulative grade points, and final SGPA instantly.
-- **Predefined Grades Dropdown**: Contains standard academic letter grades (O, A+, A, B+, B, C, P, F).
-- **Dynamic Circular Gauge**: An SVG-based circular progress chart that animates smoothly from 0.00 to 10.00 using gradients.
-- **Glassmorphic UI**: High-end styling featuring backdrop blurs, responsive grids, hover glows, and a responsive light/dark mode switch.
-- **Interactive Form Validation**: Shakes invalid input fields (e.g. credits less than 0.5 or empty names) to provide instant visual error feedback.
-- **Dynamic Clear & Reset**: Automatically adapts to clear all custom subjects in Manual mode, or reset defaults in semester modes with safety prompts.
-- **Print Optimization**: Automatically formats the page for clean printing by hiding form fields and control buttons when `Ctrl + P` is pressed.
+### Core Functionality
+- **Semester-Wise Templates**: Auto-fills standard curricula for Semesters 1–8 with one-click glassmorphic selector tabs
+- **Major Selection**: Choose your major (AIML, Data Science, Cloud Computing, Cyber Security) for structured semesters 3–8
+- **Interactive Inline Editing**: Edit subject names, credits, and select letter grades directly inside table rows
+- **Real-time GPA Calculation**: Manual calculation with animated number counter that counts up smoothly
+- **Cumulative CGPA Tracking**: Save semester results and track your overall CGPA across all semesters
+
+### Visual & Experience
+- **Circular SVG Gauge**: Animated progress ring with gradient colors representing your GPA
+- **Performance Ratings**: Contextual badges (Excellent, Very Good, Good, Average, Poor) with descriptive messages
+- **Confetti Celebration**: Colorful confetti burst when achieving Excellent GPA (≥ 9.0)
+- **Grade Distribution Bar**: Visual breakdown of all grades earned in the current semester
+- **Dark/Light Theme**: Toggle between dark and light modes with smooth transitions
+- **Glassmorphic UI**: Backdrop blurs, responsive grids, hover glows, and micro-interactions
+
+### Data Management
+- **Local Storage Persistence**: All subjects, grades, and saved semesters persist across sessions
+- **Semester-Specific Storage**: Separately tracks data for each semester and the custom mode
+- **Curriculum Versioning**: Automatically resets semester data when curriculum definitions change
+- **Bulk Grade Fill**: Quickly assign grades to all ungraded subjects at once
+
+### Export Options
+- **PNG Export**: Download a styled GPA report card as an image
+- **PDF Export**: Generate a downloadable PDF report
+- **CSV Export**: Export subject data as a CSV file for spreadsheet analysis
+- **Print Optimization**: Clean print layout accessible via Ctrl+P
+
+### Search & Organization
+- **Subject Search**: Real-time filtering with Ctrl+F keyboard shortcut
+- **Category Grouping**: Core, Major, Minor, and Elective sections for structured semesters
+- **Subject Count Limit**: Maximum 50 subjects per semester with warning
+
+### Accessibility & UX
+- **Keyboard Shortcuts**: Arrow keys to switch semesters, Escape to clear search, Ctrl+F to focus search
+- **Copy GPA**: Click the GPA value to copy it to your clipboard
+- **Input Validation**: Shake animations and visual feedback for invalid inputs
+- **Responsive Design**: Optimized for desktop, tablet, and mobile screens
+- **Auto-scroll**: Results section auto-scrolls into view on mobile after calculation
 
 ---
 
 ## 📖 How to Use
 
-1. **Choose Mode / Semester**: Select **Manual** mode to input subjects from scratch, or click **Sem 1**, **Sem 2**, or **Sem 3** to load predefined subjects and credits.
-2. **Enter Grades**: For preloaded semesters, simply select your grade from the inline dropdown in the table for each subject. SGPA will update instantly.
-3. **Customize Curriculum**: Click directly into the subject name or credits input field in the table row to make custom adjustments. Use the trash icon to delete subjects, or the "Reset" icon in the table header to return to defaults.
-4. **Add Custom Subject**: Use the form at the top to add any extra subjects to your active semester.
-5. **Delete/Reset**: Click the trash icon next to any subject to delete it, or the refresh icon in the table header to clear the list.
-6. **Print or Save**: Press `Ctrl + P` (or `Cmd + P` on Mac) to print your grades or save them as a clean PDF report card.
+1. **Choose Mode / Semester**: Select **Manual** mode to input subjects from scratch, or click any **Semester** tab to load predefined subjects
+2. **Select Major** (Semesters 3–8): Choose your major from the pill selector to load major-specific subjects
+3. **Enter Grades**: Select grades from the inline dropdown in each subject row
+4. **Add Custom Subjects**: Use the "Add New Subject" form for additional subjects
+5. **Calculate SGPA**: Press the **Calculate SGPA** button to compute your score
+6. **Save Semester**: Click "Save Semester Result" to track your progress in the cumulative CGPA
+7. **Export**: Use the export buttons (PNG, PDF, CSV) or Print to save your report
 
 ---
 
-## 📊 Grading & Scoring Scheme
-
-The calculator maps letter grades to standard grade points according to the following weights:
+## 📊 Grading Scheme
 
 | Letter Grade | Grade Description | Grade Point |
 | :---: | :--- | :---: |
@@ -67,32 +81,29 @@ The calculator maps letter grades to standard grade points according to the foll
 | **F** | Fail | 0 |
 
 ### Performance Ratings
-Based on the final calculated GPA, the application evaluates your standing:
-* **GPA $\ge$ 9.0**: `Excellent` 🟢 (Exceptional academic standing!)
-* **GPA $\ge$ 7.0**: `Very Good` 🔵 (Includes GP of 7.xx)
-* **GPA $\ge$ 6.0**: `Good` 🟣
-* **GPA $\ge$ 5.0**: `Average` 🟡
-* **GPA < 5.0**: `Poor` 🔴
+- **GPA ≥ 9.0**: `Excellent` 🎉
+- **GPA ≥ 7.0**: `Very Good` 
+- **GPA ≥ 6.0**: `Good`
+- **GPA ≥ 5.0**: `Average`
+- **GPA < 5.0**: `Poor`
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## 🛠️ Tech Stack
 
-- **Structure**: HTML5 (Semantic elements)
-- **Styling**: Vanilla CSS3 (Custom properties, CSS grid/flex, animations)
-- **Behavior**: Vanilla ES6+ JavaScript
+- **Structure**: HTML5 (Semantic elements, Open Graph meta tags)
+- **Styling**: Vanilla CSS3 (Custom properties, CSS grid/flex, animations, glassmorphism)
+- **Behavior**: Vanilla ES6+ JavaScript (LocalStorage, dynamic DOM manipulation)
 - **Icons**: Lucide Icons CDN
-- **Fonts**: Outfit (Headers) & Inter (Body/Inputs)
+- **Fonts**: Outfit (Headers) & Inter (Body)
+- **Exports**: html2canvas, jsPDF (loaded on demand from CDN)
 
 ---
 
 ## 🖥️ Local Installation
 
-To run this project locally without any dependencies:
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/pruthvikrishnang/GPA_calci.git
-   ```
-2. Open `index.html` in your web browser.
-
----
+```bash
+git clone https://github.com/pruthvikrishnang/GPA_calci.git
+cd GPA_calci
+# Open index.html in your browser (no build tools required)
+```
