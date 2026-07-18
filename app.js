@@ -873,8 +873,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper to safely regenerate structured semester data with preservation
     const regenerateStructuredData = () => {
-        // Preserve user-added Minor/Elective subjects
-        const customSubjects = subjects.filter(s => s.category === 'Minor' || s.category === 'Elective');
+        // Preserve user-added custom subjects (including Core, Major, Minor, Elective)
+        const customSubjects = subjects.filter(s => (s.id && s.id.includes('_custom_')) || s.category === 'Minor' || s.category === 'Elective');
         
         // Preserve grades from all existing subjects by name
         const gradeMap = {};
@@ -962,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset form
         form.reset();
-        if (categorySelect) categorySelect.value = 'Minor';
+        if (categorySelect) categorySelect.value = 'Core';
         nameInput.focus();
     });
 
