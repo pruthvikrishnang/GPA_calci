@@ -459,6 +459,19 @@ document.addEventListener('DOMContentLoaded', () => {
         progressCircle.style.strokeDashoffset = offset;
     };
 
+    // Calculate summary statistics for display
+    const calculateSubjectStats = () => {
+        const total = subjects.length;
+        const withGrade = subjects.filter(s => s.grade).length;
+        const avgCredits = total > 0 ? subjects.reduce((s, sub) => s + sub.credits, 0) / total : 0;
+        // Grade distribution
+        const grades = {};
+        Object.keys(GRADE_POINTS).forEach(g => {
+            grades[g] = subjects.filter(s => s.grade === g).length;
+        });
+        return { total, withGrade, avgCredits, grades };
+    };
+
     // Calculate GPA, cumulative points, total credits, and update results
     const calculateGPA = () => {
         let totalCredits = 0;
