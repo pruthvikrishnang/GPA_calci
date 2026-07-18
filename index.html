@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23a855f7%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M12 2L2 7l10 5 10-5-10-5z%22/><path d=%22M2 17l10 5 10-5%22/><path d=%22M2 12l10 5 10-5%22/></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -261,6 +262,55 @@
                                     <div class="metric-value" id="metric-points">0.0</div>
                                 </div>
                             </div>
+
+                            <!-- Calculate Button -->
+                            <div class="calculate-action">
+                                <button type="button" id="calculate-btn" class="primary-btn calculate-btn" aria-label="Calculate SGPA">
+                                    <i data-lucide="calculator"></i> Calculate SGPA
+                                </button>
+                                <span class="calculate-hint" id="calculate-hint">Press to compute your SGPA</span>
+                            </div>
+
+                            <!-- Save Semester Button -->
+                            <div class="save-action">
+                                <button type="button" id="save-sem-btn" class="secondary-btn save-btn" aria-label="Save This Semester" disabled>
+                                    <i data-lucide="save"></i> Save Semester Result
+                                </button>
+                                <span class="save-hint" id="save-hint">Calculate SGPA first to save this semester</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Saved Semesters & Cumulative CGPA Card -->
+                    <section class="card saved-card" id="saved-section" style="display:none;">
+                        <div class="card-header">
+                            <i data-lucide="layers" class="header-icon"></i>
+                            <h2>Saved Semesters</h2>
+                            <span class="subtitle-badge cgpa-badge" id="cgpa-badge">CGPA: 0.00</span>
+                        </div>
+                        <div class="cgpa-summary" id="cgpa-summary" style="display:none;">
+                            <div class="cgpa-metrics">
+                                <div class="cgpa-metric">
+                                    <span class="cgpa-metric-label">Cumulative CGPA</span>
+                                    <span class="cgpa-metric-value" id="cgpa-value">0.00</span>
+                                </div>
+                                <div class="cgpa-metric">
+                                    <span class="cgpa-metric-label">Total Credits</span>
+                                    <span class="cgpa-metric-value" id="cgpa-total-credits">0.0</span>
+                                </div>
+                                <div class="cgpa-metric">
+                                    <span class="cgpa-metric-label">Semesters Saved</span>
+                                    <span class="cgpa-metric-value" id="cgpa-sem-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="saved-list-container">
+                            <div class="saved-list-empty" id="saved-list-empty">
+                                <i data-lucide="archive" class="saved-empty-icon"></i>
+                                <p>No semesters saved yet.</p>
+                                <span>Calculate SGPA and click "Save Semester Result" to track your progress.</span>
+                            </div>
+                            <div class="saved-list" id="saved-list"></div>
                         </div>
                     </section>
                 </div>

@@ -2,7 +2,7 @@
 // Supported Features:
 // - Semester-wise template selector (Semester 1, 2, & 3) with predefined credits
 // - Inline editable subject names, credits, and grade selectors in the table
-// - Instant calculation updates upon changing cell values
+// - Manual calculation: SGPA is computed only when the Calculate button is pressed
 // - Semester-specific local storage persistence (persists custom selections separately)
 // - Dynamic adaptive clear/reset button for templates and custom layouts
 
@@ -252,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let subjects = [];
     let currentSemester = 'custom';
     let searchTerm = '';
+    let hasUncalculatedChanges = false;
 
     // Curriculum Versioning to invalidate cache when default subjects change
     const CURRICULUM_VERSION = 'v8';
@@ -343,10 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const getDefaultSemesterData = (sem) => {
         if (sem === 'custom') {
             return [
-                { id: '1', name: 'Advanced Engineering Math', grade: 'O', credits: 4.0 },
-                { id: '2', name: 'Data Structures & Algorithms', grade: 'A+', credits: 4.0 },
-                { id: '3', name: 'Object Oriented Programming', grade: 'A', credits: 3.0 },
-                { id: '4', name: 'Technical Writing', grade: 'B+', credits: 2.0 }
+                { id: '1', name: 'Advanced Engineering Math', grade: '', credits: 4.0 },
+                { id: '2', name: 'Data Structures & Algorithms', grade: '', credits: 4.0 },
+                { id: '3', name: 'Object Oriented Programming', grade: '', credits: 3.0 },
+                { id: '4', name: 'Technical Writing', grade: '', credits: 2.0 }
             ];
         }
         
@@ -478,8 +479,9 @@ document.addEventListener('DOMContentLoaded', () => {
             gpaDisplay.textContent = '0.00';
             ratingBadge.textContent = 'Ready to Calculate';
             ratingBadge.className = 'rating-badge rating-ready';
-            ratingMessage.textContent = 'Enter your subjects and credits to get your score and rating.';
+            ratingMessage.textContent = 'Enter your subjects and credits, then press "Calculate SGPA" to get your score and rating.';
             updateGauge(0);
+            setCalculateButtonState('ready');
             return;
         }
 
@@ -518,14 +520,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ratingBadge.textContent = rating;
         ratingBadge.className = `rating-badge ${badgeClass}`;
-        
+
         // Check for ungraded subjects to notify user
         const ungradedCount = subjects.filter(s => !s.grade).length;
         if (ungradedCount > 0) {
             desc += ` (${ungradedCount} subject${ungradedCount > 1 ? 's are' : ' is'} currently ungraded and excluded from calculations.)`;
         }
-        
+
         ratingMessage.textContent = desc;
+        hasUncalculatedChanges = false;
+        setCalculateButtonState('calculated');
+        updateSaveButtonState();
     };
 
     // Save and restore default empty state content
@@ -668,7 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add name input listener
         const nameInp = tr.querySelector('.table-input-name');
         nameInp.addEventListener('input', () => {
-            updateSubjectProperty(subject.id, 'name', nameInp.value.trim(), false);
+            updateSubjectProperty(subject.id, 'name', nameInp.value.trim());
             if (searchTerm) {
                 filterSubjects();
             }
@@ -680,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = parseFloat(creditsInp.value);
             if (!isNaN(val) && val >= 0.5 && val <= 20) {
                 creditsInp.classList.remove('input-invalid');
-                updateSubjectProperty(subject.id, 'credits', val, true);
+                updateSubjectProperty(subject.id, 'credits', val);
             } else {
                 creditsInp.classList.add('input-invalid');
             }
@@ -701,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(() => {
                 gradePointCell.classList.add('gp-flash');
             });
-            updateSubjectProperty(subject.id, 'grade', selectedGrade, true);
+            updateSubjectProperty(subject.id, 'grade', selectedGrade);
         });
 
         return tr;
@@ -768,7 +773,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (searchTerm) {
             filterSubjects();
         }
-        calculateGPA();
     };
 
     // Helper to escape HTML tags to avoid XSS
@@ -793,17 +797,16 @@ document.addEventListener('DOMContentLoaded', () => {
         subjects = subjects.filter(subject => subject.id !== id);
         saveSubjects();
         renderSubjects();
+        markUncalculated();
     };
 
-    // Update subject property by ID and save
-    const updateSubjectProperty = (id, prop, value, recalculate = true) => {
+    // Update subject property by ID and save — never auto-calculate, always mark as needing recalculation
+    const updateSubjectProperty = (id, prop, value) => {
         const index = subjects.findIndex(s => s.id === id);
         if (index !== -1) {
             subjects[index][prop] = value;
             saveSubjects();
-            if (recalculate) {
-                calculateGPA();
-            }
+            markUncalculated();
         }
     };
 
@@ -900,6 +903,42 @@ document.addEventListener('DOMContentLoaded', () => {
         subjects = fresh;
         saveSubjects();
         renderSubjects();
+        markUncalculated();
+    };
+
+    // Mark that results need recalculation (UI state changes)
+    const markUncalculated = () => {
+        hasUncalculatedChanges = true;
+        setCalculateButtonState('pending');
+    };
+
+    // Update the calculate button visual state
+    const setCalculateButtonState = (state) => {
+        const btn = document.getElementById('calculate-btn');
+        if (!btn) return;
+        const hint = document.getElementById('calculate-hint');
+        
+        if (state === 'pending') {
+            btn.classList.add('btn-pending');
+            btn.classList.remove('btn-calculated');
+            if (hint) {
+                hint.textContent = 'Grades changed — press to recalculate';
+                hint.style.color = 'var(--warning-color, #f59e0b)';
+            }
+        } else if (state === 'calculated') {
+            btn.classList.remove('btn-pending');
+            btn.classList.add('btn-calculated');
+            if (hint) {
+                hint.textContent = 'SGPA is up to date ✓';
+                hint.style.color = 'var(--success-color, #10b981)';
+            }
+        } else {
+            btn.classList.remove('btn-pending', 'btn-calculated');
+            if (hint) {
+                hint.textContent = 'Press to compute your SGPA';
+                hint.style.color = 'var(--text-muted, #6b7280)';
+            }
+        }
     };
 
     // Major selector click handlers
@@ -959,6 +998,7 @@ document.addEventListener('DOMContentLoaded', () => {
         subjects.push(newSubject);
         saveSubjects();
         renderSubjects();
+        markUncalculated();
 
         // Reset form
         form.reset();
@@ -989,15 +1029,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     subjects = [];
                     saveSubjects();
                     renderSubjects();
+                    initResultsDisplay();
                 }
             } else {
                 if (confirm(`Are you sure you want to reset Semester ${currentSemester} to its default subjects and credits? This will clear entered grades.`)) {
                     subjects = getDefaultSemesterData(currentSemester);
                     saveSubjects();
                     renderSubjects();
+                    initResultsDisplay();
                 }
             }
         });
+    }
+
+    // Calculate button event listener — only calculates when user clicks
+    const calculateBtn = document.getElementById('calculate-btn');
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', calculateGPA);
     }
 
     // Handle semester changes
@@ -1017,6 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStructuredUI(sem);
         renderSubjects();
         updateClearButtonUI();
+        initResultsDisplay();
     };
 
     // Semester selector tab listeners
@@ -1419,12 +1468,244 @@ document.addEventListener('DOMContentLoaded', () => {
         window.print();
     };
 
+    // ========================
+    // Saved Semesters & Cumulative CGPA
+    // ========================
+
+    let savedSemesters = [];
+
+    const loadSavedSemesters = () => {
+        try {
+            const saved = localStorage.getItem('gpa_saved_semesters');
+            savedSemesters = saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            savedSemesters = [];
+        }
+    };
+
+    const saveSavedSemesters = () => {
+        localStorage.setItem('gpa_saved_semesters', JSON.stringify(savedSemesters));
+    };
+
+    const recalculateCGPA = () => {
+        if (savedSemesters.length === 0) return null;
+        
+        let totalCredits = 0;
+        let totalPoints = 0;
+        
+        savedSemesters.forEach(sem => {
+            totalCredits += sem.totalCredits;
+            totalPoints += sem.cumulativePoints;
+        });
+        
+        return {
+            cgpa: totalCredits > 0 ? totalPoints / totalCredits : 0,
+            totalCredits,
+            totalPoints,
+            count: savedSemesters.length
+        };
+    };
+
+    const renderSavedSemesters = () => {
+        const savedSection = document.getElementById('saved-section');
+        const savedList = document.getElementById('saved-list');
+        const savedListEmpty = document.getElementById('saved-list-empty');
+        const cgpaSummary = document.getElementById('cgpa-summary');
+        const cgpaValue = document.getElementById('cgpa-value');
+        const cgpaTotalCredits = document.getElementById('cgpa-total-credits');
+        const cgpaSemCount = document.getElementById('cgpa-sem-count');
+        const cgpaBadge = document.getElementById('cgpa-badge');
+
+        if (!savedSection) return;
+
+        if (savedSemesters.length === 0) {
+            savedSection.style.display = 'none';
+            return;
+        }
+
+        savedSection.style.display = 'block';
+
+        // Calculate cumulative CGPA
+        const cgpaData = recalculateCGPA();
+        
+        if (cgpaData && cgpaData.totalCredits > 0) {
+            cgpaSummary.style.display = 'block';
+            cgpaValue.textContent = cgpaData.cgpa.toFixed(2);
+            cgpaTotalCredits.textContent = cgpaData.totalCredits.toFixed(1);
+            cgpaSemCount.textContent = cgpaData.count;
+            if (cgpaBadge) {
+                cgpaBadge.textContent = `CGPA: ${cgpaData.cgpa.toFixed(2)}`;
+                cgpaBadge.style.display = 'inline-block';
+            }
+        } else {
+            cgpaSummary.style.display = 'none';
+            if (cgpaBadge) {
+                cgpaBadge.textContent = 'CGPA: 0.00';
+                cgpaBadge.style.display = 'inline-block';
+            }
+        }
+
+        // Render saved semester items
+        savedListEmpty.style.display = 'none';
+        savedList.innerHTML = '';
+
+        savedSemesters.forEach((sem, idx) => {
+            const item = document.createElement('div');
+            item.className = 'saved-list-item';
+            item.style.animationDelay = `${idx * 0.05}s`;
+            
+            let displayName = sem.name;
+            
+            item.innerHTML = `
+                <div class="saved-list-icon">
+                    <i data-lucide="layers"></i>
+                </div>
+                <div class="saved-list-info">
+                    <div class="saved-list-name">${escapeHtml(displayName)}</div>
+                    <div class="saved-list-detail">${sem.totalCredits.toFixed(1)} credits  •  ${sem.cumulativePoints.toFixed(1)} grade pts</div>
+                </div>
+                <div class="saved-list-sgpa">${sem.sgpa.toFixed(2)}</div>
+                <button class="saved-list-delete" data-sem-id="${escapeHtml(sem.id)}" aria-label="Delete saved semester">
+                    <i data-lucide="x"></i>
+                </button>
+            `;
+            
+            savedList.appendChild(item);
+            
+            // Delete button handler
+            const deleteBtn = item.querySelector('.saved-list-delete');
+            deleteBtn.addEventListener('click', () => {
+                deleteSavedSemester(sem.id);
+            });
+        });
+
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    const saveCurrentSemester = () => {
+        // Calculate current semester data
+        let totalCredits = 0;
+        let cumulativePoints = 0;
+        
+        subjects.forEach(subj => {
+            if (!subj.grade) return;
+            const gp = GRADE_POINTS[subj.grade];
+            totalCredits += subj.credits;
+            cumulativePoints += (subj.credits * gp);
+        });
+
+        if (totalCredits === 0) {
+            showToast('No graded subjects to save!', true);
+            return;
+        }
+
+        const sgpa = cumulativePoints / totalCredits;
+        
+        // Create semester label
+        let semLabel;
+        if (currentSemester === 'custom') {
+            const savedMajor = getSelectedMajor(currentSemester);
+            semLabel = savedMajor ? `Manual (${savedMajor})` : 'Manual';
+        } else {
+            const savedMajor = getSelectedMajor(currentSemester);
+            semLabel = savedMajor ? `Semester ${currentSemester} (${savedMajor})` : `Semester ${currentSemester}`;
+        }
+
+        // Check if already saved, overwrite if same semester
+        const existingIdx = savedSemesters.findIndex(s => s.semKey === currentSemester);
+        
+        const semData = {
+            id: `saved_${currentSemester}_${Date.now()}`,
+            semKey: currentSemester,
+            name: semLabel,
+            sgpa,
+            totalCredits,
+            cumulativePoints
+        };
+
+        if (existingIdx !== -1) {
+            savedSemesters[existingIdx] = semData;
+            showToast(`Updated ${semLabel} — SGPA: ${sgpa.toFixed(2)}`);
+        } else {
+            savedSemesters.push(semData);
+            showToast(`Saved ${semLabel} — SGPA: ${sgpa.toFixed(2)}`);
+        }
+        
+        saveSavedSemesters();
+        renderSavedSemesters();
+        updateSaveButtonState();
+    };
+
+    const deleteSavedSemester = (id) => {
+        const sem = savedSemesters.find(s => s.id === id);
+        savedSemesters = savedSemesters.filter(s => s.id !== id);
+        saveSavedSemesters();
+        renderSavedSemesters();
+        updateSaveButtonState();
+        if (sem) {
+            showToast(`Removed ${sem.name}`);
+        }
+    };
+
+    const updateSaveButtonState = () => {
+        const saveBtn = document.getElementById('save-sem-btn');
+        const saveHint = document.getElementById('save-hint');
+        if (!saveBtn) return;
+
+        // Check if current semester data has been calculated and has grades
+        let totalCredits = 0;
+        subjects.forEach(subj => {
+            if (subj.grade) {
+                totalCredits += subj.credits;
+            }
+        });
+
+        if (totalCredits === 0 || hasUncalculatedChanges) {
+            saveBtn.disabled = true;
+            if (saveHint) {
+                saveHint.textContent = hasUncalculatedChanges
+                    ? 'Calculate SGPA first to save this semester'
+                    : 'Add subjects with grades to save this semester';
+            }
+        } else {
+            saveBtn.disabled = false;
+            if (saveHint) {
+                const existing = savedSemesters.find(s => s.semKey === currentSemester);
+                saveHint.textContent = existing
+                    ? 'Semester already saved — click to update'
+                    : 'Save this semester to cumulative CGPA';
+            }
+        }
+    };
+
+    // Save button event listener
+    const saveSemBtn = document.getElementById('save-sem-btn');
+    if (saveSemBtn) {
+        saveSemBtn.addEventListener('click', saveCurrentSemester);
+    }
+
     // Event listeners
     if (exportPNGBtn) exportPNGBtn.addEventListener('click', exportPNG);
     if (exportPDFBtn) exportPDFBtn.addEventListener('click', exportPDF);
     if (exportPrintBtn) exportPrintBtn.addEventListener('click', printReport);
 
+    // Initialize display to "ready" state
+    const initResultsDisplay = () => {
+        metricCredits.textContent = '0.0';
+        metricPoints.textContent = '0.0';
+        gpaDisplay.textContent = '0.00';
+        ratingBadge.textContent = 'Ready to Calculate';
+        ratingBadge.className = 'rating-badge rating-ready';
+        ratingMessage.textContent = 'Enter your subjects and credits, then press "Calculate SGPA" to get your score and rating.';
+        updateGauge(0);
+        setCalculateButtonState('ready');
+    };
+
     // Initial load & render
+    loadSavedSemesters();
     loadSubjects();
     renderSubjects();
+    initResultsDisplay();
+    renderSavedSemesters();
+    updateSaveButtonState();
 });

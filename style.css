@@ -191,6 +191,11 @@ h1 span {
     display: block;
 }
 
+/* Main content area layout helper */
+.app-content {
+    flex: 1;
+}
+
 /* Layout Grid & Card Styling */
 .calculator-grid {
     display: grid;
@@ -1826,6 +1831,289 @@ h1 span {
     font-size: 0.85rem;
 }
 
+/* ======================== */
+/* Save Semester Button */
+/* ======================== */
+
+.calculate-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+}
+
+.calculate-btn {
+    width: 100%;
+    max-width: 260px;
+}
+
+.calculate-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.save-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: -0.5rem;
+}
+
+.secondary-btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.save-btn {
+    width: 100%;
+    max-width: 260px;
+    height: 40px;
+    padding: 0 1.25rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--border-radius-sm);
+    background: rgba(99, 102, 241, 0.06);
+    color: #818cf8;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all var(--transition-fast);
+}
+
+.save-btn:hover:not(:disabled) {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.save-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.save-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--border-color);
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.save-btn i {
+    width: 15px;
+    height: 15px;
+    transition: transform var(--transition-fast);
+}
+
+.save-btn:hover:not(:disabled) i {
+    transform: scale(1.1);
+}
+
+.save-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+/* ======================== */
+/* Saved Semesters & CGPA Card */
+/* ======================== */
+.saved-card {
+    margin-top: 1.5rem;
+    transition: all var(--transition-normal);
+}
+
+.cgpa-badge {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15)) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+}
+
+.cgpa-summary {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(236, 72, 153, 0.06));
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    border-radius: var(--border-radius-sm);
+    animation: fadeInFilterInfo 0.3s ease forwards;
+}
+
+.cgpa-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    text-align: center;
+}
+
+.cgpa-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.cgpa-metric-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.cgpa-metric-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cgpa-metric:first-child .cgpa-metric-value {
+    font-size: 1.6rem;
+}
+
+/* Saved list items */
+.saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.saved-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+    animation: fadeInRow var(--transition-normal) forwards;
+}
+
+.saved-list-item:hover {
+    border-color: var(--border-color-hover);
+    background: var(--bg-card-hover);
+    transform: translateX(3px);
+}
+
+.saved-list-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--border-radius-sm);
+    background: var(--gradient-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.saved-list-icon i {
+    width: 16px;
+    height: 16px;
+    color: #a855f7;
+}
+
+.saved-list-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.saved-list-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.saved-list-detail {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+}
+
+.saved-list-sgpa {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #a855f7;
+    white-space: nowrap;
+}
+
+.saved-list-delete {
+    width: 26px;
+    height: 26px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.saved-list-delete:hover {
+    border-color: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+.saved-list-delete i {
+    width: 13px;
+    height: 13px;
+}
+
+.saved-list-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--text-secondary);
+}
+
+.saved-empty-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+.saved-list-empty p {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+}
+
+.saved-list-empty span {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* ======================== */
 /* Print Stylesheet */
 @media print {
     @page {
