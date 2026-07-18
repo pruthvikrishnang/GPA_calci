@@ -1522,6 +1522,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Export as CSV
+    const exportCSV = () => {
+        if (subjects.length === 0) {
+            showToast('No subjects to export!', true);
+            return;
+        }
+        const header = 'Subject,Grade,Credits,Grade Point';
+        const rows = subjects.map(s => {
+            const gp = s.grade ? GRADE_POINTS[s.grade] : '-';
+            return `"${s.name}",${s.grade || '-'},${s.credits.toFixed(1)},${gp}`;
+        });
+        
+        // Add summary row
+        let totalCredits = 0;
+        let totalPoints = 0;
+        subjects.forEach(s => {
+            if (s.grade) {
+                totalCredits += s.credits;
+                totalPoints += s.credits * GRADE_POINTS[s.grade];
+            }
+        });
+        const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 'N/A';
+        rows.push('');
+        rows.push(`Overall SGPA,,,${gpa}`);
+        
+        const csv = [header, ...rows].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `GPA_Data_${currentSemester === 'custom' ? 'Manual' : `Sem${currentSemester}`}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+        showToast('CSV exported successfully!');
+    };
+
     // Print report
     const printReport = () => {
         window.print();
