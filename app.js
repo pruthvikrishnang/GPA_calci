@@ -536,6 +536,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gpa >= 9.0) {
             triggerConfetti();
         }
+        
+        // Auto-scroll results into view on mobile
+        const resultsSection = document.querySelector('.results-card');
+        if (resultsSection && window.innerWidth <= 968) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
     // Animated counter for GPA display
