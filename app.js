@@ -49,9 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
@@ -63,9 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.pulse = Math.random() * Math.PI * 2;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.pulse += 0.02;
+                this.x += this.speedX; this.y += this.speedY; this.pulse += 0.02;
                 if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
             }
             draw() {
@@ -77,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fill();
             }
         }
-
         const count = Math.min(80, Math.floor(canvas.width * canvas.height / 10000));
         for (let i = 0; i < count; i++) particles.push(new Particle());
 
@@ -88,10 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const dy = particles[a].y - particles[b].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < 120) {
-                        const alpha = (1 - dist / 120) * 0.15;
                         ctx.beginPath();
                         ctx.strokeStyle = '#a855f7';
-                        ctx.globalAlpha = alpha;
+                        ctx.globalAlpha = (1 - dist / 120) * 0.15;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
@@ -111,4 +105,29 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     };
     initParticles();
+
+    // ========================
+    // CGPA Calculator
+    // ========================
+    let cgpaSemesters = [];
+    let selectedSemCount = 0;
+
+    const semCountBtns = document.querySelectorAll('.sem-count-btn');
+    const cgpaStep2 = document.getElementById('cgpa-step-2');
+    const cgpaInputs = document.getElementById('cgpa-inputs');
+    const cgpaCalcBtn = document.getElementById('cgpa-calc-btn');
+
+    semCountBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            semCountBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSemCount = parseInt(btn.dataset.count);
+            cgpaSemesters = [];
+            for (let i = 1; i <= selectedSemCount; i++) {
+                cgpaSemesters.push({ sem: i, sgpa: '' });
+            }
+            cgpaStep2.style.display = 'block';
+            cgpaStep2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
 });
