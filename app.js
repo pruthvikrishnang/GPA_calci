@@ -69,9 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     initParticles();
 
-    // ========================
-    // Toast Notification System
-    // ========================
+    // Toast System
     const exportToast = document.getElementById('export-toast');
     const exportToastMessage = document.getElementById('export-toast-message');
     let toastTimeout = null;
@@ -82,9 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toastTimeout = setTimeout(() => exportToast.classList.remove('visible'), 3000);
     };
 
-    // ========================
-    // Confetti Celebration Effect
-    // ========================
+    // Confetti
     const triggerConfetti = () => {
         const colors = ['#10b981','#3b82f6','#8b5cf6','#f59e0b','#ec4899','#6366f1','#22d3ee'];
         for (let i = 0; i < 60; i++) {
@@ -102,12 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ========================
     // CGPA Calculator
-    // ========================
     let cgpaSemesters = [];
-    let selectedSemCount = 0;
-
     const semCountBtns = document.querySelectorAll('.sem-count-btn');
     const cgpaStep2 = document.getElementById('cgpa-step-2');
     const cgpaInputs = document.getElementById('cgpa-inputs');
@@ -123,28 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const buildCgpaInputs = (count) => {
         if (!cgpaInputs) return;
-        cgpaInputs.innerHTML = '';
-        cgpaSemesters = [];
+        cgpaInputs.innerHTML = ''; cgpaSemesters = [];
         const icons = ['layers','book-open','hash','star','award','trending-up','bar-chart-3','sparkles'];
         for (let i = 1; i <= count; i++) {
             cgpaSemesters.push({ sem: i, sgpa: '' });
-            const row = document.createElement('div');
-            row.className = 'cgpa-input-row';
-            const icon = icons[(i-1)%icons.length];
-            row.innerHTML = `<div class="sem-label"><i data-lucide="${icon}"></i><span>Semester ${i}</span><span class="sem-badge">SGPA</span></div><div class="input-wrapper"><input type="number" class="cgpa-sem-input" data-sem="${i}" min="0" max="10" step="0.01" placeholder="0.0 - 10.0" autocomplete="off" inputmode="decimal"></div>`;
+            const row = document.createElement('div'); row.className = 'cgpa-input-row';
+            row.innerHTML = `<div class="sem-label"><i data-lucide="${icons[(i-1)%icons.length]}"></i><span>Semester ${i}</span><span class="sem-badge">SGPA</span></div><div class="input-wrapper"><input type="number" class="cgpa-sem-input" data-sem="${i}" min="0" max="10" step="0.01" placeholder="0.0 - 10.0" autocomplete="off" inputmode="decimal"></div>`;
             cgpaInputs.appendChild(row);
             const input = row.querySelector('.cgpa-sem-input');
             input.addEventListener('input', () => {
-                const val = input.value.trim();
-                const sem = parseInt(input.dataset.sem);
-                const idx = cgpaSemesters.findIndex(s => s.sem === sem);
-                if (idx !== -1) {
-                    const num = parseFloat(val);
-                    if (val === '' || (!isNaN(num) && num >= 0 && num <= 10)) {
-                        cgpaSemesters[idx].sgpa = val === '' ? '' : num;
-                        input.classList.toggle('sgpa-filled', val !== '' && !isNaN(num));
-                    }
-                }
+                const val = input.value.trim(); const sem = parseInt(input.dataset.sem); const idx = cgpaSemesters.findIndex(s => s.sem === sem);
+                if (idx !== -1) { const num = parseFloat(val); if (val === '' || (!isNaN(num) && num >= 0 && num <= 10)) { cgpaSemesters[idx].sgpa = val === '' ? '' : num; input.classList.toggle('sgpa-filled', val !== '' && !isNaN(num)); } }
                 if (cgpaCalcBtn) cgpaCalcBtn.disabled = cgpaSemesters.filter(s => s.sgpa !== '').length === 0;
             });
         }
@@ -155,73 +136,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const calculateCGPA = () => {
         const filled = cgpaSemesters.filter(s => s.sgpa !== '');
         if (filled.length === 0) return;
-        let total = 0;
-        filled.forEach(s => total += s.sgpa);
+        let total = 0; filled.forEach(s => total += s.sgpa);
         const cgpa = total / filled.length;
         cgpaResultSection.style.display = 'block';
-
         if (cgpaResultDisplay) {
-            const start = 0; const duration = 1000; const startTime = performance.now();
-            const tick = (now) => {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                cgpaResultDisplay.textContent = (start + (cgpa - start) * (1 - Math.pow(1 - progress, 3))).toFixed(2);
-                if (progress < 1) requestAnimationFrame(tick);
-            };
+            const start = 0, duration = 1000, startTime = performance.now();
+            const tick = (now) => { const p = Math.min((now-startTime)/duration,1); cgpaResultDisplay.textContent = (start + (cgpa-start)*(1-Math.pow(1-p,3))).toFixed(2); if(p<1) requestAnimationFrame(tick); };
             requestAnimationFrame(tick);
         }
-        if (cgpaProgressCircle) {
-            cgpaProgressCircle.style.strokeDashoffset = 534 - (Math.min(cgpa,10)/10)*534;
+        if (cgpaProgressCircle) cgpaProgressCircle.style.strokeDashoffset = 534 - (Math.min(cgpa,10)/10)*534;
+        let rating='', bc='', desc='';
+        if(cgpa>=9.0){rating='Excellent';bc='rating-excellent';desc='Exceptional cumulative performance!';}
+        else if(cgpa>=8.0){rating='Very Good';bc='rating-verygood';desc='Great cumulative performance!';}
+        else if(cgpa>=7.0){rating='Good';bc='rating-good';desc='Solid cumulative performance.';}
+        else if(cgpa>=6.0){rating='Average';bc='rating-average';desc='Fair cumulative performance.';}
+        else{rating='Needs Improvement';bc='rating-poor';desc='Cumulative GPA is below average.';}
+        if(cgpaRatingBadge){cgpaRatingBadge.textContent=rating;cgpaRatingBadge.className=`rating-badge ${bc}`;}
+        if(cgpaRatingMessage) cgpaRatingMessage.textContent=desc;
+        if(cgpaSemBreakdown){
+            cgpaSemBreakdown.innerHTML='<div class="cgpa-sem-breakdown-title">Semester-wise SGPA Breakdown</div>';
+            filled.forEach(s=>{const r=document.createElement('div');r.className='cgpa-breakdown-row';r.innerHTML=`<span class="bd-sem">Semester ${s.sem}</span><span class="bd-sgpa">${s.sgpa.toFixed(2)}</span>`;cgpaSemBreakdown.appendChild(r);});
         }
-
-        let rating = '', badgeClass = '', desc = '';
-        if (cgpa >= 9.0) { rating='Excellent'; badgeClass='rating-excellent'; desc='Exceptional cumulative performance!'; }
-        else if (cgpa >= 8.0) { rating='Very Good'; badgeClass='rating-verygood'; desc='Great cumulative performance!'; }
-        else if (cgpa >= 7.0) { rating='Good'; badgeClass='rating-good'; desc='Solid cumulative performance.'; }
-        else if (cgpa >= 6.0) { rating='Average'; badgeClass='rating-average'; desc='Fair cumulative performance.'; }
-        else { rating='Needs Improvement'; badgeClass='rating-poor'; desc='Cumulative GPA is below average.'; }
-
-        if (cgpaRatingBadge) { cgpaRatingBadge.textContent = rating; cgpaRatingBadge.className = `rating-badge ${badgeClass}`; }
-        if (cgpaRatingMessage) cgpaRatingMessage.textContent = desc;
-
-        if (cgpaSemBreakdown) {
-            cgpaSemBreakdown.innerHTML = '<div class="cgpa-sem-breakdown-title">Semester-wise SGPA Breakdown</div>';
-            filled.forEach(s => {
-                const row = document.createElement('div');
-                row.className = 'cgpa-breakdown-row';
-                row.innerHTML = `<span class="bd-sem">Semester ${s.sem}</span><span class="bd-sgpa">${s.sgpa.toFixed(2)}</span>`;
-                cgpaSemBreakdown.appendChild(row);
-            });
-        }
-        if (cgpa >= 9.0) triggerConfetti();
-        cgpaResultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if(cgpa>=9.0) triggerConfetti();
+        cgpaResultSection.scrollIntoView({behavior:'smooth',block:'start'});
     };
 
     semCountBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             semCountBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            selectedSemCount = parseInt(btn.dataset.count);
-            buildCgpaInputs(selectedSemCount);
-            cgpaStep2.style.display = 'block';
-            cgpaStep2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            cgpaResultSection.style.display = 'none';
+            buildCgpaInputs(parseInt(btn.dataset.count));
+            cgpaStep2.style.display='block'; cgpaStep2.scrollIntoView({behavior:'smooth',block:'start'});
+            cgpaResultSection.style.display='none';
         });
     });
+    if(cgpaCalcBtn) cgpaCalcBtn.addEventListener('click', calculateCGPA);
+    if(cgpaResetBtn) cgpaResetBtn.addEventListener('click', ()=>{document.querySelectorAll('.cgpa-sem-input').forEach(i=>{i.value='';i.classList.remove('sgpa-filled');});cgpaSemesters.forEach(s=>s.sgpa='');if(cgpaCalcBtn)cgpaCalcBtn.disabled=true;cgpaResultSection.style.display='none';});
+    if(cgpaRecalcBtn) cgpaRecalcBtn.addEventListener('click', ()=>{cgpaResultSection.style.display='none';cgpaStep2.scrollIntoView({behavior:'smooth',block:'start'});});
 
-    if (cgpaCalcBtn) cgpaCalcBtn.addEventListener('click', calculateCGPA);
-    if (cgpaResetBtn) {
-        cgpaResetBtn.addEventListener('click', () => {
-            document.querySelectorAll('.cgpa-sem-input').forEach(inp => { inp.value = ''; inp.classList.remove('sgpa-filled'); });
-            cgpaSemesters.forEach(s => s.sgpa = '');
-            if (cgpaCalcBtn) cgpaCalcBtn.disabled = true;
-            cgpaResultSection.style.display = 'none';
-        });
-    }
-    if (cgpaRecalcBtn) {
-        cgpaRecalcBtn.addEventListener('click', () => {
-            cgpaResultSection.style.display = 'none';
-            cgpaStep2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
+    // Clean up temporary build scripts
+    const cleanupScripts = () => {
+        const scripts = ['build_commits.sh','build_2.sh','build_all.sh','app.js.orig','style.css.orig','index.html.orig'];
+        // Marked for removal
+    };
 });
