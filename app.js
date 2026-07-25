@@ -38,52 +38,69 @@ document.addEventListener('DOMContentLoaded', () => {
         let particles = []; let animId = null;
         const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
         window.addEventListener('resize', resize); resize();
-
         class Particle {
             constructor() { this.reset(); }
             reset() {
-                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1; this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5; this.opacity = Math.random() * 0.5 + 0.2;
+                this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height;
+                this.size = Math.random()*3+1; this.speedX = (Math.random()-0.5)*0.5; this.speedY = (Math.random()-0.5)*0.5;
+                this.opacity = Math.random()*0.5+0.2; this.pulse = Math.random()*Math.PI*2;
                 this.color = ['#6366f1','#a855f7','#ec4899','#818cf8'][Math.floor(Math.random()*4)];
-                this.pulse = Math.random() * Math.PI * 2;
             }
             update() {
-                this.x += this.speedX; this.y += this.speedY; this.pulse += 0.02;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+                this.x+=this.speedX; this.y+=this.speedY; this.pulse+=0.02;
+                if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset();
             }
             draw() {
-                const pulseOpacity = Math.sin(this.pulse) * 0.2 + 0.6;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity * pulseOpacity; ctx.fill();
+                const po = Math.sin(this.pulse)*0.2+0.6; ctx.beginPath();
+                ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+                ctx.fillStyle=this.color; ctx.globalAlpha=this.opacity*po; ctx.fill();
             }
         }
-        const count = Math.min(80, Math.floor(canvas.width * canvas.height / 10000));
-        for (let i = 0; i < count; i++) particles.push(new Particle());
-        const connectParticles = () => {
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a + 1; b < particles.length; b++) {
-                    const dx = particles[a].x - particles[b].x;
-                    const dy = particles[a].y - particles[b].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        ctx.beginPath(); ctx.strokeStyle = '#a855f7';
-                        ctx.globalAlpha = (1 - dist / 120) * 0.15; ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[a].x, particles[a].y); ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
+        const count = Math.min(80,Math.floor(canvas.width*canvas.height/10000));
+        for(let i=0;i<count;i++) particles.push(new Particle());
+        const connect = () => {
+            for(let a=0;a<particles.length;a++) for(let b=a+1;b<particles.length;b++) {
+                const dx=particles[a].x-particles[b].x,dy=particles[a].y-particles[b].y,dist=Math.sqrt(dx*dx+dy*dy);
+                if(dist<120){ctx.beginPath();ctx.strokeStyle='#a855f7';ctx.globalAlpha=(1-dist/120)*0.15;ctx.lineWidth=0.5;ctx.moveTo(particles[a].x,particles[a].y);ctx.lineTo(particles[b].x,particles[b].y);ctx.stroke();}
             }
         };
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            connectParticles(); ctx.globalAlpha = 1;
-            animId = requestAnimationFrame(animate);
-        };
+        const animate = () => { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); connect();ctx.globalAlpha=1;animId=requestAnimationFrame(animate); };
         animate();
     };
     initParticles();
+
+    // ========================
+    // Toast Notification System
+    // ========================
+    const exportToast = document.getElementById('export-toast');
+    const exportToastMessage = document.getElementById('export-toast-message');
+    let toastTimeout = null;
+    const showToast = (message, isError = false) => {
+        if (toastTimeout) clearTimeout(toastTimeout);
+        exportToastMessage.textContent = message;
+        exportToast.className = `export-toast visible${isError ? ' error' : ''}`;
+        toastTimeout = setTimeout(() => exportToast.classList.remove('visible'), 3000);
+    };
+
+    // ========================
+    // Confetti Celebration Effect
+    // ========================
+    const triggerConfetti = () => {
+        const colors = ['#10b981','#3b82f6','#8b5cf6','#f59e0b','#ec4899','#6366f1','#22d3ee'];
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random()*100+'vw';
+            piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+            piece.style.width = (Math.random()*6+4)+'px';
+            piece.style.height = (Math.random()*6+4)+'px';
+            piece.style.animationDuration = (Math.random()*1.5+1.5)+'s';
+            piece.style.animationDelay = (Math.random()*0.8)+'s';
+            piece.style.borderRadius = Math.random()>0.5?'50%':'2px';
+            document.body.appendChild(piece);
+            setTimeout(() => piece.remove(), 3500);
+        }
+    };
 
     // ========================
     // CGPA Calculator
@@ -113,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cgpaSemesters.push({ sem: i, sgpa: '' });
             const row = document.createElement('div');
             row.className = 'cgpa-input-row';
-            const icon = icons[(i - 1) % icons.length];
+            const icon = icons[(i-1)%icons.length];
             row.innerHTML = `<div class="sem-label"><i data-lucide="${icon}"></i><span>Semester ${i}</span><span class="sem-badge">SGPA</span></div><div class="input-wrapper"><input type="number" class="cgpa-sem-input" data-sem="${i}" min="0" max="10" step="0.01" placeholder="0.0 - 10.0" autocomplete="off" inputmode="decimal"></div>`;
             cgpaInputs.appendChild(row);
             const input = row.querySelector('.cgpa-sem-input');
@@ -143,27 +160,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const cgpa = total / filled.length;
         cgpaResultSection.style.display = 'block';
 
-        // Animate counter
         if (cgpaResultDisplay) {
-            const start = 0; const duration = 1000;
-            const startTime = performance.now();
+            const start = 0; const duration = 1000; const startTime = performance.now();
             const tick = (now) => {
                 const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                cgpaResultDisplay.textContent = (start + (cgpa - start) * eased).toFixed(2);
+                cgpaResultDisplay.textContent = (start + (cgpa - start) * (1 - Math.pow(1 - progress, 3))).toFixed(2);
                 if (progress < 1) requestAnimationFrame(tick);
             };
             requestAnimationFrame(tick);
         }
-
-        // Update gauge
         if (cgpaProgressCircle) {
-            const circumference = 534;
-            cgpaProgressCircle.style.strokeDashoffset = circumference - (Math.min(cgpa, 10) / 10) * circumference;
+            cgpaProgressCircle.style.strokeDashoffset = 534 - (Math.min(cgpa,10)/10)*534;
         }
 
-        // Rating
         let rating = '', badgeClass = '', desc = '';
         if (cgpa >= 9.0) { rating='Excellent'; badgeClass='rating-excellent'; desc='Exceptional cumulative performance!'; }
         else if (cgpa >= 8.0) { rating='Very Good'; badgeClass='rating-verygood'; desc='Great cumulative performance!'; }
@@ -174,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cgpaRatingBadge) { cgpaRatingBadge.textContent = rating; cgpaRatingBadge.className = `rating-badge ${badgeClass}`; }
         if (cgpaRatingMessage) cgpaRatingMessage.textContent = desc;
 
-        // Breakdown
         if (cgpaSemBreakdown) {
             cgpaSemBreakdown.innerHTML = '<div class="cgpa-sem-breakdown-title">Semester-wise SGPA Breakdown</div>';
             filled.forEach(s => {
@@ -184,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cgpaSemBreakdown.appendChild(row);
             });
         }
+        if (cgpa >= 9.0) triggerConfetti();
         cgpaResultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
