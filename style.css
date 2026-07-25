@@ -438,3 +438,5 @@ body {
 .export-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 .export-toast.error { background: rgba(239,68,68,0.9); }
 .export-toast i { width: 18px; height: 18px; }/* Added: smoother animation timing for gauge */
+/* Home: enhanced card hover shadow */
+/* CGPA: responsive sem selector */
