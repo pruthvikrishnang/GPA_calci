@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your GPA/SGPA/CGPA with a beautiful interface">
+    <meta name="keywords" content="GPA, SGPA, CGPA calculator">
+    <meta name="theme-color" content="#0b0f19">
     <title>Apex GPA & SGPA Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -49,7 +56,57 @@
         </div>
     </div>
     <div class="page" id="page-sgpa"></div>
-    <div class="page" id="page-cgpa"></div>
+    <div class="page" id="page-cgpa">
+        <div class="app-container cgpa-container">
+            <header class="cgpa-header">
+                <div class="cgpa-header-left">
+                    <a href="#home" class="icon-btn" title="Back to Home"><i data-lucide="arrow-left"></i></a>
+                    <div class="cgpa-header-title">
+                        <div class="cgpa-header-icon"><i data-lucide="bar-chart-3"></i></div>
+                        <div><h1>CGPA <span>Calculator</span></h1><p class="subtitle">Calculate your Cumulative Grade Point Average</p></div>
+                    </div>
+                </div>
+                <button id="cgpa-theme-toggle" class="icon-btn"><i data-lucide="sun" class="sun-icon"></i><i data-lucide="moon" class="moon-icon"></i></button>
+            </header>
+            <main class="cgpa-content">
+                <section class="card cgpa-step" id="cgpa-step-1">
+                    <div class="card-header"><h2>Select Number of Semesters</h2><span class="subtitle-badge">Step 1 of 2</span></div>
+                    <p class="cgpa-description">Choose how many semesters to include in your CGPA calculation.</p>
+                    <div class="sem-count-selector" id="sem-count-selector">
+                        <button type="button" class="sem-count-btn" data-count="1">1 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="2">2 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="3">3 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="4">4 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="5">5 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="6">6 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="7">7 Sem</button>
+                        <button type="button" class="sem-count-btn" data-count="8">8 Sem</button>
+                    </div>
+                </section>
+                <section class="card cgpa-step" id="cgpa-step-2" style="display:none;">
+                    <div class="card-header"><h2>Enter Semester SGPA Values</h2><span class="subtitle-badge">Step 2 of 2</span></div>
+                    <p class="cgpa-description">Enter SGPA for each semester (0.0 - 10.0).</p>
+                    <div id="cgpa-inputs" class="cgpa-inputs"></div>
+                    <div class="cgpa-actions">
+                        <button type="button" id="cgpa-calc-btn" class="primary-btn" disabled><i data-lucide="calculator"></i> Calculate CGPA</button>
+                        <button type="button" id="cgpa-reset-btn" class="secondary-btn"><i data-lucide="rotate-ccw"></i> Reset All</button>
+                    </div>
+                </section>
+                <section class="card cgpa-result-card" id="cgpa-result-section" style="display:none;">
+                    <div class="card-header"><h2>Your CGPA Result</h2></div>
+                    <div class="cgpa-result-content">
+                        <div class="cgpa-result-gauge"><div class="gauge-wrapper"><svg class="gpa-gauge" viewBox="0 0 200 200"><circle class="gauge-bg" cx="100" cy="100" r="85"/><circle class="gauge-progress" id="cgpa-progress-circle" cx="100" cy="100" r="85"/></svg><div class="gauge-text"><span class="gauge-number" id="cgpa-result-display">0.00</span><span class="gauge-label">CGPA</span></div></div></div>
+                        <div class="cgpa-result-details">
+                            <div class="rating-box"><div class="rating-badge-container"><span class="rating-badge" id="cgpa-rating-badge">Ready</span></div><p class="rating-message" id="cgpa-rating-message">Your CGPA rating will appear here.</p></div>
+                            <div class="cgpa-sem-breakdown" id="cgpa-sem-breakdown"></div>
+                        </div>
+                    </div>
+                    <div class="cgpa-recalc"><button type="button" id="cgpa-recalc-btn" class="primary-btn"><i data-lucide="rotate-ccw"></i> Recalculate</button></div>
+                </section>
+            </main>
+            <footer class="app-footer"><p>&copy; 2026 Apex Calculator</p></footer>
+        </div>
+    </div>
     <script src="app.js"></script>
 </body>
 </html>
