@@ -883,12 +883,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add credits input listener
         const creditsInp = tr.querySelector('.table-input-credits');
         creditsInp.addEventListener('input', () => {
-            const val = parseFloat(creditsInp.value);
-            if (!isNaN(val) && val >= 0.5 && val <= 20) {
+            const raw = creditsInp.value.trim();
+            const val = parseFloat(raw);
+            if (raw !== '' && !isNaN(val) && val >= 0.5 && val <= 20) {
                 creditsInp.classList.remove('input-invalid');
+                creditsInp.removeAttribute('title');
                 updateSubjectProperty(subject.id, 'credits', val);
             } else {
                 creditsInp.classList.add('input-invalid');
+                creditsInp.title = 'Credits must be between 0.5 and 20';
+            }
+        });
+        creditsInp.addEventListener('blur', () => {
+            if (creditsInp.classList.contains('input-invalid')) {
+                const stored = subjects.find(s => s.id === subject.id);
+                if (stored) {
+                    creditsInp.value = stored.credits;
+                    creditsInp.classList.remove('input-invalid');
+                    creditsInp.removeAttribute('title');
+                }
             }
         });
 
