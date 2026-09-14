@@ -682,6 +682,90 @@ document.addEventListener('DOMContentLoaded', () => {
         activeDetailEntry = null;
     };
 
+    const showDrawerDetailView = (entry) => {
+        const listView   = document.getElementById('drawer-list-view');
+        const detailView = document.getElementById('drawer-detail-view');
+        const backBtn    = document.getElementById('drawer-back-btn');
+        const titleEl    = document.getElementById('drawer-title');
+        const clearBtn   = document.getElementById('drawer-clear-btn');
+        if (listView)   listView.style.display = 'none';
+        if (detailView) detailView.style.display = '';
+        if (backBtn)    backBtn.style.display = '';
+        if (titleEl)    titleEl.textContent = entry.label;
+        if (clearBtn)   clearBtn.style.display = 'none';
+        activeDetailEntry = entry;
+
+        const summaryEl = document.getElementById('detail-summary');
+        if (summaryEl) {
+            summaryEl.innerHTML = `
+                <div class="detail-stat">
+                    <span class="detail-stat-label">FGP / SGPA</span>
+                    <span class="detail-stat-value fgp-val">${entry.sgpa.toFixed(2)}</span>
+                </div>
+                <div class="detail-stat">
+                    <span class="detail-stat-label">Grade Points</span>
+                    <span class="detail-stat-value gp-val">${entry.gp.toFixed(1)}</span>
+                </div>
+                <div class="detail-stat">
+                    <span class="detail-stat-label">Credits</span>
+                    <span class="detail-stat-value cr-val">${entry.credits}</span>
+                </div>
+            `;
+        }
+
+        const timeRow = document.getElementById('detail-time-row');
+        if (timeRow) timeRow.textContent = entry.time;
+
+        const subjectsEl = document.getElementById('detail-subjects-body');
+        if (subjectsEl) {
+            if (!entry.subjects || entry.subjects.length === 0) {
+                subjectsEl.innerHTML = '<div class="detail-no-subjects">Subject details not available for this entry.</div>';
+            } else {
+                subjectsEl.innerHTML = '';
+                entry.subjects.forEach(s => {
+                    const gp = s.grade && GRADE_POINTS[s.grade] !== undefined ? GRADE_POINTS[s.grade] : '–';
+                    const chipCls = gradeChipClass(s.grade);
+                    const name = s.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                    const row = document.createElement('div');
+                    row.className = 'detail-subject-row';
+                    row.innerHTML = `
+                        <span class="detail-subject-name" title="${name}">${name}</span>
+                        <span class="detail-subject-grade ${chipCls}">${s.grade || '–'}</span>
+                        <span class="detail-subject-credits">${(+s.credits).toFixed(1)} cr</span>
+                        <span class="detail-subject-gp">${gp}</span>
+                    `;
+                    subjectsEl.appendChild(row);
+                });
+            }
+        }
+
+        const loadBtn = document.getElementById('detail-load-btn');
+        if (loadBtn) loadBtn.onclick = () => loadEntryIntoCalculator(entry);
+
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    const loadEntryIntoCalculator = (entry) => {
+        if (!entry.subjects || entry.subjects.length === 0) {
+            showToast('No subject data available for this entry.', true);
+            return;
+        }
+        subjects = JSON.parse(JSON.stringify(entry.subjects));
+        const targetSem = entry.semKey || 'custom';
+        localStorage.setItem(`gpa_subjects_${targetSem}`, JSON.stringify(subjects));
+        localStorage.setItem('gpa_selected_semester', targetSem);
+        if (currentSemester !== targetSem) {
+            currentSemester = targetSem;
+            semButtons.forEach(b => b.classList.toggle('active', b.dataset.sem === targetSem));
+            if (semBadge) semBadge.textContent = targetSem === 'custom' ? 'Manual Mode' : `Semester ${targetSem}`;
+            updateStructuredUI(targetSem);
+        }
+        renderSubjects();
+        markUncalculated();
+        closeDrawer();
+        showToast(`Loaded "${entry.label}" — click Calculate SGPA to see results.`);
+    };
+
     const renderDrawerList = () => {
         const countEl  = document.getElementById('drawer-count');
         const emptyEl  = document.getElementById('drawer-empty');
