@@ -2095,9 +2095,27 @@ document.addEventListener('DOMContentLoaded', () => {
             cgpaInputs.appendChild(row);
             const input = row.querySelector('.cgpa-sem-input');
             input.addEventListener('input', () => {
-                const val = input.value.trim(); const sem = parseInt(input.dataset.sem); const idx = cgpaSemesters.findIndex(s => s.sem === sem);
-                if (idx !== -1) { const num = parseFloat(val); if (val === '' || (!isNaN(num) && num >= 0 && num <= 10)) { cgpaSemesters[idx].sgpa = val === '' ? '' : num; input.classList.toggle('sgpa-filled', val !== '' && !isNaN(num)); } }
-                if (cgpaCalcBtn) cgpaCalcBtn.disabled = cgpaSemesters.filter(s => s.sgpa !== '').length === 0;
+                const val = input.value.trim();
+                const sem = parseInt(input.dataset.sem);
+                const idx = cgpaSemesters.findIndex(s => s.sem === sem);
+                if (idx !== -1) {
+                    const num = parseFloat(val);
+                    if (val === '') {
+                        cgpaSemesters[idx].sgpa = '';
+                        input.classList.remove('sgpa-filled', 'sgpa-error');
+                    } else if (!isNaN(num) && num >= 0 && num <= 10) {
+                        cgpaSemesters[idx].sgpa = num;
+                        input.classList.add('sgpa-filled');
+                        input.classList.remove('sgpa-error');
+                    } else {
+                        cgpaSemesters[idx].sgpa = '';
+                        input.classList.remove('sgpa-filled');
+                        input.classList.add('sgpa-error');
+                    }
+                }
+                const hasValid = cgpaSemesters.filter(s => s.sgpa !== '').length > 0;
+                const hasErrors = cgpaInputs.querySelectorAll('.sgpa-error').length > 0;
+                if (cgpaCalcBtn) cgpaCalcBtn.disabled = !hasValid || hasErrors;
             });
         }
         if (window.lucide) window.lucide.createIcons();
@@ -2142,7 +2160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     if(cgpaCalcBtn) cgpaCalcBtn.addEventListener('click', calculateCGPA);
-    if(cgpaResetBtn) cgpaResetBtn.addEventListener('click', ()=>{document.querySelectorAll('.cgpa-sem-input').forEach(i=>{i.value='';i.classList.remove('sgpa-filled');});cgpaSemesters.forEach(s=>s.sgpa='');if(cgpaCalcBtn)cgpaCalcBtn.disabled=true;cgpaResultSection.style.display='none';});
+    if(cgpaResetBtn) cgpaResetBtn.addEventListener('click', ()=>{document.querySelectorAll('.cgpa-sem-input').forEach(i=>{i.value='';i.classList.remove('sgpa-filled','sgpa-error');});cgpaSemesters.forEach(s=>s.sgpa='');if(cgpaCalcBtn)cgpaCalcBtn.disabled=true;cgpaResultSection.style.display='none';});
     if(cgpaRecalcBtn) cgpaRecalcBtn.addEventListener('click', ()=>{cgpaResultSection.style.display='none';cgpaStep2.scrollIntoView({behavior:'smooth',block:'start'});});
 
     // Clean up temporary build scripts
