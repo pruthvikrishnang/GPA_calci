@@ -638,8 +638,134 @@ document.addEventListener('DOMContentLoaded', () => {
             calcHistory = calcHistory.slice(0, MAX_HISTORY);
         }
 
-        persistHistory();
+        // ========================
+    // Past Calculations Drawer
+    // ========================
+    let activeDetailEntry = null;
+
+    const gradeChipClass = (grade) => {
+        const m = { 'O':'grade-chip-o','A+':'grade-chip-ap','A':'grade-chip-a','B+':'grade-chip-bp','B':'grade-chip-b','C':'grade-chip-c','P':'grade-chip-p','F':'grade-chip-f' };
+        return m[grade] || 'grade-chip-none';
     };
+
+    const openDrawer = () => {
+        const backdrop = document.getElementById('past-calc-backdrop');
+        const drawer   = document.getElementById('past-calc-drawer');
+        if (!drawer) return;
+        renderDrawerList();
+        if (backdrop) backdrop.classList.add('open');
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    const closeDrawer = () => {
+        const backdrop = document.getElementById('past-calc-backdrop');
+        const drawer   = document.getElementById('past-calc-drawer');
+        if (backdrop) backdrop.classList.remove('open');
+        if (drawer)   drawer.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(showDrawerListView, 320);
+    };
+
+    const showDrawerListView = () => {
+        const listView   = document.getElementById('drawer-list-view');
+        const detailView = document.getElementById('drawer-detail-view');
+        const backBtn    = document.getElementById('drawer-back-btn');
+        const titleEl    = document.getElementById('drawer-title');
+        const clearBtn   = document.getElementById('drawer-clear-btn');
+        if (listView)   listView.style.display = '';
+        if (detailView) detailView.style.display = 'none';
+        if (backBtn)    backBtn.style.display = 'none';
+        if (titleEl)    titleEl.textContent = 'Past Calculations';
+        if (clearBtn)   clearBtn.style.display = calcHistory.length > 0 ? '' : 'none';
+        activeDetailEntry = null;
+    };
+
+    const renderDrawerList = () => {
+        const countEl  = document.getElementById('drawer-count');
+        const emptyEl  = document.getElementById('drawer-empty');
+        const listEl   = document.getElementById('drawer-list');
+        const clearBtn = document.getElementById('drawer-clear-btn');
+        if (!listEl) return;
+
+        if (countEl) countEl.textContent = calcHistory.length > 0 ? `${calcHistory.length} / ${MAX_HISTORY}` : '';
+        if (clearBtn) clearBtn.style.display = calcHistory.length > 0 ? '' : 'none';
+
+        if (calcHistory.length === 0) {
+            if (emptyEl) emptyEl.style.display = '';
+            listEl.innerHTML = '';
+            return;
+        }
+        if (emptyEl) emptyEl.style.display = 'none';
+        listEl.innerHTML = '';
+
+        calcHistory.forEach((entry, idx) => {
+            const item = document.createElement('div');
+            item.className = 'drawer-list-item';
+            const safe = entry.label.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            item.innerHTML = `
+                <span class="drawer-list-num">#${idx + 1}</span>
+                <div class="drawer-list-info">
+                    <div class="drawer-list-label">${safe}</div>
+                    <div class="drawer-list-meta">${entry.time} &nbsp;·&nbsp; ${entry.credits} credits</div>
+                </div>
+                <div class="drawer-list-chips">
+                    <div class="drawer-chip chip-gp">
+                        <span class="drawer-chip-lbl">GP</span>
+                        <span class="drawer-chip-val">${entry.gp.toFixed(1)}</span>
+                    </div>
+                    <div class="drawer-chip chip-fgp">
+                        <span class="drawer-chip-lbl">FGP</span>
+                        <span class="drawer-chip-val">${entry.sgpa.toFixed(2)}</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="drawer-list-arrow"></i>
+            `;
+            item.addEventListener('click', () => showDrawerDetailView(entry));
+            listEl.appendChild(item);
+        });
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    const clearHistory = () => {
+        calcHistory = [];
+        persistHistory();
+        renderDrawerList();
+    };
+
+    // Drawer event listeners
+    const pastCalcBtn = document.getElementById('past-calc-btn');
+    if (pastCalcBtn) pastCalcBtn.addEventListener('click', openDrawer);
+
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+
+    const drawerBackBtn = document.getElementById('drawer-back-btn');
+    if (drawerBackBtn) drawerBackBtn.addEventListener('click', showDrawerListView);
+
+    const drawerClearBtn = document.getElementById('drawer-clear-btn');
+    if (drawerClearBtn) {
+        drawerClearBtn.addEventListener('click', () => {
+            if (calcHistory.length === 0) return;
+            if (confirm('Clear all past calculations? This cannot be undone.')) {
+                clearHistory();
+                showToast('Calculation history cleared.');
+            }
+        });
+    }
+
+    const drawerBackdrop = document.getElementById('past-calc-backdrop');
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const drawer = document.getElementById('past-calc-drawer');
+            if (drawer && drawer.classList.contains('open')) closeDrawer();
+        }
+    });
+
+    loadHistory();
 
     // ========================
     // Bulk Grade Fill
