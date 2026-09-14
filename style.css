@@ -1898,8 +1898,11 @@ th:hover .tooltip-icon {
     border-color: var(--color-poor) !important;
     background-color: rgba(239, 68, 68, 0.05) !important;
     color: var(--color-poor) !important;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
     animation: shake 0.3s ease-in-out;
+}
+.input-invalid:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25) !important;
 }
 
 /* Footer Styling */
