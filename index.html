@@ -301,6 +301,52 @@
             </main>
             <footer class="app-footer"><p>&copy; 2026 Apex Calculator. Designed for academic excellence.</p></footer>
         </div>
+
+        <!-- PAST CALCULATIONS DRAWER -->
+        <div id="past-calc-backdrop" class="past-calc-backdrop" aria-hidden="true"></div>
+        <aside id="past-calc-drawer" class="past-calc-drawer" role="dialog" aria-modal="true" aria-label="Past Calculations">
+            <div class="drawer-header">
+                <button type="button" id="drawer-back-btn" class="drawer-back-btn" style="display:none;" aria-label="Back to list">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <span class="drawer-title" id="drawer-title">Past Calculations</span>
+                <div class="drawer-header-right">
+                    <span class="drawer-count" id="drawer-count"></span>
+                    <button type="button" id="drawer-clear-btn" class="drawer-clear-btn" title="Clear all history" aria-label="Clear all history" style="display:none;">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                    <button type="button" id="drawer-close-btn" class="icon-btn" aria-label="Close">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- List View -->
+            <div id="drawer-list-view" class="drawer-view">
+                <div id="drawer-empty" class="drawer-empty">
+                    <i data-lucide="clock"></i>
+                    <p>No past calculations yet</p>
+                    <span>Click &ldquo;Calculate SGPA&rdquo; to start tracking your history.</span>
+                </div>
+                <div id="drawer-list" class="drawer-list"></div>
+            </div>
+
+            <!-- Detail View -->
+            <div id="drawer-detail-view" class="drawer-view" style="display:none;">
+                <div class="detail-summary" id="detail-summary"></div>
+                <div class="detail-time-row" id="detail-time-row"></div>
+                <div class="detail-subjects-wrap">
+                    <div class="detail-subjects-title">Subjects in this calculation</div>
+                    <div id="detail-subjects-body"></div>
+                </div>
+                <div class="detail-footer">
+                    <button type="button" id="detail-load-btn" class="primary-btn detail-load-btn">
+                        <i data-lucide="upload"></i> Load into Calculator
+                    </button>
+                    <p class="detail-load-hint">Restores subjects &amp; grades from this calculation into the current session.</p>
+                </div>
+            </div>
+        </aside>
     </div>
 
     <!-- CGPA CALCULATOR PAGE -->
