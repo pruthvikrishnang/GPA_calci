@@ -588,6 +588,57 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resultsSection && window.innerWidth <= 968) {
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+
+        // Save this calculation to history buffer
+        saveCalculationToHistory(gpa, cumulativePoints, totalCredits);
+    };
+
+    // ========================
+    // Calculation History (GP / FGP cache — last 10)
+    // ========================
+    const HISTORY_KEY = 'gpa_calc_history';
+    const MAX_HISTORY = 10;
+    let calcHistory = [];
+
+    const loadHistory = () => {
+        try {
+            const raw = localStorage.getItem(HISTORY_KEY);
+            calcHistory = raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            calcHistory = [];
+        }
+    };
+
+    const persistHistory = () => {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(calcHistory));
+    };
+
+    const saveCalculationToHistory = (sgpa, gp, credits) => {
+        const semLabel = currentSemester === 'custom'
+            ? 'Manual Mode'
+            : `Semester ${currentSemester}`;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateStr = now.toLocaleDateString([], { month: 'short', day: 'numeric' });
+
+        const entry = {
+            id: Date.now(),
+            label: semLabel,
+            semKey: currentSemester,
+            sgpa: parseFloat(sgpa.toFixed(2)),
+            gp: parseFloat(gp.toFixed(2)),
+            credits: parseFloat(credits.toFixed(1)),
+            time: `${dateStr}, ${timeStr}`,
+            subjects: JSON.parse(JSON.stringify(subjects))
+        };
+
+        calcHistory.unshift(entry);
+
+        if (calcHistory.length > MAX_HISTORY) {
+            calcHistory = calcHistory.slice(0, MAX_HISTORY);
+        }
+
+        persistHistory();
     };
 
     // ========================
