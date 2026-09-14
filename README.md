@@ -20,6 +20,7 @@ The calculator is deployed on GitHub Pages for instant access.
 - **Interactive Inline Editing**: Edit subject names, credits, and select letter grades directly inside table rows
 - **Real-time GPA Calculation**: Manual calculation with animated number counter that counts up smoothly
 - **Cumulative CGPA Tracking**: Save semester results and track your overall CGPA across all semesters
+- **Input Validation & Safety Guards**: Real-time range validation (0.0–10.0 for SGPA, 0.5–20 for credits) with red error glows, tooltips, blur-reversion, and calculation guards
 
 ### Visual & Experience
 - **Circular SVG Gauge**: Animated progress ring with gradient colors representing your GPA
@@ -29,9 +30,12 @@ The calculator is deployed on GitHub Pages for instant access.
 - **Dark/Light Theme**: Toggle between dark and light modes with smooth transitions
 - **Glassmorphic UI**: Backdrop blurs, responsive grids, hover glows, and micro-interactions
 
-### Data Management
-- **Local Storage Persistence**: All subjects, grades, and saved semesters persist across sessions
-- **Semester-Specific Storage**: Separately tracks data for each semester and the custom mode
+### Data Management & Past Calculations
+- **Past Calculations Drawer**: Dedicated slide-in drawer storing up to 10 previous calculation records with date/time stamps
+- **Detailed Calculation Inspection**: View GP (Grade Points) and FGP (Final Grade Point / SGPA) chips and inspect full subject & grade breakdowns
+- **One-Click Calculation Restore**: Instantly restore past calculation subjects and grades back into the active calculator workspace
+- **Local Storage Persistence**: All subjects, grades, saved semesters, and calculation history persist across sessions
+- **Semester-Specific Storage**: Separately tracks data for each semester and custom mode
 - **Curriculum Versioning**: Automatically resets semester data when curriculum definitions change
 - **Bulk Grade Fill**: Quickly assign grades to all ungraded subjects at once
 
@@ -63,7 +67,8 @@ The calculator is deployed on GitHub Pages for instant access.
 4. **Add Custom Subjects**: Use the "Add New Subject" form for additional subjects
 5. **Calculate SGPA**: Press the **Calculate SGPA** button to compute your score
 6. **Save Semester**: Click "Save Semester Result" to track your progress in the cumulative CGPA
-7. **Export**: Use the export buttons (PNG, PDF, CSV) or Print to save your report
+7. **View Past Calculations**: Click the "Past Calculations" header button to review previous calculations, inspect subject breakdowns, or restore past calculations into your workspace
+8. **Export**: Use the export buttons (PNG, PDF, CSV) or Print to save your report
 
 ---
 
