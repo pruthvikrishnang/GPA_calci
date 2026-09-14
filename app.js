@@ -2111,11 +2111,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         cgpaSemesters[idx].sgpa = '';
                         input.classList.remove('sgpa-filled');
                         input.classList.add('sgpa-error');
+                        input.title = 'SGPA must be between 0.0 and 10.0';
                     }
                 }
                 const hasValid = cgpaSemesters.filter(s => s.sgpa !== '').length > 0;
                 const hasErrors = cgpaInputs.querySelectorAll('.sgpa-error').length > 0;
                 if (cgpaCalcBtn) cgpaCalcBtn.disabled = !hasValid || hasErrors;
+            });
+            input.addEventListener('blur', () => {
+                input.dispatchEvent(new Event('input'));
             });
         }
         if (window.lucide) window.lucide.createIcons();
@@ -2123,8 +2127,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const calculateCGPA = () => {
-        const filled = cgpaSemesters.filter(s => s.sgpa !== '');
+        const filled = cgpaSemesters.filter(s => typeof s.sgpa === 'number' && !isNaN(s.sgpa) && s.sgpa >= 0 && s.sgpa <= 10);
         if (filled.length === 0) return;
+        if (cgpaInputs && cgpaInputs.querySelectorAll('.sgpa-error').length > 0) return;
         let total = 0; filled.forEach(s => total += s.sgpa);
         const cgpa = total / filled.length;
         cgpaResultSection.style.display = 'block';
