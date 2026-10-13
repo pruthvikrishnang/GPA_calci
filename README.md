@@ -114,7 +114,7 @@ first one, so any script error used to render the whole site blank):
 
 ```bash
 npm install   # installs jsdom (dev-only; the app itself needs nothing)
-npm test      # 34 checks: pages activate, SGPA/CGPA math, forms, drawer,
+npm test      # 38 checks: pages activate, SGPA/CGPA math, forms, drawer,
               # search, CSV export, theme persistence, corrupted-storage
               # resilience, edge cases
 ```
