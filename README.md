@@ -105,6 +105,42 @@ The calculator is deployed on GitHub Pages for instant access.
 
 ---
 
+## ✅ Development & Testing
+
+The site itself is a zero-build static app — no bundler, no dependencies. A
+headless test suite (jsdom) guards every user-facing flow, including the
+blank-screen regression (all pages are hidden until the script activates the
+first one, so any script error used to render the whole site blank):
+
+```bash
+npm install   # installs jsdom (dev-only; the app itself needs nothing)
+npm test      # 34 checks: pages activate, SGPA/CGPA math, forms, drawer,
+              # search, CSV export, theme persistence, corrupted-storage
+              # resilience, edge cases
+```
+
+To serve the app locally (recommended over file://, mirrors GitHub Pages):
+
+```bash
+npm start                 # serves on http://localhost:8080
+# or: python3 -m http.server 8080
+```
+
+---
+
+## 🚢 Deployment
+
+The site is served by **GitHub Pages** from the `main` branch root (source:
+`main` / `/`). Deploying is just pushing to `main` — Pages rebuilds
+automatically at **https://pruthvikrishnang.github.io/GPA_calci/**.
+
+Checklist before pushing:
+
+1. `npm test` passes
+2. The page loads served locally (`npm start`) with no console errors
+
+---
+
 ## 🖥️ Local Installation
 
 ```bash
