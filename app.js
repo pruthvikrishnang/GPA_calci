@@ -637,8 +637,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (calcHistory.length > MAX_HISTORY) {
             calcHistory = calcHistory.slice(0, MAX_HISTORY);
         }
+    };
 
-        // ========================
+    // ========================
     // Past Calculations Drawer
     // ========================
     let activeDetailEntry = null;
