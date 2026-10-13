@@ -6,6 +6,30 @@
 // - Semester-specific local storage persistence (persists custom selections separately)
 // - Dynamic adaptive clear/reset button for templates and custom layouts
 
+// Safe storage access. Some browsing environments (Safari private mode,
+// blocked cookies, embedded webviews, quota-exceeded states) throw on ANY
+// localStorage access. A bare safeStorage.getItem() at init used to kill
+// the whole script and render a blank page. Fall back to an in-memory store
+// so the session still works (data just won't persist for that visit).
+const safeStorage = (() => {
+    try {
+        const store = window.localStorage;
+        store.setItem('__gpa_storage_probe__', '1');
+        store.removeItem('__gpa_storage_probe__');
+        return store;
+    } catch (e) {
+        const mem = new Map();
+        return {
+            getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+            setItem: (k, v) => { mem.set(k, String(v)); },
+            removeItem: (k) => { mem.delete(k); },
+            clear: () => mem.clear(),
+            key: (i) => (Array.from(mem.keys())[i] ?? null),
+            get length() { return mem.size; },
+        };
+    }
+})();
+
 // Grade to Grade Point Mapping
 const GRADE_POINTS = {
     'O': 10,
@@ -232,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const htmlElement = document.documentElement;
 
     // Load saved theme or default to dark
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const savedTheme = safeStorage.getItem('theme') || 'dark';
     htmlElement.setAttribute('data-theme', savedTheme);
 
     // Initial Lucide Icons rendering
@@ -245,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
         htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        safeStorage.setItem('theme', newTheme);
     });
 
     // Subject State Manager
@@ -257,13 +281,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Curriculum Versioning to invalidate cache when default subjects change
     const CURRICULUM_VERSION = 'v8';
     const checkCurriculumVersion = () => {
-        const savedVersion = localStorage.getItem('gpa_curriculum_version');
+        const savedVersion = safeStorage.getItem('gpa_curriculum_version');
         if (savedVersion !== CURRICULUM_VERSION) {
             // Clear all semester caches when curriculum updates
             for (let i = 1; i <= 8; i++) {
-                localStorage.removeItem(`gpa_subjects_${i}`);
+                safeStorage.removeItem(`gpa_subjects_${i}`);
             }
-            localStorage.setItem('gpa_curriculum_version', CURRICULUM_VERSION);
+            safeStorage.setItem('gpa_curriculum_version', CURRICULUM_VERSION);
         }
     };
     checkCurriculumVersion();
@@ -293,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load initial subjects from local storage based on active semester
     const loadSubjects = () => {
-        currentSemester = localStorage.getItem('gpa_selected_semester') || 'custom';
+        currentSemester = safeStorage.getItem('gpa_selected_semester') || 'custom';
         
         // Update UI active states for semester buttons
         semButtons.forEach(btn => {
@@ -311,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStructuredUI(currentSemester);
 
         const key = `gpa_subjects_${currentSemester}`;
-        const saved = localStorage.getItem(key);
+        const saved = safeStorage.getItem(key);
         if (saved) {
             try {
                 subjects = JSON.parse(saved);
@@ -332,12 +356,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get selected major for a semester from localStorage
     const getSelectedMajor = (sem) => {
-        return localStorage.getItem(`gpa_major_${sem}`) || '';
+        return safeStorage.getItem(`gpa_major_${sem}`) || '';
     };
 
     // Save selected major for a semester
     const saveSelectedMajor = (sem, major) => {
-        localStorage.setItem(`gpa_major_${sem}`, major);
+        safeStorage.setItem(`gpa_major_${sem}`, major);
     };
 
     // Helper to get default data for a semester template or sample custom data
@@ -420,8 +444,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save subjects to local storage
     const saveSubjects = () => {
         const key = `gpa_subjects_${currentSemester}`;
-        localStorage.setItem(key, JSON.stringify(subjects));
-        localStorage.setItem('gpa_selected_semester', currentSemester);
+        safeStorage.setItem(key, JSON.stringify(subjects));
+        safeStorage.setItem('gpa_selected_semester', currentSemester);
     };
 
     // DOM Element References
@@ -561,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ratingMessage.textContent = desc;
         // Store last calculated timestamp
         const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        localStorage.setItem('gpa_last_calculated_' + currentSemester, timestamp);
+        safeStorage.setItem('gpa_last_calculated_' + currentSemester, timestamp);
         
         // Update grade distribution visual
         updateGradeDistribution();
@@ -602,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadHistory = () => {
         try {
-            const raw = localStorage.getItem(HISTORY_KEY);
+            const raw = safeStorage.getItem(HISTORY_KEY);
             calcHistory = raw ? JSON.parse(raw) : [];
         } catch (e) {
             calcHistory = [];
@@ -610,7 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const persistHistory = () => {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(calcHistory));
+        safeStorage.setItem(HISTORY_KEY, JSON.stringify(calcHistory));
     };
 
     const saveCalculationToHistory = (sgpa, gp, credits) => {
@@ -637,8 +661,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (calcHistory.length > MAX_HISTORY) {
             calcHistory = calcHistory.slice(0, MAX_HISTORY);
         }
+    };
 
-        // ========================
+    // ========================
     // Past Calculations Drawer
     // ========================
     let activeDetailEntry = null;
@@ -752,8 +777,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         subjects = JSON.parse(JSON.stringify(entry.subjects));
         const targetSem = entry.semKey || 'custom';
-        localStorage.setItem(`gpa_subjects_${targetSem}`, JSON.stringify(subjects));
-        localStorage.setItem('gpa_selected_semester', targetSem);
+        safeStorage.setItem(`gpa_subjects_${targetSem}`, JSON.stringify(subjects));
+        safeStorage.setItem('gpa_selected_semester', targetSem);
         if (currentSemester !== targetSem) {
             currentSemester = targetSem;
             semButtons.forEach(b => b.classList.toggle('active', b.dataset.sem === targetSem));
@@ -1542,7 +1567,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle semester changes
     const handleSemesterChange = (sem) => {
         const key = `gpa_subjects_${sem}`;
-        const saved = localStorage.getItem(key);
+        const saved = safeStorage.getItem(key);
         if (saved) {
             try {
                 subjects = JSON.parse(saved);
@@ -2030,7 +2055,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadSavedSemesters = () => {
         try {
-            const saved = localStorage.getItem('gpa_saved_semesters');
+            const saved = safeStorage.getItem('gpa_saved_semesters');
             savedSemesters = saved ? JSON.parse(saved) : [];
         } catch (e) {
             savedSemesters = [];
@@ -2038,7 +2063,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const saveSavedSemesters = () => {
-        localStorage.setItem('gpa_saved_semesters', JSON.stringify(savedSemesters));
+        safeStorage.setItem('gpa_saved_semesters', JSON.stringify(savedSemesters));
     };
 
     const recalculateCGPA = () => {
@@ -2295,7 +2320,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const current = htmlElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             htmlElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
+            safeStorage.setItem('theme', next);
         });
     };
     setupThemeToggle('home-theme-toggle');
