@@ -272,7 +272,54 @@ console.log('== 9. Resilience: corrupted localStorage must not blank the site ==
   window.close && window.close();
 }
 
-console.log('== 10. Edge cases: empty & all-F calculations ==');
+console.log('== 10. Resilience: localStorage that throws (private mode / blocked cookies) ==');
+{
+  jsErrors.length = 0;
+  let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
+    .replace(/href="style\.css"/, `href="file://${ROOT}/style.css"`)
+    .replace(/src="app\.js"/, `src="file://${ROOT}/app.js"`);
+  const dom = new JSDOM(html, {
+    url: 'https://pruthvikrishnang.github.io/GPA_calci/',
+    runScripts: 'dangerously',
+    resources: new LocalResources(),
+    pretendToBeVisual: true,
+    virtualConsole: vc,
+    beforeParse(window) {
+      window.HTMLCanvasElement.prototype.getContext = function () {
+        return new Proxy({}, { get: () => () => {}, set: () => true });
+      };
+      window.HTMLElement.prototype.scrollIntoView = function () {};
+      // Simulate Safari private mode / blocked storage: every access throws.
+      const boom = () => { throw new window.DOMException('Access denied.', 'SecurityError'); };
+      Object.defineProperty(window, 'localStorage', {
+        get() {
+          return { getItem: boom, setItem: boom, removeItem: boom, clear: boom, key: boom, get length() { throw new Error('nope'); } };
+        },
+      });
+    },
+  });
+  const ready = new Promise((resolve) => {
+    dom.window.addEventListener('load', () => setTimeout(resolve, 300));
+    setTimeout(resolve, 5000);
+  });
+  await ready;
+  const { window, document } = { window: dom.window, document: dom.window.document };
+  ok(document.getElementById('page-home').classList.contains('active'), 'page activates when storage access throws');
+  const total = document.querySelectorAll('#subject-list-body select').length;
+  for (let i = 0; i < total; i++) {
+    const s = document.querySelectorAll('#subject-list-body select')[i];
+    if (!s) break;
+    s.value = 'O';
+    s.dispatchEvent(new window.Event('change', { bubbles: true }));
+  }
+  document.getElementById('calculate-btn').click();
+  await sleep(1200);
+  ok(document.getElementById('gpa-display').textContent.trim() === '10.00', `calculation still works (got ${document.getElementById('gpa-display').textContent.trim()})`);
+  ok(jsErrors.length === 0, 'no uncaught errors with throwing storage' + (jsErrors.length ? ' -> ' + jsErrors.join(' | ') : ''));
+  window.close && window.close();
+}
+
+console.log('== 11. Edge cases: empty & all-F calculations ==');
 {
   const { window, document } = await makeDom();
   document.getElementById('calculate-btn').click();
