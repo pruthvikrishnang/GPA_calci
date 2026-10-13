@@ -1,0 +1,13 @@
+{
+  "name": "gpa-calci",
+  "version": "1.0.0",
+  "description": "Apex GPA & SGPA Calculator - static single-page web app (no build tools required)",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node test/smoke.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}
