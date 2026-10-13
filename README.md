@@ -146,5 +146,5 @@ Checklist before pushing:
 ```bash
 git clone https://github.com/pruthvikrishnang/GPA_calci.git
 cd GPA_calci
-# Open index.html in your browser (no build tools required)
+npm start        # serves on http://localhost:8080 (or just open index.html)
 ```
