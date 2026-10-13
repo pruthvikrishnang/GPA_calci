@@ -2,3 +2,10 @@
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local desktop tool artifacts (kept local, never committed)
+.freebuff/
+
+# Node
+node_modules/
+npm-debug.log*
